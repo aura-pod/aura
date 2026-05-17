@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنتجات المتوفرة | متجر أورا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #05D1CE;
+            --bg-page: #fcfcfd;
+            --text-main: #1e293b;
+            --available-bg: #ecfdf5;
+            --available-text: #059669;
+            --unavailable-bg: #fff1f2;
+            --unavailable-text: #FF6B01;
+            --card-white: #ffffff;
+            --card-unavail-bg: #fffafa; /* أحمر باهت جداً للبطاقات غير المتوفرة */
+            --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+        /* دخول انسيابي للرأس مع التدرج اللوني الفخم */
+        header {
+            text-align: center;
+            padding: 50px 0 30px;
+            animation: fadeInBlur 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @keyframes fadeInBlur {
+            0% { opacity: 0; transform: translateY(-20px); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        h1 { 
+            font-weight: 900; 
+            font-size: 2.8rem; 
+            margin: 0; 
+            background: linear-gradient(135deg, #05D1CE 0%, #05D1CE 100%); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        p { color: #64748b; font-size: 1.1rem; margin-top: 10px; }
+
+        /* شاشة التحميل (جرد المستودع) */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            gap: 15px;
+        }
+
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            animation: pulseText 1.5s infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* منطقة الفلترة - شبكة مرنة (أزرار تلتف تلقائياً) */
+        .filter-wrapper {
+            margin-bottom: 40px;
+            padding: 10px 0;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #64748b;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        .filter-btn:hover { border-color: var(--primary-color); transform: translateY(-2px); }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 15px -3px rgba(5, 209, 205, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* لافتات الأقسام (Banners) الملونة بألوان باستيل هادئة */
+        .section-banner {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 40px 0 20px;
+            animation: slideRight 0.8s ease-out;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        @keyframes slideRight { 0% { opacity: 0; transform: translateX(30px); } 100% { opacity: 1; transform: translateX(0); } }
+
+        .banner-avail { background: var(--available-bg); color: var(--available-text); border: 1px solid #d1fae5; }
+        .banner-unavail { background: var(--unavailable-bg); color: var(--unavailable-text); border: 1px solid #ffe4e6; }
+
+        /* بطاقة المنتج الفخمة */
+        .product-card {
+            background: var(--card-white);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* تنسيق بطاقة المنتج الغير متوفر (اللون الأحمر الباهت) */
+        .unavailable-card {
+            background-color: var(--card-unavail-bg);
+            border-color: #ffeded;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .unavailable-card:hover {
+            border-color: #fecdd3;
+            box-shadow: 0 20px 25px -5px rgba(225, 29, 72, 0.1); 
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .item-name { font-weight: 800; font-size: 1.3rem; color: #0f172a; }
+        .unavailable-card .item-name { color: #881337; } 
+
+        /* المقاسات كتفاعل بصري */
+        .sizes-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .size-pill {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            transition: 0.3s;
+        }
+        
+        /* تأثير الهوفر على المقاسات */
+        .product-card:hover .size-pill { border-color: var(--primary-color); color: var(--primary-color); }
+        .unavailable-card:hover .size-pill { border-color: var(--unavailable-text); color: var(--unavailable-text); }
+
+        /* الألوان بظلال عميقة و Inset Shadow */
+        .colors-row { display: flex; gap: 12px; }
+        .color-item {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15), inset 0 2px 4px rgba(0,0,0,0.05);
+            transition: 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .color-item:hover { transform: scale(1.25); }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.2rem; }
+            .card-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .colors-row { align-self: flex-end; }
+            .product-card { padding: 20px; }
+        }
+
+        /* حركة ظهور البطاقات */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>المنتجات المتوفرة</h1>
+        <p>اكتشف المنتجات المتوفرة حسب المقاس بلمسة وحدة</p>
+    </header>
+
+    <div id="loader-section" class="loader-container">
+        <div class="spinner"></div>
+        <div class="loader-text">جاري جرد المستودع ...</div>
+    </div>
+
+    <div id="main-content" style="display: none;">
+        
+        <div class="filter-wrapper">
+            <div class="filter-bar" id="filter-bar">
+                <button class="filter-btn active" onclick="applyFilter('الكل', this)">الكل</button>
+            </div>
+        </div>
+
+        <div id="avail-section">
+            <div class="section-banner banner-avail">✦ متاح الآن في المتجر</div>
+            <div id="list-avail"></div>
+        </div>
+
+        <div id="unavail-section">
+            <div class="section-banner banner-unavail">✦ غير متوفر حالياً</div>
+            <div id="list-unavail"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // التأكد من أن مكتبة تيليجرام جاهزة
+const tg = window.Telegram.WebApp;
+
+// 1. إظهار زر الرجوع الرسمي في الأعلى
+tg.BackButton.show();
+
+// 2. تحديد ماذا يحدث عند الضغط عليه
+tg.BackButton.onClick(function() {
+    // العودة للرابط الرئيسي الخاص بك على GitHub
+    window.location.href = "https://your-username.github.io/main-page/";
+    
+    // ملاحظة: يمكنك أيضاً استخدام window.history.back() للعودة للصفحة السابقة
+});
+
+// إبلاغ تيليجرام أن التطبيق جاهز للعرض
+tg.ready();
+
+    // ضع رابط الـ CSV هنا
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSR9eL3t49hBFyxbrLUvJ2dF9Jp_vPoCQVX_L9EifOR5aoLuuPjP2jV8S50kdCwzedYpSlM8v9l7z2C/pub?output=csv';
+    
+    const colorMap = {
+        'أبيض': '#ffffff', 'أسود': '#1a1a1a', 'أحمر': '#f43f5e', 
+        'أزرق': '#3b82f6', 'أخضر': '#10b981', 'أصفر': '#fbbf24',
+        'رمادي': '#94a3b8', 'بني': '#78350f', 'كحلي': '#1e3a8a',
+        'زهري': '#f472b6', 'بنفسجي': '#8b5cf6', 'بيج': '#f5f5dc'
+    };
+
+    let productsData = [];
+
+    async function init() {
+        try {
+            // جلب البيانات
+            const r = await fetch(csvUrl);
+            const d = await r.text();
+            const lines = d.split('\n').slice(1);
+            const sizeSet = new Set();
+
+            lines.forEach(line => {
+                const [item, avail, sizes, colors] = line.split(',');
+                if (!item) return;
+
+                const sizeArr = sizes.split('-').map(s => s.trim());
+                sizeArr.forEach(s => sizeSet.add(s));
+
+                productsData.push({
+                    name: item.trim(),
+                    isAvail: avail.trim() === 'متوفر' || avail.trim().toLowerCase() === 'yes',
+                    sizes: sizeArr,
+                    colors: colors.split('-').map(c => c.trim())
+                });
+            });
+
+            // تأخير مصطنع لمدة 1.5 ثانية لإعطاء انطباع الجرد الدقيق
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            const sortedSizes = Array.from(sizeSet).sort();
+            const bar = document.getElementById('filter-bar');
+            sortedSizes.forEach(sz => {
+                const b = document.createElement('button');
+                b.className = 'filter-btn';
+                b.innerText = sz;
+                b.onclick = (e) => applyFilter(sz, e.target);
+                bar.appendChild(b);
+            });
+
+            // إخفاء شاشة التحميل وإظهار المحتوى
+            document.getElementById('loader-section').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+
+            render();
+        } catch (err) { 
+            // في حال حدوث خطأ في الرابط
+            const loaderSec = document.getElementById('loader-section');
+            loaderSec.innerHTML = '<div class="loader-text" style="color: var(--unavailable-text);">تعذر الاتصال بالمستودع، يرجى تحديث الصفحة.</div>';
+            console.error("حدث خطأ في جلب البيانات من ملف CSV"); 
+        }
+    }
+
+    function render(filter = 'الكل') {
+        const aL = document.getElementById('list-avail');
+        const uL = document.getElementById('list-unavail');
+        aL.innerHTML = ''; uL.innerHTML = '';
+
+        productsData.forEach((p, index) => {
+            if (filter !== 'الكل' && !p.sizes.includes(filter)) return;
+
+            const sHtml = p.sizes.map(s => `<div class="size-pill">${s}</div>`).join('');
+            const cHtml = p.colors.map(c => {
+                const hex = colorMap[c] || c;
+                return `<div class="color-item" style="background:${hex}" title="${c}"></div>`;
+            }).join('');
+
+            const cardClass = p.isAvail ? 'product-card' : 'product-card unavailable-card';
+
+            const card = `
+                <div class="${cardClass}" style="animation: slideInUp 0.6s ease forwards; animation-delay: ${index * 0.05}s">
+                    <div class="card-header">
+                        <div class="item-name">${p.name}</div>
+                        <div class="colors-row">${cHtml}</div>
+                    </div>
+                    <div class="sizes-row">${sHtml}</div>
+                </div>
+            `;
+
+            if (p.isAvail) aL.innerHTML += card;
+            else uL.innerHTML += card;
+        });
+    }
+
+    function applyFilter(size, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render(size);
+    }
+
+    init();
+</script>
+
+</body>
+</html>
