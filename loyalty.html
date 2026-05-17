@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطاقة نقاط أورا | متجر أورا</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --neon-pink: #ff007f;
+            --neon-cyan: #05D1CE;
+            --glass-white: rgba(255, 255, 255, 0.15);
+            --gold: #f1c40f;
+            --dark-space: #2E1A47;
+        }
+
+        /* تنسيق الصفحة */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        ::-webkit-scrollbar { display: none; }
+        body {
+    background: #1A0B2E; /* الموف الليلي كقاعدة */
+    background-image: 
+        linear-gradient(135deg, #0b272e 0%, #311B92 100%); /* تدرج انسيابي فخم */
+    min-height: 100vh; 
+    color: #fff; 
+    display: flex; 
+    justify-content: center;
+    align-items: flex-start; 
+    padding: 40px 20px; 
+    overflow-y: auto;
+}
+
+        .container { width: 100%; max-width: 450px; text-align: center; }
+        .logo-title {
+            font-size: 2.5rem; font-weight: 900; margin-bottom: 5px;
+            background: linear-gradient(to right, #fff, var(--neon-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.4));
+        }
+
+        /* حقل الإدخال 3D مفرغ */
+        .search-box { margin-bottom: 35px; }
+        input {
+            width: 100%; padding: 20px; border-radius: 20px;
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.05);
+            color: #fff; font-size: 18px; text-align: center; outline: none;
+            box-shadow: inset 4px 4px 12px rgba(0,0,0,0.9), inset -1px -1px 5px rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        input:focus { border-color: var(--neon-cyan); box-shadow: inset 2px 2px 8px rgba(0,0,0,1), 0 0 15px rgba(0, 243, 255, 0.3); }
+
+        /* زر متوهج مكثف */
+        /* الزر في حالته الطبيعية */
+.btn-glow {
+    width: 100%; 
+    margin-top: 15px; 
+    padding: 18px; 
+    border-radius: 20px;
+    border: none; 
+    font-size: 18px; 
+    font-weight: 900; 
+    color: #fff;
+    background: linear-gradient(45deg, #6200ea, var(--neon-pink));
+    cursor: pointer; 
+    transition: transform 0.1s ease, box-shadow 0.1s ease; /* سرعة استجابة خاطفة */
+    box-shadow: 0 0 25px rgba(255, 0, 127, 0.6), 0 5px 15px rgba(0,0,0,0.4);
+    outline: none; 
+    -webkit-tap-highlight-color: transparent; 
+}
+
+/* تأثير الضغط الفعلي (سيظهر الآن بوضوح) */
+.btn-glow:active {
+    transform: scale(0.92) translateY(2px) !important; /* تصغير ونزول طفيف للأسفل */
+    box-shadow: 0 0 10px rgba(255, 0, 127, 0.3), inset 2px 2px 5px rgba(0,0,0,0.3) !important;
+    filter: brightness(0.9); /* تعتيم بسيط جداً للإيحاء بالضغط */
+}
+
+        /* البطاقة الزجاجية */
+        .card-container { display: none; margin-top: 25px; }
+        .glass-card {
+            width: 100%; aspect-ratio: 1.58;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.05));
+            backdrop-filter: blur(30px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px; padding: 25px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; justify-content: space-between;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+        /* تعديل اللمعة لتشمل كامل البطاقة (ثانية واحدة) */
+        .glass-card::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.05), 
+                rgba(255, 255, 255, 0.25), 
+                rgba(255, 255, 255, 0.05), 
+                transparent
+            );
+            transform: skewX(-25deg);
+            animation: fullShimmer 3s infinite ease-in-out; /* تتحرك كل 3 ثواني واللمعة تستغرق ثانية */
+        }
+        @keyframes fullShimmer {
+            0% { left: -150%; }
+            33% { left: 150%; } /* اللمعة سريعة (1 ثانية من أصل 3) */
+            100% { left: 150%; }
+        }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; }
+        .aura-brand { font-size: 24px; font-weight: 900; letter-spacing: 2px; }
+
+        .smart-chip {
+            width: 45px; height: 34px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            border-radius: 6px; position: relative;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+        }
+        .smart-chip svg { position: absolute; width: 100%; height: 100%; opacity: 0.4; }
+
+        .card-middle { text-align: left; margin-top: 10px; }
+        .client-name { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 2px; }
+        .client-id { font-size: 20px; font-weight: 900; font-family: monospace; letter-spacing: 3px; color: rgba(255,255,255,0.9); }
+
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
+
+        .points-badge {
+            background: rgba(0, 243, 255, 0.15);
+            border: 1px solid rgba(0, 243, 255, 0.5);
+            padding: 8px 15px; border-radius: 12px;
+            text-align: center; min-width: 90px;
+            backdrop-filter: blur(5px);
+        }
+        .p-label { font-size: 13px; color: var(--neon-cyan); font-weight: 900; }
+        .p-number { font-size: 18px; font-weight: 900; line-height: 1; color: #fff; }
+
+        .reward-info { text-align: left; }
+        .r-label { font-size: 13px; color: var(--neon-pink); font-weight: 900; }
+        .r-value { font-size: 15px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--neon-pink); }
+
+        /* سجل الاستبدال */
+        .history-section { margin-top: 35px; opacity: 0; }
+        .h-title { text-align: right; color: var(--neon-cyan); font-size: 14px; font-weight: 900; margin-bottom: 10px; }
+        .table-glass {
+            background: rgba(255,255,255,0.02); border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08); overflow: hidden; backdrop-filter: blur(10px);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(255,255,255,0.05); padding: 15px; font-size: 12px; color: var(--neon-pink); }
+        td { padding: 15px; font-size: 14px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.03); color: #ccc; }
+
+        .err-msg { color: #f9f9f9; margin-top: 15px; font-size: 18px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="logo-title">بطاقة نقاط أورا</h1>
+    <p style="color: #FF017E; font-size: 18px; margin-bottom: 30px;">جمّع نقاط من كل عملية شراء لتستبدلها بخصومات أو هدية</p>
+
+    <div class="search-box">
+        <input type="text" id="phoneInput" placeholder="أدخل المعرف أو رقم الموبايل">
+        <button class="btn-glow" onclick="fetchData()">
+            <span id="btnText">اكشف نقاطي</span>
+            <i class="fas fa-fingerprint" style="margin-right: 10px;"></i>
+        </button>
+        <p id="error" class="err-msg">نعتذر، الرقم غير مسجل في نظام نقاط أورا</p>
+    </div>
+
+    <div class="card-container" id="mainDisplay">
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="aura-brand">نقاط أورا</div>
+                <div class="smart-chip">
+                    <svg viewBox="0 0 45 34"><path d="M0 8h45M0 16h45M0 24h45M12 0v34M22 0v34M32 0v34" stroke="black" stroke-width="0.5" fill="none"/></svg>
+                </div>
+            </div>
+            <div class="card-middle">
+                <div id="cName" class="client-name">CLIENT NAME</div>
+                <div id="cId" class="client-id">0000 000 000</div>
+            </div>
+            <div class="card-footer">
+                <div class="points-badge">
+                    <div class="p-label">رصيد النقاط</div>
+                    <div class="p-number" id="cPoints">0</div>
+                </div>
+                <div class="reward-info">
+                    <div class="r-label">مكافأتك الحالية</div>
+                    <div class="r-value" id="cReward">---</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-section" id="histSection">
+            <div class="h-title"><i class="fas fa-history"></i> سجل الاستبدال (الأحدث أولاً):</div>
+            <div class="table-glass">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>النقاط</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="histBody"></tbody>
+                </table>
+            </div>
+            <div style="height: 50px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // التأكد من أن مكتبة تيليجرام جاهزة
+const tg = window.Telegram.WebApp;
+
+// 1. إظهار زر الرجوع الرسمي في الأعلى
+tg.BackButton.show();
+
+// 2. تحديد ماذا يحدث عند الضغط عليه
+tg.BackButton.onClick(function() {
+    // العودة للرابط الرئيسي الخاص بك على GitHub
+    window.location.href = "https://your-username.github.io/main-page/";
+    
+    // ملاحظة: يمكنك أيضاً استخدام window.history.back() للعودة للصفحة السابقة
+});
+
+// إبلاغ تيليجرام أن التطبيق جاهز للعرض
+tg.ready();
+
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSdaut8ZgkECvek_gExllOXcl2sQiyBS3YT7EsHKV-OJCXhv4f2yL1hG4vtOC8Y5nGzdqlcuQerJjI1/pub?gid=0&single=true&output=csv';
+    const HIST_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSdaut8ZgkECvek_gExllOXcl2sQiyBS3YT7EsHKV-OJCXhv4f2yL1hG4vtOC8Y5nGzdqlcuQerJjI1/pub?gid=525119091&single=true&output=csv';
+
+    async function fetchData() {
+    const phone = document.getElementById('phoneInput').value.trim();
+    const btnText = document.getElementById('btnText');
+    const mainDisplay = document.getElementById('mainDisplay');
+    const error = document.getElementById('error');
+
+    // التعديل الجديد: التحقق من وجود رقم
+    if(!phone) {
+        error.innerText = "الرجاء كتابة المعرف الخاص بك أو رقم موبايلك";
+        error.style.display = 'block';
+        return; 
+    }
+
+        if(!phone) return;
+        btnText.innerText = "جاري البحث في نظام النقاط عن رصيدك..";
+        error.style.display = 'none';
+
+        try {
+            const res1 = await fetch(`${SHEET_URL}&t=${Date.now()}`);
+            const text1 = await res1.text();
+            const rows1 = text1.split(/\r?\n/).map(r => r.split(','));
+            const user = rows1.find(r => r[0] && r[0].trim() === phone);
+
+            if(user) {
+                document.getElementById('cId').innerText = format(user[0]);
+                document.getElementById('cName').innerText = (user[1] || 'VIP Member').toUpperCase();
+                document.getElementById('cReward').innerText = user[3] || '---';
+
+                const res2 = await fetch(`${HIST_URL}&t=${Date.now()}`);
+                const text2 = await res2.text();
+                const rows2 = text2.split(/\r?\n/).map(r => r.split(','));
+                const history = rows2.filter(r => r[0] && r[0].trim() === phone).reverse();
+                
+                renderHistory(history);
+                mainDisplay.style.display = 'block';
+                btnText.innerText = "اكشف نقاطي";
+
+                gsap.fromTo(".glass-card", { scale: 0.9, opacity: 0, y: 30 }, { scale: 1, opacity: 1, y: 0, duration: 1, ease: "back.out(1.5)" });
+                gsap.to("#histSection", { opacity: 1, duration: 1, delay: 0.5 });
+                animatePoints(parseInt(user[2]) || 0);
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.8 }, colors: ['#00f3ff', '#ff007f'] });
+            } else {
+                            if(user) {
+                // كود إظهار البطاقة (لا تغيره)
+            } else {
+                // التعديل هنا:
+                btnText.innerText = "اكشف نقاطي";
+                error.innerText = "رقم المعرف الخاص بك أو رقم موبايلك غير صحيح.. الرجاء كتابة المعرف الصحيح";
+                error.style.display = 'block';
+                mainDisplay.style.display = 'none';
+            }
+
+            }
+        } catch (e) {
+            btnText.innerText = "اكشف نقاطي";
+        }
+    }
+
+    function format(n) {
+        let s = n.replace(/\D/g, '');
+        return s.length === 10 ? `${s.slice(0,4)} ${s.slice(4,7)} ${s.slice(7,10)}` : n;
+    }
+
+    function animatePoints(val) {
+        let obj = { n: 0 };
+        gsap.to(obj, { n: val, duration: 2.5, ease: "power3.out", onUpdate: () => { document.getElementById('cPoints').innerText = Math.floor(obj.n); } });
+    }
+
+    function renderHistory(data) {
+        const body = document.getElementById('histBody');
+        body.innerHTML = data.length ? "" : "<tr><td colspan='2' style='opacity:0.4;'>لا توجد عمليات سابقة</td></tr>";
+        data.forEach(r => { body.innerHTML += `<tr><td style="color:var(--neon-pink); font-weight:900;">${r[1]}</td><td>${r[2]}</td></tr>`; });
+    }
+</script>
+</body>
+</html>
