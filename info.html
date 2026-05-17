@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل أورا | متجر أورا</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-off-white: #fcfafc;
+            --mauve-primary: #05D1CE;
+            --mauve-dark: #05D1CE;
+            /* اللون الذهبي لقسم التواصل - يمكنك تغييره من هنا */
+            --gold-accent: #FF6B01; 
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
+            
+            --text-main: #444;
+            --white: #ffffff;
+            --shadow: 0 8px 10px rgba(245, 245, 245, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* إعدادات المتصفح وإخفاء أشرطة التمرير */
+        * {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        *::-webkit-scrollbar { display: none; }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-off-white);
+            margin: 0;
+            padding: 20px;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .container { max-width: 480px; margin: 0 auto; }
+
+        header h1 {
+            text-align: center;
+            color: var(--mauve-dark);
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: var(--white);
+            border-radius: 22px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(5, 209, 205, 0.1);
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(214, 214, 214, 0.548);
+        }
+
+        /* تمييز قسم التواصل باللون الذهبي */
+        .contact-section {
+            border: 1px solid var(--gold-accent);
+            background: linear-gradient(to bottom, #ffffff, #fffdfa);
+        }
+
+        .gold-text { color: var(--gold-accent) !important; }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: var(--mauve-dark);
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+        .section-title i { margin-left: 12px; }
+
+        .content-block strong {
+            display: block;
+            color: var(--mauve-dark);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .content-block p { font-size: 14.5px; line-height: 1.6; color: var(--text-main); }
+
+        /* الأكورديون */
+        .faq-item { border-bottom: 1px solid #f0f0f0; padding: 15px 0; }
+        .faq-question {
+            width: 100%; background: none; border: none; display: flex;
+            justify-content: space-between; align-items: center; cursor: pointer;
+            font-family: 'Tajawal'; font-size: 15px; font-weight: 700; color: var(--text-main);
+        }
+        .faq-question i { color: var(--mauve-primary); transition: 0.3s; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: 0.4s; color: #777; font-size: 14px; }
+        .faq-item.active .faq-answer { max-height: 200px; margin-top: 12px; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+
+        /* أزرار التواصل */
+        .contact-link {
+            display: flex; align-items: center; padding: 15px;
+            background: var(--white); border-radius: 15px; text-decoration: none;
+            color: var(--gold-accent); font-weight: 600; margin-top: 12px;
+            border: 1px solid var(--gold-accent); transition: var(--transition);
+        }
+        .contact-link:hover { background: var(--gold-accent); color: white; }
+        .contact-link:active { transform: scale(0.95); }
+        .contact-link i { margin-left: 12px; font-size: 18px; }
+
+    </style>
+</head>
+<body>
+
+<div class="container animate__animated animate__fadeIn">
+    <header><h1>دليل أورا</h1></header>
+
+    <div class="info-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+        <div class="section-title"><i class="fas fa-info-circle"></i><span>معلومات عامة</span></div>
+        <div class="content-block">
+            <strong>ماذا يقدم اورا؟</strong>
+            <p>منصة متخصصة في الطباعة الحرارية والرقمية بجودة احترافية على مختلف الخامات.</p>
+        </div>
+        <div class="content-block">
+            <strong>كيفية الطلب؟</strong>
+            <p>اختر منتجك، ارفع تصميمك، واترك الباقي لمبدعينا في قسم التنفيذ.</p>
+        </div>
+    </div>
+
+    <div class="info-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+        <div class="section-title"><i class="fas fa-shield-alt"></i><span>سياسات المتجر</span></div>
+        <div class="content-block">
+            <strong>الدفع:</strong>
+            <p>لأن الطباعة تتم حسب الطلب فالدفع يتم بشكل مسبق قبل الاستلام بعد تأكيد الطلب وكل التفاصيل المتعلقة فيه.</p>
+                        <strong>استرجاع النقود والاستبدال:</strong>
+            <p>يتم استخدام أفضل الخامات المتوفرة والطباعة بأفضل جودة ولا يتم إرسال أي منتج إلا بعد التأكد من عدم وجود أي خطأ أو خلل في المنتج أو الطباعة، ويقبل الاسترداد في حال وصول منتج بغير تصميم بالخطأ عن طريق الشحن.</p>
+
+            <strong>مدة الشحن:</strong>
+            <p>تتراوح بين 2 يوم و 4 أيام من تأكيد الطلب والدفع</p>
+        </div>
+    </div>
+
+    
+
+    <div class="info-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        <div class="section-title"><i class="fas fa-question-circle"></i><span>الأسئلة الشائعة</span></div>
+        
+        <div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>
+
+                <div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>
+
+                <div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>
+
+                <div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>
+
+                <div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>
+
+
+        <div class="faq-item">
+            <button class="faq-question">هل يمكنني طلب كميات للجملة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">نعم، نوفر أسعاراً خاصة للكميات الكبيرة والمشاريع التجارية، يرجى التواصل معنا عبر الواتساب.</div>
+        </div>
+
+<div class="faq-item">
+            <button class="faq-question">ما هي مدة الشحن المتوقعة؟<i class="fas fa-chevron-down"></i></button>
+            <div class="faq-answer">يستغرق الشحن عادة من 3 إلى 5 أيام عمل لجميع مناطق المملكة.</div>
+        </div>        
+    </div>
+</div>
+<div class="info-card contact-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+        <div class="section-title gold-text"><i class="fas fa-headset"></i><span>قنوات التواصل</span></div>
+        
+        <a href="https://wa.me/963959521161" class="contact-link">
+            <i class="fab fa-whatsapp"></i>
+            <span>تواصل عبر واتساب</span>
+        </a>
+
+        <a href="mailto:netsites.rm.1@gmail.com?subject=استفسار من تطبيق اورا" class="contact-link">
+            <i class="fas fa-envelope-open-text"></i>
+            <span>مراسلتنا عبر البريد الإلكتروني</span>
+        </a>
+    </div>
+<script>
+    // التأكد من أن مكتبة تيليجرام جاهزة
+const tg = window.Telegram.WebApp;
+
+// 1. إظهار زر الرجوع الرسمي في الأعلى
+tg.BackButton.show();
+
+// 2. تحديد ماذا يحدث عند الضغط عليه
+tg.BackButton.onClick(function() {
+    // العودة للرابط الرئيسي الخاص بك على GitHub
+    window.location.href = "https://your-username.github.io/main-page/";
+    
+    // ملاحظة: يمكنك أيضاً استخدام window.history.back() للعودة للصفحة السابقة
+});
+
+// إبلاغ تيليجرام أن التطبيق جاهز للعرض
+tg.ready();
+
+    // الأكورديون
+    document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+            const faqItem = button.parentElement;
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== faqItem) item.classList.remove('active');
+            });
+            faqItem.classList.toggle('active');
+        });
+    });
+
+</script>
+</body>
+</html>
