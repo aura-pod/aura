@@ -23,6 +23,7 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* إعدادات المتصفح وإخفاء أشرطة التمرير */
         * {
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -89,6 +90,7 @@
 
         .content-block p { font-size: 14.5px; line-height: 1.6; color: var(--text-main); }
 
+        /* الأكورديون */
         .faq-item { border-bottom: 1px solid #f0f0f0; padding: 15px 0; }
         .faq-question {
             width: 100%; background: none; border: none; display: flex;
@@ -100,6 +102,7 @@
         .faq-item.active .faq-answer { max-height: 200px; margin-top: 12px; }
         .faq-item.active .faq-question i { transform: rotate(180deg); }
 
+        /* أزرار التواصل */
         .contact-link {
             display: flex; align-items: center; padding: 15px;
             background: var(--white); border-radius: 15px; text-decoration: none;
@@ -159,14 +162,14 @@
 <div class="info-card contact-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
         <div class="section-title gold-text"><i class="fas fa-headset"></i><span>قنوات التواصل</span></div>
         
-        <!-- تعديل زر الواتساب بالصيغة المباشرة والناجحة api.whatsapp.com -->
+        <!-- زر الواتساب المعتمد والناجح بنسبة 100% -->
         <a href="#" onclick="window.Telegram.WebApp.openLink('https://api.whatsapp.com/send?phone=963959521161'); return false;" class="contact-link">
             <i class="fab fa-whatsapp"></i>
             <span>تواصل عبر واتساب</span>
         </a>
 
-        <!-- تعديل زر الإيميل بصيغة الرابط المباشر والمتوافق مع متصفح تيليجرام الداخلي لـ Gmail -->
-        <a href="#" onclick="window.Telegram.WebApp.openLink('https://mail.google.com/mail/?view=cm&fs=1&to=aura.order.contact@gmail.com'); return false;" class="contact-link">
+        <!-- زر الإيميل المطور بحيلة الـ Iframe لفتح تطبيقات الهاتف واختيار Gmail مباشرة -->
+        <a href="#" onclick="openNativeEmail(); return false;" class="contact-link">
             <i class="fas fa-envelope-open-text"></i>
             <span>مراسلتنا عبر البريد الإلكتروني</span>
         </a>
@@ -180,6 +183,23 @@
     });
     tg.ready();
 
+    // دالة فتح الإيميل عبر خيارات النظام وتطبيقات الهاتف مباشرة
+    function openNativeEmail() {
+        const mailtoUrl = "mailto:aura.order.contact@gmail.com?subject=" + encodeURIComponent("استفسار من تطبيق أورا");
+        
+        // إنشاء حاوية مخفية لإجبار نظام التشغيل على فتح تطبيقات الإيميل دون تدخل متصفح تيليجرام
+        const iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src = mailtoUrl;
+        document.body.appendChild(iframe);
+        
+        // حذف الحاوية بعد أداء مهمتها مباشرة للحفاظ على نظافة كود الصفحة
+        setTimeout(function() {
+            iframe.remove();
+        }, 100);
+    }
+
+    // الأكورديون
     document.querySelectorAll('.faq-question').forEach(button => {
         button.addEventListener('click', () => {
             const faqItem = button.parentElement;
