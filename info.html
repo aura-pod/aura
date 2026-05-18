@@ -102,19 +102,24 @@
         .faq-item.active .faq-answer { max-height: 200px; margin-top: 12px; }
         .faq-item.active .faq-question i { transform: rotate(180deg); }
 
-        /* أزرار التواصل */
+        /* أزرار التواصل المحدثة لمنع القوائم المنبثقة للروابط */
         .contact-link {
             display: flex; align-items: center; padding: 15px;
             background: var(--white); border-radius: 15px; text-decoration: none;
             color: var(--gold-accent); font-weight: 600; margin-top: 12px;
             border: 1px solid var(--gold-accent); transition: var(--transition);
             cursor: pointer;
+            
+            /* منع ظهور الرابط والمعاينة عند الضغط المطول في نظام آيفون iOS */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .contact-link:hover { background: var(--gold-accent); color: white; }
         .contact-link:active { transform: scale(0.95); }
         .contact-link i { margin-left: 12px; font-size: 18px; }
 
-        /* تنسيق فقرة الإيميل التفاعلية للنسخ */
+        /* تنسيق فقرة الإيميل التفاعلية */
         .email-copy-block {
             margin-top: 18px;
             padding: 12px;
@@ -125,8 +130,12 @@
             font-size: 14px;
             color: var(--text-main);
             cursor: pointer;
-            user-select: none;
             transition: var(--transition);
+            
+            /* منع الخيارات عند الضغط المطول */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .email-copy-block:active { transform: scale(0.98); }
         .email-highlight {
@@ -188,19 +197,19 @@
 <div class="info-card contact-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
         <div class="section-title gold-text"><i class="fas fa-headset"></i><span>قنوات التواصل</span></div>
         
-        <!-- الطريقة الأولى: زر الواتساب المستقر -->
+        <!-- زر الواتساب المستقر -->
         <a href="#" onclick="window.Telegram.WebApp.openLink('https://api.whatsapp.com/send?phone=963959521161'); return false;" class="contact-link">
             <i class="fab fa-whatsapp"></i>
             <span>تواصل عبر واتساب</span>
         </a>
 
-        <!-- الطريقة الثانية: زر تيليجرام البديل والاحترافي (قم بتعديل USERNAME_HERE بمعرف حسابك) -->
+        <!-- زر تيليجرام البديل (قم بتعديل YOUR_USERNAME بمعرف حسابك) -->
         <a href="#" onclick="window.Telegram.WebApp.openLink('https://t.me/Rahief'); return false;" class="contact-link">
             <i class="fab fa-telegram-plane"></i>
             <span>تواصل عبر تيليغرام</span>
         </a>
 
-        <!-- الطريقة الثالثة: الفقرة النصية للإيميل مع ميزة النسخ الذكي عند النقر -->
+        <!-- الفقرة النصية للإيميل مع ميزة النسخ الذكي -->
         <div class="email-copy-block" onclick="copyEmailText('aura.order.contact@gmail.com', this)" title="انقر لنسخ الإيميل">
             <span>عبر البريد الإلكتروني:</span>
             <span class="email-highlight">aura.order.contact@gmail.com</span>
@@ -216,18 +225,23 @@
     });
     tg.ready();
 
-    // دالة نسخ البريد الإلكتروني وتغيير النص بشكل تفاعلي مؤقت
+    // جافاسكربت لتعطيل قائمة الخيارات (Context Menu) عند الضغط المطول على الأزرار (أندرويد + كمبيوتر)
+    document.querySelectorAll('.contact-link, .email-copy-block').forEach(element => {
+        element.addEventListener('contextmenu', function(e) {
+            e.preventDefault(); // يمنع النظام من إظهار أي قائمة أو تفاصيل للرابط
+        });
+    });
+
+    // دالة نسخ البريد الإلكتروني
     function copyEmailText(email, element) {
         navigator.clipboard.writeText(email).then(function() {
             const originalContent = element.innerHTML;
-            // حركة تفاعلية رشيقة تؤكد للمستخدم نجاح النسخ
             element.innerHTML = '<span style="color: #05D1CE; font-weight: bold;"><i class="fas fa-check"></i> تم نسخ الإيميل بنجاح! 📋</span>';
             setTimeout(function() {
                 element.innerHTML = originalContent;
             }, 2200);
         }).catch(function() {
-            // حل احتياطي بسيط في حال قيود المتصفحات النادرة
-            alert("الإيميل هو: " + email);
+            alert(" can't copy: " + email);
         });
     }
 
