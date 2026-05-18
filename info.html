@@ -162,14 +162,14 @@
 <div class="info-card contact-section animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
         <div class="section-title gold-text"><i class="fas fa-headset"></i><span>قنوات التواصل</span></div>
         
-        <!-- زر الواتساب المعتمد والناجح بنسبة 100% -->
+        <!-- زر الواتساب عبر الدالة الرسمية لتيليجرام الناجحة والمستقرة -->
         <a href="#" onclick="window.Telegram.WebApp.openLink('https://api.whatsapp.com/send?phone=963959521161'); return false;" class="contact-link">
             <i class="fab fa-whatsapp"></i>
             <span>تواصل عبر واتساب</span>
         </a>
 
-        <!-- زر الإيميل المطور بحيلة الـ Iframe لفتح تطبيقات الهاتف واختيار Gmail مباشرة -->
-        <a href="#" onclick="openNativeEmail(); return false;" class="contact-link">
+        <!-- زر الإيميل المباشر باستخدام بروتوكول mailto النقي مئة بالمئة بدون تدخل جافاسكربت -->
+        <a href="mailto:aura.order.contact@gmail.com?subject=استفسار%20من%20تطبيق%20أورا" class="contact-link">
             <i class="fas fa-envelope-open-text"></i>
             <span>مراسلتنا عبر البريد الإلكتروني</span>
         </a>
@@ -182,22 +182,6 @@
         window.location.href = "index.html";
     });
     tg.ready();
-
-    // دالة فتح الإيميل عبر خيارات النظام وتطبيقات الهاتف مباشرة
-    function openNativeEmail() {
-        const mailtoUrl = "mailto:aura.order.contact@gmail.com?subject=" + encodeURIComponent("استفسار من تطبيق أورا");
-        
-        // إنشاء حاوية مخفية لإجبار نظام التشغيل على فتح تطبيقات الإيميل دون تدخل متصفح تيليجرام
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        iframe.src = mailtoUrl;
-        document.body.appendChild(iframe);
-        
-        // حذف الحاوية بعد أداء مهمتها مباشرة للحفاظ على نظافة كود الصفحة
-        setTimeout(function() {
-            iframe.remove();
-        }, 100);
-    }
 
     // الأكورديون
     document.querySelectorAll('.faq-question').forEach(button => {
