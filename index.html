@@ -21,6 +21,13 @@
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
+        /* إعدادات أمان إضافية لمنع تحديد النصوص والقوائم */
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         body {
             font-family: 'Cairo', sans-serif;
             background-color: var(--bg-off-white);
@@ -60,14 +67,15 @@
             font-size: 30px;
             box-shadow: 0 10px 20px rgba(5, 209, 205, 0.2);
         }
-/* تنسيق لوغو البزنس الجديد */
-.brand-logo-custom {
-    width: 200px; /* يمكنك تعديل الحجم حسب الرغبة */
-    height: auto; /* للحفاظ على أبعاد الصورة */
-    display: block;
-    margin: 0 auto 15px; /* لتوسط اللوغو وترك مسافة بالأسفل */
-    filter: drop-shadow(0 0px 0px rgba(5, 209, 205, 0.25)); /* إضافة الظل مباشرة على الصورة */
-}
+        
+        /* تنسيق لوغو البزنس الجديد */
+        .brand-logo-custom {
+            width: 200px; /* يمكنك تعديل الحجم حسب الرغبة */
+            height: auto; /* للحفاظ على أبعاد الصورة */
+            display: block;
+            margin: 0 auto 15px; /* لتوسط اللوغو وترك مسافة بالأسفل */
+            filter: drop-shadow(0 0px 0px rgba(5, 209, 205, 0.25)); /* إضافة الظل مباشرة على الصورة */
+        }
 
         header h1 {
             font-size: 26px;
@@ -99,6 +107,7 @@
             border: 1px solid rgba(5, 209, 205, 0.1);
             transition: var(--transition);
             position: relative;
+            cursor: pointer; /* إضافة شكل اليد عند التمرير بالماوس للأجهزة المكتبية */
         }
 
         /* تأثير الأيقونة */
@@ -136,12 +145,6 @@
             transform: rotate(10deg);
         }
 
-        /* تأثير الضغط (Active) */
-        .btn-item:active {
-            transform: scale(2.95);
-            transition: 0.9s;
-        }
-
         /* سهم صغير على اليسار */
         .btn-item::after {
             content: '\f104'; /* أيقونة سهم FontAwesome */
@@ -164,47 +167,51 @@
             color: #bbb;
             letter-spacing: 1px;
         }
-    /* 1. التعديل الأساسي لإخفاء المستطيل الأزرق/الرمادي عند اللمس */
-.btn-item {
-    outline: none;
-    -webkit-tap-highlight-color: transparent; /* هذا السطر هو السر لإخفاء المستطيل */
-    user-select: none; /* لمنع تحديد النص عند الضغط المطول */
-    transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s ease;
-}
 
-/* 2. تأثير حركة الضغط الحقيقية (الزر ينضغط للداخل) */
-.btn-item:active {
-    transform: scale(0.95); /* تصغير الزر بنسبة بسيطة جداً ليعطي شعور الضغط */
-    box-shadow: 0 2px 5px rgba(214, 214, 214, 0.1); /* تقليل الظل ليظهر وكأن الزر اقترب من الخلفية */
-    background-color: #f0f0f0; /* تغيير بسيط جداً في درجة اللون لزيادة التفاعل */
-}
+        /* 1. التعديل الأساسي لإخفاء المستطيل الأزرق/الرمادي عند اللمس */
+        .btn-item {
+            outline: none;
+            -webkit-tap-highlight-color: transparent; /* هذا السطر هو السر لإخفاء المستطيل */
+            user-select: none; /* لمنع تحديد النص عند الضغط المطول */
+            -webkit-touch-callout: none; /* لمنع ظهور القوائم عند الضغط المطول في أجهزة آبل */
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s ease;
+        }
 
-/* 3. تأثير إضافي للأيقونة داخل الزر عند الضغط */
-.btn-item:active .icon-box {
-    transform: scale(0.9); /* تصغير الأيقونة أيضاً بانسجام مع الزر */
-}
-/* إخفاء شريط التمرير للمتصفحات المعتمدة على Chrome و Safari و Opera (موبايل وكمبيوتر) */
-body::-webkit-scrollbar {
-    display: none;
-}
+        /* 2. تأثير حركة الضغط الحقيقية (الزر ينضغط للداخل) */
+        .btn-item:active {
+            transform: scale(0.95); /* تصغير الزر بنسبة بسيطة جداً ليعطي شعور الضغط */
+            box-shadow: 0 2px 5px rgba(214, 214, 214, 0.1); /* تقليل الظل ليظهر وكأن الزر اقترب من الخلفية */
+            background-color: #f0f0f0; /* تغيير بسيط جداً في درجة اللون لزيادة التفاعل */
+            transition: 0.1s; /* سرعة استجابة الضغط */
+        }
 
-/* إخفاء شريط التمرير لمتصفح Firefox */
-body {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-    overflow-y: scroll; /* السماح بالتمرير العمودي */
-    -webkit-overflow-scrolling: touch; /* تمرير سلس جداً على هواتف iPhone */
-}
+        /* 3. تأثير إضافي للأيقونة داخل الزر عند الضغط */
+        .btn-item:active .icon-box {
+            transform: scale(0.9); /* تصغير الأيقونة أيضاً بانسجام مع الزر */
+        }
 
-/* لضمان أن الحاوية الرئيسية تسمح بالتمرير أيضاً إذا طالت المحتويات */
-.container {
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-.container::-webkit-scrollbar {
-    display: none;
-}
+        /* إخفاء شريط التمرير للمتصفحات المعتمدة على Chrome و Safari و Opera (موبايل وكمبيوتر) */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* إخفاء شريط التمرير لمتصفح Firefox */
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            overflow-y: scroll; /* السماح بالتمرير العمودي */
+            -webkit-overflow-scrolling: touch; /* تمرير سلس جداً على هواتف iPhone */
+        }
+
+        /* لضمان أن الحاوية الرئيسية تسمح بالتمرير أيضاً إذا طالت المحتويات */
+        .container {
+            overflow-y: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .container::-webkit-scrollbar {
+            display: none;
+        }
 
     </style>
 </head>
@@ -215,12 +222,12 @@ body {
     <img src="aura-logo-index.png" alt="Logo" class="brand-logo-custom">
     <h1>متجر أورا للطباعة حسب الطلب</h1>
     <h3>هون بتطلب وبتعرف كل شي عن المتجر وعن طلبك</h3>
-</header>
+    </header>
 
 
     <div class="menu-list">
         
-        <a href="info.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+        <div onclick="window.location.href='info.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
             <div class="icon-box">
                 <i class="fas fa-circle-info"></i>
             </div>
@@ -228,41 +235,41 @@ body {
                 <span style="font-weight: 600; font-size: 17px;">دليل أورا</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">حول أورا • كيفية الطلب • سياسات • استفسارات</small>
             </div>
-        </a>
+        </div>
 
-        <a href="order.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+        <div onclick="window.location.href='order.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
             <div class="icon-box"><i class="fas fa-shopping-bag"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">طلب شراء</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">نموذج طلب شراء مميز وبسيط</small>
             </div>
-        </a>
+        </div>
 
-        <a href="loyalty.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+        <div onclick="window.location.href='loyalty.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
             <div class="icon-box"><i class="fas fa-gift"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">بطاقة نقاط أورا</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">شوف رصيد نقاطك لتبدلها بخصومات</small>
             </div>
-        </a>
+        </div>
 
-        <a href="available.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        <div onclick="window.location.href='available.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
             <div class="icon-box"><i class="fas fa-tags"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">المنتجات المتوفرة</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">حالة توفر المنتجات بألوانها ومقاساتها</small>
             </div>
-        </a>
+        </div>
 
-        <a href="size.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+        <div onclick="window.location.href='size.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
             <div class="icon-box"><i class="fas fa-ruler-horizontal"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">دليل المقاسات والعناية</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">اعرف مقاسات المنتجات ليوصلك طلبك صح</small>
             </div>
-        </a>
+        </div>
 
-        <a href="track.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+        <div onclick="window.location.href='track.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
             <div class="icon-box">
                 <i class="fas fa-layer-group"></i> 
             </div>
@@ -270,9 +277,9 @@ body {
                 <span style="font-weight: 600; font-size: 17px;">تتبع الطلب</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">دفع • طباعة • كبس حراري • شحن</small>
             </div>
-        </a>
+        </div>
 
-        <a href="mockup.html" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.7s;">
+        <div onclick="window.location.href='mockup.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.7s;">
             <div class="icon-box">
                 <i class="fas fa-palette"></i>
             </div>
@@ -280,7 +287,7 @@ body {
                 <span style="font-weight: 600; font-size: 17px;">معاينة التصميم</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">أداة بسيطة لتقريب معاينة التصميم عالمنتج</small>
             </div>
-        </a>
+        </div>
 
     </div>
 
@@ -295,6 +302,15 @@ body {
     window.Telegram.WebApp.BackButton.hide();
     tg.ready();
     tg.expand(); // لفتح التطبيق بكامل الشاشة تلقائياً
+
+    // جافاسكربت صارم لتعطيل القائمة المنبثقة (Context Menu) عند الضغط المطول على الأزرار
+    document.querySelectorAll('.btn-item').forEach(element => {
+        element.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
+    });
 </script>
 
 </body>
