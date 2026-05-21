@@ -75,6 +75,8 @@
             display: block;
             margin: 0 auto 15px; /* لتوسط اللوغو وترك مسافة بالأسفل */
             filter: drop-shadow(0 0px 0px rgba(5, 209, 205, 0.25)); /* إضافة الظل مباشرة على الصورة */
+            pointer-events: none; /* إيقاف التفاعل مع الصورة لمنع ظهور القائمة عند النقر المطول */
+            -webkit-user-drag: none; /* منع سحب الصورة */
         }
 
         header h1 {
@@ -219,7 +221,7 @@
 
 <div class="container">
     <header class="animate__animated animate__fadeInDown">
-    <img src="aura-logo-index.png" alt="Logo" class="brand-logo-custom">
+    <img src="aura-logo-index.png" alt="Logo" class="brand-logo-custom" draggable="false">
     <h1>متجر أورا للطباعة حسب الطلب</h1>
     <h3>هون بتطلب وبتعرف كل شي عن المتجر وعن طلبك</h3>
     </header>
@@ -303,8 +305,8 @@
     tg.ready();
     tg.expand(); // لفتح التطبيق بكامل الشاشة تلقائياً
 
-    // جافاسكربت صارم لتعطيل القائمة المنبثقة (Context Menu) عند الضغط المطول على الأزرار
-    document.querySelectorAll('.btn-item').forEach(element => {
+    // جافاسكربت صارم لتعطيل القائمة المنبثقة (Context Menu) عند الضغط المطول على الأزرار والصورة
+    document.querySelectorAll('.btn-item, .brand-logo-custom').forEach(element => {
         element.addEventListener('contextmenu', function(e) {
             e.preventDefault();
             e.stopPropagation();
