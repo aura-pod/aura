@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تقييمات الزبائن | متجر أورا</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-off-white: #fcfafc;
+            --mauve-primary: #05D1CE;
+            --mauve-dark: #05D1CE;
+            --text-main: #4a4a4a;
+            --text-light: #FF6B01;
+            --white: #ffffff;
+            --gold: #FFD700;
+            --male-color: #3399ff;
+            --female-color: #ff66b2;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+
+        body {
+            background-color: var(--bg-off-white);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        body::-webkit-scrollbar { display: none; }
+        body { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px 0;
+            padding-bottom: 40px;
+        }
+
+        header, .tabs-container {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-top: 10px;
+        }
+
+        .header-icon {
+            font-size: 40px;
+            color: var(--mauve-primary);
+            margin-top: 15px; /* تم إضافة هذه المسافة لتناسق الشكل بعد نقل القلب */
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* تأثير النبض للقلب */
+        .header-icon i {
+            display: inline-block;
+            animation: pulseHeart 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseHeart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: var(--mauve-dark);
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 15px;
+            color: var(--text-light);
+            margin-top: 2px;
+            font-weight: 700;
+        }
+
+        header .swipe-hint {
+            color: var(--text-main);
+            font-size: 12px;
+            margin-top: 30px;
+            opacity: 0.9;
+            font-weight: 700;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: var(--white);
+            padding: 8px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(5, 209, 205, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 5px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-light);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .tab-btn.active {
+            background: var(--mauve-primary);
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(5, 209, 205, 0.3);
+        }
+
+        .reviews-carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 15px;
+            padding: 10px 20px;
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+            scroll-behavior: smooth;
+        }
+
+        .reviews-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .review-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+            width: 80vw;
+            max-width: 300px;
+            flex: 0 0 auto;
+            scroll-snap-align: center;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            white-space: normal;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* تعديلات العرض للقسم العلوي من البطاقة */
+        .review-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fdfcfb, #efefef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px; /* محاذاة الأيقونة مع أول سطر من الاسم */
+        }
+
+        .avatar-svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .reviewer-details {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 0; 
+        }
+
+        /* حاوية الاسم والنجوم معاً */
+        .name-stars-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--text-main);
+            text-align: start;
+            white-space: normal; /* السماح بالتفاف النص */
+            word-wrap: break-word; /* كسر الكلمات الطويلة */
+            flex: 1; /* يأخذ المساحة المتاحة ويدفع النجوم للطرف الآخر */
+        }
+
+        .stars {
+            display: flex;
+            gap: 2px;
+            flex-shrink: 0; /* منع النجوم من الانكماش أو الالتفاف أسفل بعضها */
+            margin-top: 4px; /* محاذاة النجوم مع خط الاسم */
+        }
+
+        .stars i {
+            color: var(--gold);
+            font-size: 11px;
+        }
+
+        .review-date {
+            font-size: 11px;
+            color: var(--text-light);
+            text-align: start;
+            margin-top: 2px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-weight: 600;
+            word-wrap: break-word; 
+            white-space: pre-wrap; 
+            flex-grow: 1;
+            text-align: start; 
+        }
+
+        .review-image-wrapper {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            pointer-events: auto; 
+        }
+
+        .review-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .zoom-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            backdrop-filter: blur(2px);
+            pointer-events: none;
+        }
+
+        .load-more-card {
+            width: 140px;
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(5, 209, 205, 0.05);
+            border: 2px dashed var(--mauve-primary);
+            border-radius: 20px;
+            color: var(--mauve-dark);
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            scroll-snap-align: center;
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+
+        .load-more-card i {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--mauve-primary);
+            animation: slideLeft 1.5s infinite ease-in-out;
+        }
+
+        @keyframes slideLeft {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-8px); }
+        }
+
+        .load-more-card:active {
+            transform: scale(0.95);
+            background: rgba(5, 209, 205, 0.15);
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active .lightbox-img {
+            transform: scale(1);
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+<div class="container">
+    <header class="animate__animated animate__fadeInDown">
+        <h1>تقييمات الزبائن</h1>
+        <p>ثقتكم هي مسؤولية .. شكراً لكل كلمة طيبة</p>
+        <div class="header-icon">
+            <i class="fas fa-heart"></i>
+        </div>
+        <p class="swipe-hint">&rarr; اسحب لليمين لعرض المزيد من التقييمات &larr;</p>
+
+
+    </header>
+
+    <div class="tabs-container animate__animated animate__fadeIn">
+        <button class="tab-btn active" onclick="changeFilter('all', this)">الكل</button>
+        <button class="tab-btn" onclick="changeFilter('chat', this)">محادثات تسعدنا</button>
+        <button class="tab-btn" onclick="changeFilter('product', this)">تصوير زبائننا</button>
+    </div>
+
+    <!-- الكاروسيل الذي يحتوي البطاقات وبطاقة "المزيد" -->
+    <div class="reviews-carousel" id="reviews-container">
+        <!-- يتم توليد المحتوى هنا -->
+    </div>
+</div>
+
+<div class="lightbox" id="lightbox">
+    <div class="close-lightbox" onclick="closeLightbox()"><i class="fas fa-times"></i></div>
+    <img src="" alt="Zoomed Review" class="lightbox-img" id="lightbox-img">
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.BackButton.show();
+    tg.BackButton.onClick(function() {
+        window.location.href = "index.html"; 
+    });
+
+    const maleSvg = `
+        <svg class="avatar-svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M12,14 C8.67,14 2,15.67 2,19 L2,22 L22,22 L22,19 C22,15.67 15.33,14 12,14 Z" />
+        </svg>
+    `;
+
+    const femaleSvg = `
+        <svg class="avatar-svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4" />
+            <path d="M12,14 C8.67,14 2,15.67 2,19 L2,22 L22,22 L22,19 C22,15.67 15.33,14 12,14 Z" />
+        </svg>
+    `;
+
+    // البيانات الوهمية 
+    const reviewsData = [
+        { id: 1, name: "Roni", gender: "male", date: "20-05-2026", rating: 5, comment: "الطباعة بتاخد العقل، والمقاس طلع مية بالمية متل ما بدي تماماً. يعطيكن ألف عافية.", type: "product", imgUrl: "https://via.placeholder.com/400x400/05D1CE/ffffff?text=1" },
+        { id: 2, name: "زبون ٢", gender: "female", date: "24-04-2026", rating: 5, comment: "يسلم دياتكم يا رب، التصميم طلع بيجنن على الماغ والباكيجينج مرتب.", type: "chat", imgUrl: "https://via.placeholder.com/300x500/f0f0f0/4a4a4a?text=2" },
+        { id: 3, name: "زبون ٣", gender: "female", date: "منذ أسبوعين", rating: 5, comment: "سرعة بالتوصيل وتعامل راقي جداً.. والتيشرت قماشته كتير مريحة.", type: "product", imgUrl: "https://via.placeholder.com/400x300/333333/ffffff?text=3" },
+        { id: 4, name: "زبون ٤", gender: "male", date: "منذ شهر", rating: 5, comment: "التفاصيل باللوغو واضحة وممتازة، شكراً لاهتمامكم بأدق التفاصيل.", type: "chat", imgUrl: "https://via.placeholder.com/300x400/f0f0f0/4a4a4a?text=4" },
+        { id: 5, name: "زبون ٥", gender: "female", date: "منذ شهر", rating: 5, comment: "شغل متقن ومرتب، يعطيكم العافية على هذه الجودة.", type: "product", imgUrl: "https://via.placeholder.com/400x400/ff66b2/ffffff?text=5" },
+        { id: 6, name: "زبون ٦", gender: "male", date: "منذ شهرين", rating: 5, comment: "Amazing service and very fast delivery. I highly recommend them!", type: "chat", imgUrl: "https://via.placeholder.com/300x400/3399ff/ffffff?text=6" },
+        { id: 7, name: "زبون ٧", gender: "female", date: "منذ شهرين", rating: 5, comment: "الخامة ممتازة والألوان ثابتة بعد الغسيل.", type: "product", imgUrl: "https://via.placeholder.com/400x400/ff66b2/ffffff?text=7" },
+    ];
+
+    const container = document.getElementById('reviews-container');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    const itemsPerLoad = 5; 
+    let currentLimit = itemsPerLoad; 
+    let currentFilterType = 'all'; 
+
+    function renderReviews(reset = true) {
+        const filteredData = currentFilterType === 'all' 
+            ? reviewsData 
+            : reviewsData.filter(review => review.type === currentFilterType);
+
+        if (reset) {
+            container.innerHTML = "";
+            currentLimit = itemsPerLoad;
+        } else {
+            const loadCard = document.getElementById('load-more-card');
+            if (loadCard) loadCard.remove();
+        }
+
+        const startIndex = reset ? 0 : currentLimit - itemsPerLoad;
+        const dataToShow = filteredData.slice(startIndex, currentLimit);
+
+        let htmlString = "";
+
+        dataToShow.forEach((review, index) => {
+            let starsHtml = '';
+            for(let i=0; i<review.rating; i++) {
+                starsHtml += `<i class="fa-solid fa-star"></i>`;
+            }
+
+            const isFemale = review.gender === 'female';
+            const cardBorderColor = isFemale ? 'var(--female-color)' : 'var(--male-color)';
+            const avatarColor = isFemale ? 'var(--female-color)' : 'var(--male-color)';
+            
+            const avatarIcon = isFemale ? femaleSvg : maleSvg;
+
+            htmlString += `
+                <div class="review-card fade-in" style="border-color: ${cardBorderColor};">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-avatar" style="color: ${avatarColor}; border: 1px solid ${avatarColor}40;">
+                                ${avatarIcon}
+                            </div>
+                            <div class="reviewer-details">
+                                <div class="name-stars-wrapper">
+                                    <div class="reviewer-name" dir="rtl">${review.name}</div>
+                                    <div class="stars">${starsHtml}</div>
+                                </div>
+                                <div class="review-date" dir="rtl">${review.date}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="review-text" dir="auto">"${review.comment}"</div>
+
+                    <div class="review-image-wrapper" onclick="openLightbox('${review.imgUrl}')">
+                        <img src="${review.imgUrl}" alt="Customer Review" class="review-img" loading="lazy">
+                        <div class="zoom-icon"><i class="fas fa-search-plus"></i></div>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (currentLimit < filteredData.length) {
+            htmlString += `
+                <div id="load-more-card" class="load-more-card fade-in" onclick="loadMoreReviews()">
+                    <i class="fa-solid fa-arrow-left-long"></i>
+                    <span>عرض المزيد</span>
+                </div>
+            `;
+        }
+
+        container.insertAdjacentHTML('beforeend', htmlString);
+    }
+
+    function loadMoreReviews() {
+        currentLimit += itemsPerLoad; 
+        renderReviews(false); 
+    }
+
+    function changeFilter(type, btnElement) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+        
+        currentFilterType = type;
+        renderReviews(true); 
+        
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+
+    function openLightbox(imgSrc) {
+        lightboxImg.src = imgSrc;
+        lightbox.classList.add('active');
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+    }
+
+    lightbox.addEventListener('click', function(e) {
+        if (e.target !== lightboxImg) {
+            closeLightbox();
+        }
+    });
+
+    document.addEventListener('contextmenu', e => e.preventDefault(), false);
+    document.addEventListener('dragstart', e => e.preventDefault(), false);
+
+    window.onload = () => {
+        renderReviews(true);
+    };
+
+</script>
+</body>
+</html>
