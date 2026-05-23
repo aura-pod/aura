@@ -307,7 +307,7 @@
             </div>
         </div>
 
-        <!-- زر عروض الفلاش الجديد (يتم التحكم بظهوره برمجياً عبر الـ JavaScript بالأسفل) -->
+        <!-- زر عروض الفلاش -->
         <div id="flash-sale-btn" onclick="window.location.href='flash.html'" class="btn-item flash-btn animate__animated animate__fadeInUp" style="animation-delay: 0.8s; display: none;">
             <div class="icon-box">
                 <i class="fas fa-bolt"></i>
@@ -315,6 +315,17 @@
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 700; font-size: 17px; color: var(--flash-color);">عروض الـ Flash Sale</span>
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">خصومات قوية وحصرية لفترة محدودة جداً</small>
+            </div>
+        </div>
+
+        <!-- زر آراء الزبائن الجديد -->
+        <div id="reviews-btn" onclick="window.location.href='reviews.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.9s; display: none;">
+            <div class="icon-box">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
+                <span style="font-weight: 600; font-size: 17px;">آراء الزبائن</span>
+                <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">تصفح تجارب زبائننا السابقين وتقييماتهم</small>
             </div>
         </div>
 
@@ -328,12 +339,17 @@
 
 <script>
     // ==========================================
-    // لوحة التحكم بإظهار وإخفاء زر عروض الفلاش
+    // لوحة التحكم بإظهار وإخفاء الأزرار الخاصة
     // ==========================================
-    const showFlashSaleButton = true; // اجعلها true للإظهار، أو false للإخفاء تماماً
+    const showFlashSaleButton = true;  // اجعلها true للإظهار، أو false للإخفاء تماماً
+    const showReviewsButton = true;   // اجعلها false حالياً (نظراً لعدم وجود تقييمات)، وعند توفرها غيرها إلى true
 
     if (showFlashSaleButton) {
         document.getElementById('flash-sale-btn').style.display = 'flex';
+    }
+
+    if (showReviewsButton) {
+        document.getElementById('reviews-btn').style.display = 'flex';
     }
 
     // ==========================================
