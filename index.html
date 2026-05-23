@@ -19,6 +19,7 @@
             --text-main: #4a4a4a;
             --white: #ffffff;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --flash-color: #ff3366; /* لون مميز خاص بزر عروض الفلاش للفت الانتباه */
         }
 
         /* إعدادات أمان إضافية لمنع تحديد النصوص والقوائم */
@@ -70,13 +71,13 @@
         
         /* تنسيق لوغو البزنس الجديد */
         .brand-logo-custom {
-            width: 200px; /* يمكنك تعديل الحجم حسب الرغبة */
-            height: auto; /* للحفاظ على أبعاد الصورة */
+            width: 200px; 
+            height: auto; 
             display: block;
-            margin: 0 auto 15px; /* لتوسط اللوغو وترك مسافة بالأسفل */
-            filter: drop-shadow(0 0px 0px rgba(5, 209, 205, 0.25)); /* إضافة الظل مباشرة على الصورة */
-            pointer-events: none; /* إيقاف التفاعل مع الصورة لمنع ظهور القائمة عند النقر المطول */
-            -webkit-user-drag: none; /* منع سحب الصورة */
+            margin: 0 auto 15px; 
+            filter: drop-shadow(0 0px 0px rgba(5, 209, 205, 0.25)); 
+            pointer-events: none; 
+            -webkit-user-drag: none; 
         }
 
         header h1 {
@@ -109,7 +110,7 @@
             border: 1px solid rgba(5, 209, 205, 0.1);
             transition: var(--transition);
             position: relative;
-            cursor: pointer; /* إضافة شكل اليد عند التمرير بالماوس للأجهزة المكتبية */
+            cursor: pointer; 
         }
 
         /* تأثير الأيقونة */
@@ -127,6 +128,11 @@
             transition: var(--transition);
         }
 
+        /* تخصيص أيقونة الفلاش بلونها الخاص عند الهوفر */
+        .btn-item.flash-btn .icon-box {
+            color: var(--flash-color);
+        }
+
         .btn-item span {
             font-size: 17px;
             font-weight: 500;
@@ -141,15 +147,24 @@
             border-color: var(--mauve-primary);
         }
 
+        .btn-item.flash-btn:hover {
+            border-color: var(--flash-color);
+        }
+
         .btn-item:hover .icon-box {
             background: var(--mauve-dark);
             color: white;
             transform: rotate(10deg);
         }
 
+        .btn-item.flash-btn:hover .icon-box {
+            background: var(--flash-color);
+            color: white;
+        }
+
         /* سهم صغير على اليسار */
         .btn-item::after {
-            content: '\f104'; /* أيقونة سهم FontAwesome */
+            content: '\f104'; 
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
             margin-right: auto;
@@ -162,6 +177,10 @@
             transform: translateX(-5px);
         }
 
+        .btn-item.flash-btn:hover::after {
+            color: var(--flash-color);
+        }
+
         footer {
             text-align: center;
             margin-top: 50px;
@@ -170,42 +189,40 @@
             letter-spacing: 1px;
         }
 
-        /* 1. التعديل الأساسي لإخفاء المستطيل الأزرق/الرمادي عند اللمس */
+        /* إخفاء المستطيل الأزرق/الرمادي عند اللمس */
         .btn-item {
             outline: none;
-            -webkit-tap-highlight-color: transparent; /* هذا السطر هو السر لإخفاء المستطيل */
-            user-select: none; /* لمنع تحديد النص عند الضغط المطول */
-            -webkit-touch-callout: none; /* لمنع ظهور القوائم عند الضغط المطول في أجهزة آبل */
+            -webkit-tap-highlight-color: transparent; 
+            user-select: none; 
+            -webkit-touch-callout: none; 
             transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s ease;
         }
 
-        /* 2. تأثير حركة الضغط الحقيقية (الزر ينضغط للداخل) */
+        /* تأثير حركة الضغط الحقيقية */
         .btn-item:active {
-            transform: scale(0.95); /* تصغير الزر بنسبة بسيطة جداً ليعطي شعور الضغط */
-            box-shadow: 0 2px 5px rgba(214, 214, 214, 0.1); /* تقليل الظل ليظهر وكأن الزر اقترب من الخلفية */
-            background-color: #f0f0f0; /* تغيير بسيط جداً في درجة اللون لزيادة التفاعل */
-            transition: 0.1s; /* سرعة استجابة الضغط */
+            transform: scale(0.95); 
+            box-shadow: 0 2px 5px rgba(214, 214, 214, 0.1); 
+            background-color: #f0f0f0; 
+            transition: 0.1s; 
         }
 
-        /* 3. تأثير إضافي للأيقونة داخل الزر عند الضغط */
+        /* تأثير إضافي للأيقونة داخل الزر عند الضغط */
         .btn-item:active .icon-box {
-            transform: scale(0.9); /* تصغير الأيقونة أيضاً بانسجام مع الزر */
+            transform: scale(0.9); 
         }
 
-        /* إخفاء شريط التمرير للمتصفحات المعتمدة على Chrome و Safari و Opera (موبايل وكمبيوتر) */
+        /* إخفاء شريط التمرير */
         body::-webkit-scrollbar {
             display: none;
         }
 
-        /* إخفاء شريط التمرير لمتصفح Firefox */
         body {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-            overflow-y: scroll; /* السماح بالتمرير العمودي */
-            -webkit-overflow-scrolling: touch; /* تمرير سلس جداً على هواتف iPhone */
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+            overflow-y: scroll; 
+            -webkit-overflow-scrolling: touch; 
         }
 
-        /* لضمان أن الحاوية الرئيسية تسمح بالتمرير أيضاً إذا طالت المحتويات */
         .container {
             overflow-y: auto;
             -ms-overflow-style: none;
@@ -221,13 +238,12 @@
 
 <div class="container">
     <header class="animate__animated animate__fadeInDown">
-    <img src="aura-logo-index.png" alt="Logo" class="brand-logo-custom" draggable="false">
-    <h1>متجر أورا للطباعة حسب الطلب</h1>
-    <h3>هون بتطلب وبتعرف كل شي عن المتجر وعن طلبك</h3>
+        <img src="aura-logo-index.png" alt="Logo" class="brand-logo-custom" draggable="false">
+        <h1>متجر أورا للطباعة حسب الطلب</h1>
+        <h3>هون بتطلب وبتعرف كل شي عن المتجر وعن طلبك</h3>
     </header>
 
-
-    <div class="menu-list">
+    <div class="menu-list" id="main-menu-list">
         
         <div onclick="window.location.href='info.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
             <div class="icon-box">
@@ -291,21 +307,44 @@
             </div>
         </div>
 
+        <!-- زر عروض الفلاش الجديد (يتم التحكم بظهوره برمجياً عبر الـ JavaScript بالأسفل) -->
+        <div id="flash-sale-btn" onclick="window.location.href='flash.html'" class="btn-item flash-btn animate__animated animate__fadeInUp" style="animation-delay: 0.8s; display: none;">
+            <div class="icon-box">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
+                <span style="font-weight: 700; font-size: 17px; color: var(--flash-color);">عروض الـ Flash Sale</span>
+                <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">خصومات قوية وحصرية لفترة محدودة جداً</small>
+            </div>
+        </div>
+
     </div>
 
     <footer class="animate__animated animate__fadeIn">
- منتمنالك يوم مليء بالخير والسعادة والنجاح ❤️
-      AURA 2026
+        بتمنالك يوم مليء بالخير والسعادة والنجاح ❤️
+        <br>AURA 2026
     </footer>
 </div>
 
 <script>
+    // ==========================================
+    // لوحة التحكم بإظهار وإخفاء زر عروض الفلاش
+    // ==========================================
+    const showFlashSaleButton = true; // اجعلها true للإظهار، أو false للإخفاء تماماً
+
+    if (showFlashSaleButton) {
+        document.getElementById('flash-sale-btn').style.display = 'flex';
+    }
+
+    // ==========================================
+    // إعدادات بيئة تيليغرام وحماية الواجهة
+    // ==========================================
     const tg = window.Telegram.WebApp;
     window.Telegram.WebApp.BackButton.hide();
     tg.ready();
-    tg.expand(); // لفتح التطبيق بكامل الشاشة تلقائياً
+    tg.expand(); 
 
-    // جافاسكربت صارم لتعطيل القائمة المنبثقة (Context Menu) عند الضغط المطول على الأزرار والصورة
+    // جافاسكربت لمنع القائمة المنبثقة (Context Menu) عند الضغط المطول
     document.querySelectorAll('.btn-item, .brand-logo-custom').forEach(element => {
         element.addEventListener('contextmenu', function(e) {
             e.preventDefault();
