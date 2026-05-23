@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عروض سريعة خاصة | متجر أورا</title>
+    
+    <!-- مكتبة تيليغرام للـ Mini Apps -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- استيراد خط Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* التنسيقات العامة */
+        :root {
+            --primary: #ff3366;
+            --primary-hover: #e02251;
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --shadow: 0 15px 35px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            /* تصميم متوافق مع ثيم تيليغرام التلقائي (الوضع الليلي والنهاري) */
+            background-color: var(--tg-theme-bg-color, #f3f4f6);
+            color: var(--tg-theme-text-color, var(--dark));
+            overflow-x: hidden;
+            padding-bottom: 50px;
+        }
+
+        .flash-sale-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* الهيدر */
+        .header-section {
+            text-align: center;
+            margin: 20px 0 40px 0;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 0.8s forwards ease-out;
+        }
+
+        @keyframes fadeInDown {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-section h1 i {
+            color: var(--primary);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* العداد الزمني */
+        .countdown-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .countdown-box {
+            background: linear-gradient(135deg, var(--tg-theme-button-color, var(--dark)), #333);
+            color: var(--tg-theme-button-text-color, #fff);
+            min-width: 70px;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .countdown-box .number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .countdown-box .label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        /* رسالة عدم وجود عروض */
+        .no-offers-msg {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--danger);
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(220, 53, 69, 0.1);
+            border-radius: 15px;
+            border: 1px dashed var(--danger);
+        }
+
+        /* شبكة المنتجات (بطاقات فقط بدون صور) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: var(--tg-theme-secondary-bg-color, #fff);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+            transition: var(--transition);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid var(--primary); /* لمسة جمالية تعويضية عن الصور */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 51, 102, 0.15);
+        }
+
+        /* شارات الخصم والشحن */
+        .badges-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .discount-badge {
+            background: var(--primary);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+        }
+
+        .shipping-badge {
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .shipping-badge.available {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+
+        .shipping-badge.unavailable {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+        }
+
+        /* تفاصيل المنتج */
+        .product-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .price-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .current-price {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--success); /* إبراز السعر الجديد */
+        }
+
+        .old-price {
+            font-size: 1.1rem;
+            color: var(--gray);
+            text-decoration: line-through;
+        }
+
+        /* الألوان */
+        .colors-section {
+            margin-top: auto;
+        }
+
+        .colors-title {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .colors-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--tg-theme-secondary-bg-color, #fff);
+            box-shadow: 0 0 0 1px #ccc;
+        }
+
+        /* موبايل */
+        @media (max-width: 768px) {
+            .header-section h1 { font-size: 1.5rem; }
+            .countdown-box { min-width: 60px; padding: 8px; }
+            .countdown-box .number { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="flash-sale-container">
+        
+        <!-- الحاوية العلوية (العنوان والعداد) -->
+        <header class="header-section" id="header-content">
+            <h1><i class="fa-solid fa-bolt"></i> عروض سريعة خاصة</h1>
+            <p style="color: var(--gray); font-weight: 600;" id="subtitle-text">ينتهي العرض الحالي خلال:</p>
+            
+            <div class="countdown-wrapper" id="timer-container">
+                <div class="countdown-box">
+                    <span class="number" id="hours">00</span>
+                    <span class="label">ساعة</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="number" id="minutes">00</span>
+                    <span class="label">دقيقة</span>
+                </div>
+                <div class="countdown-box">
+                    <span class="number" id="seconds">00</span>
+                    <span class="label">ثانية</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- شبكة المنتجات -->
+        <main class="products-grid" id="products-container"></main>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // إعدادات بيئة تيليغرام (Telegram WebApp)
+        // ==========================================
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // يفتح التطبيق المصغر بملء الشاشة
+        
+        // تفعيل زر الرجوع (Back Button) الخاص بتيليغرام ليعود لصفحة index.html
+        tg.BackButton.show();
+        tg.BackButton.onClick(function() {
+            window.location.href = "index.html"; 
+        });
+
+        // ==========================================
+        // 1. إعدادات تاريخ ووقت بداية ونهاية العرض (بتنسيق: السنة-الشهر-اليوم T الساعة:الدقيقة:الثانية)
+        // ==========================================
+        const saleStartTime = new Date("2026-05-23T08:00:00").getTime(); // وقت البداية
+        const saleEndTime   = new Date("2026-05-25T13:31:00").getTime(); // وقت النهاية
+
+        // ==========================================
+        // 2. بيانات المنتجات
+        // ==========================================
+        const productsData = [
+            {
+                id: "tshirt",
+                name: "تيشرت",
+                show: true, 
+                isAvailableForShipping: true,
+                basePrice: 25, // السعر الأساسي بالدولار
+                isPercentageDiscount: true, // TRUE: خصم مئوي (%) | FALSE: خصم مبلغ ثابت ($)
+                discountValue: 20, // سيتم خصم 20% لأن الاختيار أعلاه TRUE
+                colors: ["#000000", "#ffffff", "#ff0000", "#0000ff"]
+            },
+            {
+                id: "hoodie",
+                name: "هودي",
+                show: true,
+                isAvailableForShipping: true,
+                basePrice: 45,
+                isPercentageDiscount: false, // FALSE: خصم مبلغ ثابت
+                discountValue: 10, // سيتم خصم 10 دولار ثابتة من السعر
+                colors: ["#000000", "#555555", "#8b0000"]
+            },
+            {
+                id: "barbatos",
+                name: "بارباتوز",
+                show: true,
+                isAvailableForShipping: false,
+                basePrice: 15,
+                isPercentageDiscount: true,
+                discountValue: 15, // خصم 15%
+                colors: ["#ffc0cb", "#add8e6", "#ffffff"]
+            },
+            {
+                id: "totebag",
+                name: "توت باغ",
+                show: true,
+                isAvailableForShipping: true,
+                basePrice: 12,
+                isPercentageDiscount: false,
+                discountValue: 3, // خصم 3 دولار
+                colors: ["#f5f5dc", "#000000"]
+            },
+            {
+                id: "mug",
+                name: "ماغ",
+                show: true,
+                isAvailableForShipping: true,
+                basePrice: 10,
+                isPercentageDiscount: true,
+                discountValue: 25, // خصم 25%
+                colors: ["#ffffff", "#000000", "#ff3366"]
+            },
+            {
+                id: "tumbler",
+                name: "تامبلر",
+                show: true,
+                isAvailableForShipping: true,
+                basePrice: 20,
+                isPercentageDiscount: false,
+                discountValue: 5, // خصم 5 دولار
+                colors: ["#c0c0c0", "#000000", "#008080"]
+            }
+        ];
+
+        const container = document.getElementById('products-container');
+        const timerContainer = document.getElementById('timer-container');
+        const subtitleText = document.getElementById('subtitle-text');
+
+        // ==========================================
+        // 3. بناء الواجهة والتحقق من الوقت
+        // ==========================================
+        function initFlashSale() {
+            let now = new Date().getTime();
+
+            // التحقق مما إذا كان الوقت الحالي خارج فترة العرض (قبله أو بعده)
+            if (now < saleStartTime || now > saleEndTime) {
+                // عرض رسالة "لا يوجد عروض" وإخفاء المنتجات
+                timerContainer.innerHTML = "";
+                subtitleText.style.display = "none";
+                container.innerHTML = `<div class="no-offers-msg">لا يوجد حالياً عروض flash sales</div>`;
+                return; // إيقاف تنفيذ باقي الكود
+            }
+
+            // إذا كان العرض سارياً، قم ببناء المنتجات
+            renderProducts();
+            startTimer();
+        }
+
+        function renderProducts() {
+            container.innerHTML = ""; 
+            
+            productsData.forEach(product => {
+                if (!product.show) return; 
+
+                // حساب السعر النهائي وتحديد نص شارة الخصم بناءً على الـ TRUE/FALSE
+                let finalPrice = 0;
+                let discountText = "";
+
+                if (product.isPercentageDiscount) {
+                    // حساب الخصم المئوي
+                    finalPrice = product.basePrice - (product.basePrice * (product.discountValue / 100));
+                    discountText = `خصم ${product.discountValue}%`;
+                } else {
+                    // حساب خصم المبلغ الثابت
+                    finalPrice = product.basePrice - product.discountValue;
+                    discountText = `خصم $${product.discountValue}`;
+                }
+
+                const shippingBadge = product.isAvailableForShipping 
+                    ? `<span class="shipping-badge available"><i class="fa-solid fa-truck"></i> متوفر شحن</span>`
+                    : `<span class="shipping-badge unavailable"><i class="fa-solid fa-truck"></i> غير متوفر شحن</span>`;
+
+                let colorsHTML = '';
+                if(product.colors && product.colors.length > 0) {
+                    colorsHTML = `<div class="colors-section">
+                                    <div class="colors-title">الألوان المتوفرة في العرض:</div>
+                                    <div class="colors-list">`;
+                    product.colors.forEach(color => {
+                        colorsHTML += `<span class="color-dot" style="background-color: ${color};"></span>`;
+                    });
+                    colorsHTML += `</div></div>`;
+                }
+
+                // بطاقة المنتج بدون صور وبدون زر "اطلب الآن"
+                const cardHTML = `
+                    <div class="product-card">
+                        <div class="badges-top">
+                            <span class="discount-badge">${discountText}</span>
+                            ${shippingBadge}
+                        </div>
+                        
+                        <h3 class="product-title">${product.name}</h3>
+                        
+                        <div class="price-wrapper">
+                            <span class="current-price">$${finalPrice.toFixed(2)}</span>
+                            <span class="old-price">$${product.basePrice.toFixed(2)}</span>
+                        </div>
+                        
+                        ${colorsHTML}
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
+            });
+        }
+
+        // ==========================================
+        // 4. برمجة العداد الزمني المرتبط بوقت النهاية
+        // ==========================================
+        function startTimer() {
+            const timerInterval = setInterval(function() {
+                let now = new Date().getTime();
+                let distance = saleEndTime - now;
+
+                if (distance < 0) {
+                    clearInterval(timerInterval);
+                    // إعادة تحميل الحالة عند انتهاء الوقت لظهور رسالة "لا يوجد عروض"
+                    initFlashSale(); 
+                    return;
+                }
+
+                let hours = Math.floor(distance / (1000 * 60 * 60));
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+                document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+                
+            }, 1000);
+        }
+
+        // تشغيل النظام عند تحميل الصفحة
+        initFlashSale();
+
+        // ==========================================
+        // حماية واجهة المستخدم (تعطيل القوائم المنبثقة)
+        // ==========================================
+        document.addEventListener('contextmenu', e => e.preventDefault(), false);
+        document.addEventListener('dragstart', e => e.preventDefault(), false);
+    </script>
+</body>
+</html>
