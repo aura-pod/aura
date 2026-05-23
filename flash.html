@@ -19,7 +19,7 @@
         :root {
             --primary: #ff3366;
             --primary-hover: #e02251;
-            --dark: #1a1a1a;
+            --dark: #05D1CE;
             --light: #f8f9fa;
             --gray: #6c757d;
             --success: #28a745;
@@ -38,9 +38,9 @@
         }
 
         body {
-            /* تصميم متوافق مع ثيم تيليغرام التلقائي (الوضع الليلي والنهاري) */
-            background-color: var(--tg-theme-bg-color, #f3f4f6);
-            color: var(--tg-theme-text-color, var(--dark));
+            /* تصميم ثابت يتجاهل ثيم تيليغرام التلقائي (الوضع الليلي والنهاري) */
+            background-color: #f3f4f6;
+            color: var(--dark);
             overflow-x: hidden;
             padding-bottom: 50px;
         }
@@ -121,8 +121,8 @@
         }
 
         .countdown-box {
-            background: linear-gradient(135deg, var(--tg-theme-button-color, var(--dark)), #333);
-            color: var(--tg-theme-button-text-color, #fff);
+            background: linear-gradient(135deg, var(--dark), #333);
+            color: #fff;
             min-width: 70px;
             padding: 10px;
             border-radius: 12px;
@@ -164,7 +164,7 @@
         }
 
         .product-card {
-            background: var(--tg-theme-secondary-bg-color, #fff);
+            background: #fff;
             border-radius: 15px;
             padding: 25px;
             box-shadow: var(--shadow);
@@ -269,7 +269,7 @@
             width: 24px;
             height: 24px;
             border-radius: 50%;
-            border: 2px solid var(--tg-theme-secondary-bg-color, #fff);
+            border: 2px solid #fff;
             box-shadow: 0 0 0 1px #ccc;
         }
 
