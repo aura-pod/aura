@@ -20,7 +20,6 @@
             --white: #ffffff;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             --flash-color: #ff3366; /* لون مميز خاص بزر عروض الفلاش للفت الانتباه */
-            --orange-color: #FF6B01; /* لون الشريط والإضافات */
         }
 
         /* إعدادات أمان إضافية لمنع تحديد النصوص والقوائم */
@@ -49,42 +48,11 @@
             box-sizing: border-box;
         }
 
-        /* تنسيقات الشريط الإخباري المتحرك */
-        .ticker-wrap {
-            width: 100%;
-            background-color: var(--white);
-            color: var(--orange-color);
-            overflow: hidden;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: none; /* مخفي افتراضياً لمنع الوميض عند اختيار إخفائه */
-            box-shadow: 0 4px 10px rgba(255, 107, 1, 0.2);
-            position: relative;
-            height: 40px;
-            line-height: 40px;
-            direction: ltr; /* تثبيت الاتجاه لضمان خروج النص من أقصى اليسار بدقة */
-        }
-
-        .ticker-text {
-            position: absolute;
-            white-space: nowrap;
-            font-size: 14px;
-            font-weight: 700;
-            direction: rtl; /* الحفاظ على اتجاه النص العربي */
-            /* الحركة من نقطة الصفر في اليسار إلى أقصى اليمين */
-            animation: move-left-to-right 12s linear infinite;
-        }
-
-        @keyframes move-left-to-right {
-            0% { left: 0; transform: translateX(-100%); }
-            100% { left: 100%; transform: translateX(0%); }
-        }
-
         /* تنسيق الهيدر */
         header {
             text-align: center;
             margin-bottom: 40px;
-            padding-top: 5px;
+            padding-top: 20px;
         }
 
         .logo-area {
@@ -269,22 +237,15 @@
 <body>
 
 <div class="container">
-
-    <div id="news-ticker" class="ticker-wrap animate__animated animate__fadeInDown">
-        <div class="ticker-text" id="ticker-message">
-            🎉 أهلاً بك في متجر أورا للطباعة حسب الطلب 😊 شحن مجاني للطلبات فوق 50$ 🚀
-        </div>
-    </div>
-
     <header class="animate__animated animate__fadeInDown">
         <img src="aura-logo-index.png" alt="Logo" class="brand-logo-custom" draggable="false">
         <h1>متجر أورا للطباعة حسب الطلب</h1>
         <h3>هون بتطلب وبتعرف كل شي عن المتجر وعن طلبك</h3>
     </header>
 
-        <div class="menu-list" id="main-menu-list">
+    <div class="menu-list" id="main-menu-list">
         
-        <div id="info-btn" onclick="window.location.href='info.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s; display: none;">
+        <div onclick="window.location.href='info.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
             <div class="icon-box">
                 <i class="fas fa-circle-info"></i>
             </div>
@@ -294,7 +255,7 @@
             </div>
         </div>
 
-        <div id="order-btn" onclick="window.location.href='order.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s; display: none;">
+        <div onclick="window.location.href='order.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
             <div class="icon-box"><i class="fas fa-shopping-bag"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">طلب شراء</span>
@@ -302,7 +263,7 @@
             </div>
         </div>
 
-        <div id="loyalty-btn" onclick="window.location.href='loyalty.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.3s; display: none;">
+        <div onclick="window.location.href='loyalty.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
             <div class="icon-box"><i class="fas fa-gift"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">بطاقة نقاط أورا</span>
@@ -310,7 +271,7 @@
             </div>
         </div>
 
-        <div id="available-btn" onclick="window.location.href='available.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.4s; display: none;">
+        <div onclick="window.location.href='available.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
             <div class="icon-box"><i class="fas fa-tags"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">المنتجات المتوفرة</span>
@@ -318,7 +279,7 @@
             </div>
         </div>
 
-        <div id="size-btn" onclick="window.location.href='size.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.5s; display: none;">
+        <div onclick="window.location.href='size.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
             <div class="icon-box"><i class="fas fa-ruler-horizontal"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
                 <span style="font-weight: 600; font-size: 17px;">دليل المقاسات والعناية</span>
@@ -326,7 +287,7 @@
             </div>
         </div>
 
-        <div id="track-btn" onclick="window.location.href='track.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.6s; display: none;">
+        <div onclick="window.location.href='track.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
             <div class="icon-box">
                 <i class="fas fa-layer-group"></i> 
             </div>
@@ -336,7 +297,7 @@
             </div>
         </div>
 
-        <div id="mockup-btn" onclick="window.location.href='mockup.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.7s; display: none;">
+        <div onclick="window.location.href='mockup.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.7s;">
             <div class="icon-box">
                 <i class="fas fa-palette"></i>
             </div>
@@ -365,9 +326,18 @@
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">تصفح تجارب زبائننا وتقييماتهم</small>
             </div>
         </div>
+        
+        <div id="community-dir-btn" onclick="window.location.href='directory.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 1.0s; display: none;">
+            <div class="icon-box">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
+                <span style="font-weight: 600; font-size: 17px;">الدليل التجاري المجتمعي</span>
+                <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">مساحة إعلانية مجانية لأي صاحب عمل</small>
+            </div>
+        </div>
 
     </div>
-
 
     <footer class="animate__animated animate__fadeIn">
         بتمنالك يوم مليء بالخير والسعادة والنجاح ❤️
@@ -377,37 +347,24 @@
 
 <script>
     // ==========================================
-    // لوحة التحكم بإظهار وإخفاء الأزرار والإعلانات
+    // لوحة التحكم بإظهار وإخفاء الأزرار الخاصة
     // ==========================================
-    
-    const showNewsTicker = true;      // شريط الإعلانات المتحرك
-    
-    // التحكم بظهور الأزرار (اجعلها true للإظهار، أو false للإخفاء)
-    const showInfoBtn = true;         // دليل أورا
-    const showOrderBtn = true;        // طلب شراء
-    const showLoyaltyBtn = true;      // بطاقة نقاط أورا
-    const showAvailableBtn = true;    // المنتجات المتوفرة
-    const showSizeBtn = true;         // دليل المقاسات والعناية
-    const showTrackBtn = true;        // تتبع الطلب
-    const showMockupBtn = true;       // معاينة التصميم
-    const showFlashSaleBtn = true;    // عروض سريعة خاصة
-    const showReviewsBtn = true;     // تقييمات الزبائن (مخفي كمثال)
+    const showFlashSaleButton = true;      // اجعلها true للإظهار، أو false للإخفاء تماماً
+    const showReviewsButton = true;        // اجعلها false حالياً (نظراً لعدم وجود تقييمات)، وعند توفرها غيرها إلى true
+    const showCommunityDirButton = true;   // أداة التحكم بزر الدليل التجاري المجتمعي الجديد
 
-    // تفعيل شريط الإعلانات
-    if (showNewsTicker) {
-        document.getElementById('news-ticker').style.display = 'block';
+    if (showFlashSaleButton) {
+        document.getElementById('flash-sale-btn').style.display = 'flex';
     }
 
-    // تفعيل الأزرار بناءً على الخيارات أعلاه
-    if (showInfoBtn) document.getElementById('info-btn').style.display = 'flex';
-    if (showOrderBtn) document.getElementById('order-btn').style.display = 'flex';
-    if (showLoyaltyBtn) document.getElementById('loyalty-btn').style.display = 'flex';
-    if (showAvailableBtn) document.getElementById('available-btn').style.display = 'flex';
-    if (showSizeBtn) document.getElementById('size-btn').style.display = 'flex';
-    if (showTrackBtn) document.getElementById('track-btn').style.display = 'flex';
-    if (showMockupBtn) document.getElementById('mockup-btn').style.display = 'flex';
-    if (showFlashSaleBtn) document.getElementById('flash-sale-btn').style.display = 'flex';
-    if (showReviewsBtn) document.getElementById('reviews-btn').style.display = 'flex';
+    if (showReviewsButton) {
+        document.getElementById('reviews-btn').style.display = 'flex';
+    }
+    
+    // إظهار زر الدليل التجاري المجتمعي بناءً على حالة المتغير
+    if (showCommunityDirButton) {
+        document.getElementById('community-dir-btn').style.display = 'flex';
+    }
 
     // ==========================================
     // إعدادات بيئة تيليغرام وحماية الواجهة
@@ -426,7 +383,6 @@
         });
     });
 </script>
-
 
 </body>
 </html>
