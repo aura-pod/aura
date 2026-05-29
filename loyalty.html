@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بطاقة نقاط أورا | متجر أورا</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -52,13 +52,12 @@
     padding-top: 5px;
 }
 
-
         /* حقل الإدخال 3D مفرغ */
         .search-box { margin-bottom: 35px; }
         input {
             width: 100%; padding: 20px; border-radius: 20px;
             background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.05);
-            color: #fff; font-size: 14px; text-align: center; outline: none;
+            color: #fff; font-size: 18px; text-align: center; outline: none;
             box-shadow: inset 4px 4px 12px rgba(0,0,0,0.9), inset -1px -1px 5px rgba(255,255,255,0.05);
             transition: 0.3s;
         }
@@ -127,7 +126,7 @@
         }
 
         .card-header { display: flex; justify-content: space-between; align-items: center; }
-        .aura-brand { font-size: 18px; font-weight: 900; letter-spacing: 2px; }
+        .aura-brand { font-size: 24px; font-weight: 900; letter-spacing: 2px; }
 
         .smart-chip {
             width: 45px; height: 34px;
@@ -138,8 +137,8 @@
         .smart-chip svg { position: absolute; width: 100%; height: 100%; opacity: 0.4; }
 
         .card-middle { text-align: left; margin-top: 10px; }
-        .client-name { font-size: 12px; font-weight: bold; color: #fff; margin-bottom: 2px; }
-        .client-id { font-size: 14px; font-weight: 900; font-family: monospace; letter-spacing: 3px; color: rgba(255,255,255,0.9); }
+        .client-name { font-size: 16px; font-weight: bold; color: #fff; margin-bottom: 2px; }
+        .client-id { font-size: 20px; font-weight: 900; font-family: monospace; letter-spacing: 3px; color: rgba(255,255,255,0.9); }
 
         .card-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
 
@@ -155,7 +154,7 @@
 
         .reward-info { text-align: left; }
         .r-label { font-size: 13px; color: var(--neon-pink); font-weight: 900; }
-        .r-value { font-size: 12px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--neon-pink); }
+        .r-value { font-size: 15px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--neon-pink); }
 
         /* سجل الاستبدال */
         .history-section { margin-top: 35px; opacity: 0; }
@@ -238,7 +237,7 @@ tg.BackButton.show();
 // 2. تحديد ماذا يحدث عند الضغط عليه
 tg.BackButton.onClick(function() {
     // العودة للرابط الرئيسي الخاص بك على GitHub
-    window.location.href = "https://your-username.github.io/main-page/";
+    window.location.href = "index.html";
     
     // ملاحظة: يمكنك أيضاً استخدام window.history.back() للعودة للصفحة السابقة
 });
