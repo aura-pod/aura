@@ -19,7 +19,7 @@
         }
 
         /* تأثير الضغط الاحترافي لجميع العناصر التفاعلية */
-        .btn:active, .box-label:active, .color-circle:active {
+        .btn:active, .box-label:active, .color-circle:active, .gift-box-label:active {
             transform: scale(0.96);
             transition: 0.1s ease;
         }
@@ -36,7 +36,7 @@
         .container { width: 100%; max-width: 600px; margin: auto; }
 
         .brand-header { text-align: center; margin-bottom: 50px; animation: fadeInDown 1s ease; }
-        .header-title { font-size: 26px; color: var(--primary); font-weight: 700; margin: 0; letter-spacing: -2px; }
+        .header-title { font-size: 30px; color: var(--primary); font-weight: 800; margin: 0; letter-spacing: -2px; }
         
         .section-card {
             background: var(--card); border-radius: 28px; padding: 30px; margin-bottom: 35px;
@@ -64,6 +64,15 @@
             font-weight: 700; color: #64748b; font-size: 0.85rem; transition: 0.3s; text-align: center; line-height: 1.4;
         }
         input[type="radio"]:checked + .box-label { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 15px rgba(5, 209, 205, 0.25); }
+
+        /* تنسيق شبكة المحافظات المصغرة داخل الهدية */
+        .gift-grid-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 8px; margin-top: 5px; }
+        .gift-box-label {
+            display: flex; align-items: center; justify-content: center; padding: 10px;
+            background: #fff; border-radius: 12px; cursor: pointer; border: 2px solid #fed7aa;
+            font-weight: 700; color: #7c2d12; font-size: 0.8rem; transition: 0.3s; text-align: center; line-height: 1.3;
+        }
+        input[type="radio"]:checked + .gift-box-label { background: #FF6B01; color: white; border-color: #FF6B01; box-shadow: 0 4px 10px rgba(255, 107, 1, 0.25); }
 
         .color-options { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px; }
         .color-circle {
@@ -126,7 +135,7 @@
         <h3>👤 بيانات صاحب الطلب</h3>
         <div class="form-group">
             <label class="form-label">الاسم الكامل <span style="color:#FF6B01">*</span>:</label>
-            <input type="text" id="c_name" class="input-field" placeholder="الاسم الثلاثي.." oncontextmenu="event.stopPropagation();">
+            <input type="text" id="c_name" class="input-field" placeholder="الاسم الثلاثي.." oncontextmenu="event.stopPropagation();" oninput="saveUserData()">
         </div>
         <div class="form-group">
             <label class="form-label">المحافظة <span style="color:#FF6B01">*</span>:</label>
@@ -134,22 +143,21 @@
         </div>
         <div class="form-group" style="margin-top: 25px;">
             <label class="form-label">العنوان بالتفصيل <span style="color:#FF6B01">*</span>:</label>
-            <input type="text" id="c_addr" class="input-field" placeholder="المنطقة - الشارع - علامة مميزة" oncontextmenu="event.stopPropagation();">
+            <input type="text" id="c_addr" class="input-field" placeholder="المنطقة - الشارع - علامة مميزة" oncontextmenu="event.stopPropagation();" oninput="saveUserData()">
         </div>
         <div class="form-group">
             <label class="form-label">رقم الموبايل <span style="color:#FF6B01">*</span>:</label>
-            <input type="tel" id="c_phone" class="input-field" placeholder="09xx xxx xxx" oncontextmenu="event.stopPropagation();">
+            <input type="tel" id="c_phone" class="input-field" placeholder="09xx xxx xxx" oncontextmenu="event.stopPropagation();" oninput="saveUserData()">
         </div>
     </div>
 
     <div class="section-card">
-        <h3>📦 تفاصيل المنتج</h3>
+        <h3>📦 تفاصيل الطلب</h3>
         <div id="cart_display"></div>
 
         <div class="form-group">
             <label class="form-label">نوع المنتج:</label>
             <div class="grid-options" id="prod_grid"></div>
-            <!-- ملاحظة الشحن المضافة حديثاً -->
             <div id="shipping_note" class="hidden" style="color: #FF6B01; background: #fff1f2; padding: 12px 15px; border-radius: 12px; margin-top: 15px; font-weight: 800; border: 1px dashed #FF6B01; font-size: 0.9rem; text-align: center; animation: slideIn 0.3s ease;">
                 ⚠️ ملاحظة: هذا المنتج غير متوفر للشحن خارج حمص حالياً
             </div>
@@ -204,9 +212,15 @@
 
         <div id="g_fields" class="gift-container hidden">
             <p style="color:#FF6B01; font-weight:bold; font-size:0.85rem; margin-bottom:15px;">⚠️ جميع بيانات مستلم الهدية إلزامية للتعبئة</p>
-            <input type="text" id="g_n" class="input-field" placeholder="اسم المستلم" style="margin-bottom:10px" oncontextmenu="event.stopPropagation();">
-            <input type="tel" id="g_p" class="input-field" placeholder="رقم موبايل المستلم" style="margin-bottom:10px" oncontextmenu="event.stopPropagation();">
-            <input type="text" id="g_a" class="input-field" placeholder="عنوان المستلم  بالمحافظة والتفصيل" oncontextmenu="event.stopPropagation();">
+            <input type="text" id="g_n" class="input-field" placeholder="اسم المستلم" style="margin-bottom:15px" oncontextmenu="event.stopPropagation();">
+            <input type="tel" id="g_p" class="input-field" placeholder="رقم موبايل المستلم" style="margin-bottom:15px" oncontextmenu="event.stopPropagation();">
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label class="form-label" style="color: #7c2d12;">محافظة المستلم <span style="color:#FF6B01">*</span>:</label>
+                <div class="gift-grid-options" id="gift_city_grid"></div>
+            </div>
+
+            <input type="text" id="g_a" class="input-field" placeholder="العنوان بالتفصيل (المنطقة - الشارع)" oncontextmenu="event.stopPropagation();">
         </div>
 
         <div class="form-group">
@@ -236,6 +250,8 @@
         </div>
     </div>
 
+    <div id="shipping_ui" style="text-align: center; font-weight: 700; margin-bottom: 15px; font-size: 1.1rem; color: #475569;">📦 تكلفة الشحن: 0 $</div>
+    
     <div id="total_ui" class="total-banner">المجموع الإجمالي: 0 $</div>
     <button class="btn btn-wa" onclick="send()">إتمام وإرسال الطلب (واتساب) 🚀</button>
 
@@ -245,7 +261,7 @@
     </div>
 
     <div class="thanks-card">
-        <h4>AURA - أورا</h4>
+        <h4>أورا - AURA</h4>
         <p>منهتم بكل قطعة لتليق فيكم وتعيشوا جوّكم 😊. شكراً لثقتكم ❤️.</p>
     </div>
 </div>
@@ -265,19 +281,74 @@ tg.BackButton.onClick(function() {
 });
 tg.ready();
 
+    // --- دوال حفظ واسترجاع بيانات الزبون الأساسية ---
+    function saveUserData() {
+        const cityNode = document.querySelector('input[name="city"]:checked');
+        const userData = {
+            name: document.getElementById('c_name').value.trim(),
+            city: cityNode ? cityNode.value : '',
+            addr: document.getElementById('c_addr').value.trim(),
+            phone: document.getElementById('c_phone').value.trim()
+        };
+        localStorage.setItem('aura_customer_data', JSON.stringify(userData));
+    }
+
+    function loadUserData() {
+        const data = localStorage.getItem('aura_customer_data');
+        if (data) {
+            try {
+                const userData = JSON.parse(data);
+                if (userData.name) document.getElementById('c_name').value = userData.name;
+                if (userData.addr) document.getElementById('c_addr').value = userData.addr;
+                if (userData.phone) document.getElementById('c_phone').value = userData.phone;
+                if (userData.city) {
+                    const cityRadio = document.querySelector(`input[name="city"][value="${userData.city}"]`);
+                    if (cityRadio) {
+                        cityRadio.checked = true;
+                        render(); // تحديث الشحن في حال وجود منتجات مسبقة
+                    }
+                }
+            } catch (e) {
+                console.error("Error loading saved data", e);
+            }
+        }
+    }
+    // ------------------------------------------------
+
     const _num = 'OTYzOTU5NTIxMTYx';
     const MAX_ITEMS = 10;
 
-    // 💡 طريقة إخفاء المنتجات بسهولة: غيّر show إلى false للمنتج الذي تريد إخفاءه
+    // 💰 حد الشحن المجاني (يمكنك تعديله لاحقاً)
+    const FREE_SHIPPING_THRESHOLD = 50; 
+
+    // 💡 تم إضافة حقل الوزن w بالغرام لكل منتج لتعديله بسهولة
     const db = { 
-        'تيشرت': { s: ['S','M','L','XL','2XL'], p: 10, show: true }, 
-        'هودي': { s: ['S','M','L','XL','2XL'], p: 20, show: true }, 
-        'بارباتوز': { s: ['3 أشهر','6 أشهر','12 شهر'], p: 20, show: true }, 
-        'توت باغ': { s: ['موحد'], p: 5, show: true }, 
-        'ماغ': { s: ['موحد'], p: 4, show: true },
-        'تامبلر': { s: ['موحد'], p: 4, show: true },
-        'مريولة': { s: ['موحد'], p: 6, show: false },
-        'طاقية': { s: ['موحد'], p: 3, show: false } 
+        'تيشرت': { s: ['S','M','L','XL','2XL'], p: 10, w: 100, show: true }, 
+        'هودي': { s: ['S','M','L','XL','2XL'], p: 20, w: 400, show: true }, 
+        'بارباتوز': { s: ['3 أشهر','6 أشهر','12 شهر'], p: 20, w: 150, show: true }, 
+        'توت باغ': { s: ['موحد'], p: 5, w: 120, show: true }, 
+        'ماغ': { s: ['موحد'], p: 4, w: 200, show: true },
+        'تامبلر': { s: ['موحد'], p: 4, w: 300, show: true },
+        'مريولة': { s: ['موحد'], p: 6, w: 100, show: false },
+        'طاقية': { s: ['موحد'], p: 3, w: 80, show: false } 
+    };
+
+    // 📍 أسعار الشحن الافتراضية للكيلو الواحد حسب كل محافظة (يمكنك تعديل الأرقام لاحقاً)
+    const shippingRates = {
+        'دمشق': 1.0,
+        'ريف دمشق': 1.0,
+        'حلب': 2.0,
+        'حمص': 0.0,
+        'حماة': 1.5,
+        'اللاذقية': 1.5,
+        'طرطوس': 1.5,
+        'إدلب': 2.0,
+        'دير الزور': 2.5,
+        'الرقة': 2.5,
+        'الحسكة': 2.5,
+        'درعا': 1.5,
+        'السويداء': 1.5,
+        'القنيطرة': 1.5
     };
 
     const extraCosts = {
@@ -293,7 +364,6 @@ tg.ready();
         'ماغ': ['أبيض'], 'تامبلر': ['أبيض'], 'بارباتوز': ['أبيض'],'طاقية': ['أسود','أبيض']
     };
     
-    const cities = ['دمشق', 'ريف دمشق', 'حلب', 'حمص', 'حماة', 'اللاذقية', 'طرطوس', 'إدلب', 'دير الزور', 'الرقة', 'الحسكة', 'درعا', 'السويداء', 'القنيطرة'];
     let _cart = [];
 
     function showAlert(msg, icon = "⚠️") {
@@ -303,11 +373,22 @@ tg.ready();
     }
     function closeAlert() { document.getElementById('customAlert').style.display = 'none'; }
 
-    document.getElementById('city_grid').innerHTML = cities.map(c => `<label><input type="radio" name="city" value="${c}"><span class="box-label">${c}</span></label>`).join('');
+    // جلب المحافظات لصاحب الطلب - تم إضافة saveUserData() عند التغيير
+    document.getElementById('city_grid').innerHTML = Object.keys(shippingRates).map(c => 
+        `<label><input type="radio" name="city" value="${c}" onchange="render(); saveUserData();"><span class="box-label">${c}</span></label>`
+    ).join('');
+
+    // جلب المحافظات لقسم الهدية (أزرار مصغرة باللون البرتقالي)
+    document.getElementById('gift_city_grid').innerHTML = Object.keys(shippingRates).map(c => 
+        `<label><input type="radio" name="gift_city" value="${c}"><span class="gift-box-label">${c}</span></label>`
+    ).join('');
     
     document.getElementById('prod_grid').innerHTML = Object.keys(db)
         .filter(p => db[p].show !== false)
         .map(p => `<label><input type="radio" name="prod" value="${p}" onchange="upP()"><span class="box-label">${p}</span></label>`).join('');
+
+    // استدعاء دالة جلب البيانات المحفوظة بعد تحميل عناصر الصفحة
+    loadUserData();
 
     function toggleD() { document.getElementById('d_code_area').classList.toggle('hidden', document.querySelector('input[name="d_type"]:checked').value !== 'كود'); }
     function toggleG() { document.getElementById('g_fields').classList.toggle('hidden', !document.getElementById('is_gift').checked); }
@@ -377,8 +458,15 @@ tg.ready();
         let dVal = document.getElementById('d_code_val').value.trim();
         if(dt.value === 'كود' && dVal === "") return showAlert("يرجى كتابة كود الموديل.");
 
-        const isG = document.getElementById('is_gift').checked, gN = document.getElementById('g_n').value.trim(), gP = document.getElementById('g_p').value.trim(), gA = document.getElementById('g_a').value.trim();
-        if(isG && (!gN || !gP || !gA)) return showAlert("لإرسال هدية، يجب تعبئة كافة بيانات المستلم.");
+        const isG = document.getElementById('is_gift').checked;
+        const gN = document.getElementById('g_n').value.trim();
+        const gP = document.getElementById('g_p').value.trim();
+        const gCityNode = document.querySelector('input[name="gift_city"]:checked');
+        const gA = document.getElementById('g_a').value.trim();
+
+        if(isG && (!gN || !gP || !gCityNode || !gA)) {
+            return showAlert("لإرسال هدية، يجب تعبئة كافة بيانات المستلم (الاسم، الموبايل، محافظة المستلم، والعنوان بالتفصيل).");
+        }
 
         const q = parseInt(document.getElementById('p_qty').value);
         const sVal = document.querySelector('input[name="size"]:checked').value, cVal = document.querySelector('input[name="color"]:checked').value;
@@ -396,7 +484,9 @@ tg.ready();
         _cart.push({
             name: p.value, design: dt.value === 'خاص' ? 'سأرسله خاص' : dVal,
             size: sVal, color: cVal, qty: q, pLoc: locVal, pSize: pSizeVal,
-            totalPrice: itemPrice * q, gift: isG ? { n: gN, p: gP, a: gA } : null, note: document.getElementById('notes').value
+            totalPrice: itemPrice * q, 
+            gift: isG ? { n: gN, p: gP, city: gCityNode.value, a: gA } : null, 
+            note: document.getElementById('notes').value
         });
         
         render();
@@ -409,7 +499,13 @@ tg.ready();
         document.getElementById('print_options_area').classList.add('hidden');
         document.getElementById('p_qty').value = "1";
         document.getElementById('notes').value = "";
-        // إخفاء ملاحظة الشحن عند إضافة المنتج للسلة
+        // تفريغ حقول الهدية بعد الإضافة وإلغاء التحديد
+        document.getElementById('is_gift').checked = false;
+        document.getElementById('g_n').value = "";
+        document.getElementById('g_p').value = "";
+        document.getElementById('g_a').value = "";
+        document.querySelectorAll('input[name="gift_city"]').forEach(r => r.checked = false);
+        document.getElementById('g_fields').classList.add('hidden');
         document.getElementById('shipping_note').classList.add('hidden');
     }
 
@@ -420,12 +516,57 @@ tg.ready();
                     <b>${i+1}. ${item.name} (${item.design})</b><br>
                     <small>الكمية: ${item.qty} | اللون: ${item.color} | المقاس: ${item.size}</small>
                     ${item.pLoc ? `<br><small>📍 الطباعة: ${item.pLoc} (${item.pSize})</small>` : ''}
-                    ${item.gift ? `<br><span style="color:#e11d48; font-size:0.8rem; font-weight:bold;">🎁 هدية لـ: ${item.gift.n}</span>` : ''}
+                    ${item.gift ? `<br><span style="color:#e11d48; font-size:0.8rem; font-weight:bold;">🎁 هدية لـ: ${item.gift.n} (${item.gift.city})</span>` : ''}
                 </div>
                 <div style="font-weight:900">${item.totalPrice}$</div>
                 <button class="del-btn" onclick="_cart.splice(${i},1);render()">✕</button>
             </div>`).join('');
-        document.getElementById('total_ui').innerText = "المجموع الإجمالي: " + _cart.reduce((a,b)=>a+b.totalPrice,0) + " $";
+
+        let subtotal = _cart.reduce((a, b) => a + b.totalPrice, 0);
+
+        const selectedCityNode = document.querySelector('input[name="city"]:checked');
+        let shippingCost = 0;
+        let shippingText = "0 $";
+
+        if (selectedCityNode) {
+            if (_cart.length === 0) {
+                shippingText = "0 $";
+            } else if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+                shippingCost = 0;
+                shippingText = "شحن مجاني 🎁";
+            } else {
+                // حساب الشحن بناءً على وجهة كل منتج (صاحب الطلب أو مستلم الهدية)
+                let weightsByCity = {};
+
+                _cart.forEach(item => {
+                    let itemWeight = (db[item.name] ? db[item.name].w : 0) * item.qty;
+                    // تحديد المحافظة المستهدفة لهذا المنتج بالذات
+                    let targetCity = item.gift ? item.gift.city : selectedCityNode.value;
+
+                    if (!weightsByCity[targetCity]) {
+                        weightsByCity[targetCity] = 0;
+                    }
+                    weightsByCity[targetCity] += itemWeight;
+                });
+
+                // حساب التكلفة بناءً على الأوزان المستقلة لكل محافظة
+                let totalWeightKg = 0;
+                for (let city in weightsByCity) {
+                    let weightKg = Math.ceil(weightsByCity[city] / 1000);
+                    if (weightKg < 1) weightKg = 1;
+                    shippingCost += weightKg * (shippingRates[city] || 0);
+                    totalWeightKg += (weightsByCity[city] / 1000);
+                }
+                
+                shippingText = shippingCost + " $ (الوزن الكلي: " + totalWeightKg.toFixed(2) + " كغ)";
+            }
+        } else {
+            shippingText = _cart.length > 0 ? "يرجى اختيار المحافظة الأساسية أولاً لحساب الشحن" : "0 $";
+        }
+
+        document.getElementById('shipping_ui').innerHTML = `📦 تكلفة الشحن: <span style="color: #FF6B01; font-weight: 800;">${shippingText}</span>`;
+        let finalTotal = subtotal + shippingCost;
+        document.getElementById('total_ui').innerText = "المجموع الإجمالي: " + finalTotal + " $";
     }
 
     function send() {
@@ -436,20 +577,49 @@ tg.ready();
         if(!n || !c || !addr || !ph || _cart.length === 0 || !py) return showAlert("يرجى إكمال بيانات الزبون، إضافة منتجات، واختيار طريقة الدفع المسبق.");
         
         let pyMethod = py.value === 'other' ? document.getElementById('pay_other_val').value : py.value;
-        let m = `🛍️ *طلب جديد - AURA*\n\n👤 *صاحب الطلب:* ${n}\n📍 *المحافظة:* ${c.value}\n🏠 *العنوان:* ${addr}\n📱 *الموبايل:* ${ph}\n\n🛒 *قائمة المشتريات (${_cart.length}):*\n`;
+        let m = `🛍️ *طلب شراء - متجر أورا*\n\n👤 *صاحب الطلب:* ${n}\n📍 *المحافظة:* ${c.value}\n🏠 *العنوان:* ${addr}\n📱 *الموبايل:* ${ph}\n\n🛒 *قائمة المشتريات (${_cart.length}):*\n`;
 
         _cart.forEach((item, i) => {
             m += `--------------------------\n${i+1}. 📦 *المنتج:* ${item.name}\n   🖼️ *التصميم:* ${item.design}\n   📏 *المقاس:* ${item.size}\n   🎨 *اللون:* ${item.color}\n`;
             if(item.pLoc) m += `   📍 *مكان الطباعة:* ${item.pLoc}\n   📐 *حجم الطباعة:* ${item.pSize}\n`;
             m += `   🔢 *الكمية:* ${item.qty}\n`;
-            if(item.gift) m += `   🎁 *هدية لـ:* ${item.gift.n} (${item.gift.p}) - ${item.gift.a}\n`;
+            if(item.gift) m += `   🎁 *نوع الطلب: هدية*\n   👤 *المستلم:* ${item.gift.n}\n   📱 *موبايل المستلم:* ${item.gift.p}\n   📍 *محافظة المستلم:* ${item.gift.city}\n   🏠 *العنوان بالتفصيل:* ${item.gift.a}\n`;
             if(item.note) m += `   📝 *ملاحظة:* ${item.note}\n`;
             m += `   💰 *السعر:* ${item.totalPrice} $\n`;
         });
+
+        let subtotal = _cart.reduce((a, b) => a + b.totalPrice, 0);
+        let shippingCost = 0;
+        let shippingStr = "0 $";
+
+        if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+            shippingCost = 0;
+            shippingStr = "شحن مجاني 🎁";
+        } else {
+            let weightsByCity = {};
+            _cart.forEach(item => {
+                let itemWeight = (db[item.name] ? db[item.name].w : 0) * item.qty;
+                let targetCity = item.gift ? item.gift.city : c.value;
+                if (!weightsByCity[targetCity]) weightsByCity[targetCity] = 0;
+                weightsByCity[targetCity] += itemWeight;
+            });
+
+            let totalWeightKg = 0;
+            for (let city in weightsByCity) {
+                let weightKg = Math.ceil(weightsByCity[city] / 1000);
+                if (weightKg < 1) weightKg = 1;
+                shippingCost += weightKg * (shippingRates[city] || 0);
+                totalWeightKg += (weightsByCity[city] / 1000);
+            }
+            shippingStr = `${shippingCost} $ (الوزن الكلي: ${totalWeightKg.toFixed(2)} كغ)`;
+        }
+
+        let finalTotal = subtotal + shippingCost;
         
         m += `\n--------------------------\n💳 *طريقة الدفع:* ${pyMethod}\n`;
-        if(document.getElementById('disc_code').value) m += `🎟️ *كود الخصم:* ${document.getElementById('disc_code').value}\n`;
-        m += `💵 *المجموع الكلي:* ${_cart.reduce((a,b)=>a+b.totalPrice,0)} $\n\n✨ شكراً لتعاملكم مع *أورا* ✨`;
+        if(document.getElementById('disc_code').value) m += `🎟️ *نقاط للاستبدال:* ${document.getElementById('disc_code').value}\n`;
+        m += `📦 *كلفة الشحن:* ${shippingStr}\n`;
+        m += `💵 *المجموع الكلي:* ${finalTotal} $\n\n✨ شكراً لتعاملكم مع *أورا* ✨`;
         window.open(`https://api.whatsapp.com/send?phone=${atob(_num)}&text=${encodeURIComponent(m)}`, '_blank');
     }
 </script>
