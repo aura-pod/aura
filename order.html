@@ -220,12 +220,12 @@
                 <div class="gift-grid-options" id="gift_city_grid"></div>
             </div>
 
-            <input type="text" id="g_a" class="input-field" placeholder="العنوان بالتفصيل (المنطقة - الشارع)" oncontextmenu="event.stopPropagation();">
+            <input type="text" id="g_a" class="input-field" placeholder="العنوان بالتفصيل .." oncontextmenu="event.stopPropagation();">
         </div>
 
         <div class="form-group">
             <label class="form-label">ملاحظات إضافية:</label>
-            <textarea id="notes" class="input-field" style="min-height:80px" placeholder="أي تفاصيل أخرى.." oncontextmenu="event.stopPropagation();"></textarea>
+            <textarea id="notes" class="input-field" style="min-height:80px" placeholder="أي تفاصيل أخرى .." oncontextmenu="event.stopPropagation();"></textarea>
         </div>
     </div>
 
@@ -326,9 +326,9 @@ tg.ready();
         'تيشرت': { s: ['S','M','L','XL','2XL'], p: 10, w: 100, show: true }, 
         'هودي': { s: ['S','M','L','XL','2XL'], p: 20, w: 400, show: true }, 
         'بارباتوز': { s: ['3 أشهر','6 أشهر','12 شهر'], p: 20, w: 150, show: true }, 
-        'توت باغ': { s: ['موحد'], p: 5, w: 120, show: true }, 
-        'ماغ': { s: ['موحد'], p: 4, w: 200, show: true },
-        'تامبلر': { s: ['موحد'], p: 4, w: 300, show: true },
+        'توت باغ': { s: ['30cm×30cm'], p: 5, w: 120, show: true }, 
+        'ماغ': { s: ['15oz'], p: 4, w: 200, show: true },
+        'تامبلر': { s: ['30oz'], p: 4, w: 300, show: true },
         'مريولة': { s: ['موحد'], p: 6, w: 100, show: false },
         'طاقية': { s: ['موحد'], p: 3, w: 80, show: false } 
     };
@@ -353,8 +353,8 @@ tg.ready();
 
     const extraCosts = {
         size: { 'Babies': 0, 'S': 0, 'M': 0, 'L': 0, 'XL': 1, '2XL': 2, 'موحد': 0 },
-        p_loc: { 'صدر فقط': 0, 'ظهر فقط': 0, 'صدر + ظهر': 3, 'مخصص (يتم الشرح عند ارسال الطلب)': 1 },
-        p_size: { 'حجم مناسب لألبسة الB B': 0, 'أقل او تساوي A4': 0, 'بين A4 وA3': 2, 'مخصص (يتم الشرح عند ارسال الطلب)': 1 }
+        p_loc: { 'صدر/أمام فقط': 0, 'ظهر/خلف فقط': 0, 'صدر/أمام + ظهر/خلف': 3, 'مخصص (التوضيح والتسعير عند الطلب)': 0 },
+        p_size: { 'حجم مناسب لألبسة الB B': 0, 'أقل او تساوي A4': 0, 'بين A4 وA3': 2, 'مخصص (التوضيح والتسعير عند الطلب)': 0 }
     };
 
     const cM = { 'أسود': '#000000', 'أبيض': '#ffffff', 'أحمر': '#ef4444', 'أزرق': '#3b82f6', 'أخضر': '#22c55e', 'أصفر': '#eab308', 'زهري': '#ec4899', 'رمادي': '#6b7280', 'بيج': '#f5f5dc' };
@@ -398,7 +398,7 @@ tg.ready();
         const pNode = document.querySelector('input[name="prod"]:checked');
         if(!pNode) return;
         const p = pNode.value;
-        const isClothing = (p === 'تيشرت' || p === 'هودي');
+        const isClothing = (p === 'تيشرت' || p === 'هودي' || p === 'توت باغ' || p === 'بارباتوز');
 
         // إظهار/إخفاء ملاحظة الشحن لحمص
         const shippingNote = document.getElementById('shipping_note');
@@ -417,7 +417,7 @@ tg.ready();
 
         if(isClothing) {
             document.getElementById('print_options_area').classList.remove('hidden');
-            const locs = ['صدر فقط', 'ظهر فقط', 'صدر + ظهر', 'مخصص (يتم الشرح عند ارسال الطلب)'];
+            const locs = ['صدر/أمام فقط', 'ظهر/خلف فقط', 'صدر/أمام + ظهر/خلف', 'مخصص (التوضيح والتسعير عند الطلب)'];
             document.getElementById('p_loc_grid').innerHTML = locs.map(l => {
                 let costText = extraCosts.p_loc[l] > 0 ? `<br><small style="color:#10b981">(+${extraCosts.p_loc[l]}$)</small>` : '';
                 return `<label><input type="radio" name="p_loc" value="${l}"><span class="box-label">${l} ${costText}</span></label>`;
@@ -430,10 +430,10 @@ tg.ready();
 
     function upSizeOptions() {
         const pNode = document.querySelector('input[name="prod"]:checked');
-        if(!pNode || (pNode.value !== 'تيشرت' && pNode.value !== 'هودي')) return;
+        if(!pNode || (pNode.value !== 'تيشرت' && pNode.value !== 'هودي' && pNode.value !== 'توت باغ' && pNode.value !== 'بارباتوز')) return;
         const sNode = document.querySelector('input[name="size"]:checked');
         const s = sNode ? sNode.value : '';
-        let printSizes = (s === 'Babies') ? ['حجم مناسب لألبسة الB B'] : ['أقل او تساوي A4', 'بين A4 وA3', 'مخصص (يتم الشرح عند ارسال الطلب)'];
+        let printSizes = (s === 'Babies') ? ['حجم مناسب لألبسة الB B'] : ['أقل او تساوي A4', 'بين A4 وA3', 'مخصص (التوضيح والتسعير عند الطلب)'];
         document.getElementById('p_size_grid').innerHTML = printSizes.map((pz,i) => {
             let costText = extraCosts.p_size[pz] > 0 ? `<br><small style="color:#10b981">(+${extraCosts.p_size[pz]}$)</small>` : '';
             return `<label><input type="radio" name="p_size" value="${pz}" ${i===0?'checked':''}><span class="box-label">${pz} ${costText}</span></label>`;
@@ -474,7 +474,7 @@ tg.ready();
         let itemPrice = db[p.value].p + (extraCosts.size[sVal] || 0);
         let locVal = null, pSizeVal = null;
 
-        if(p.value === 'تيشرت' || p.value === 'هودي') {
+        if(p.value === 'تيشرت' || p.value === 'هودي' || p.value === 'توت باغ' || p.value === 'بارباتوز') {
             const lNode = document.querySelector('input[name="p_loc"]:checked'), pzNode = document.querySelector('input[name="p_size"]:checked');
             if(!lNode || !pzNode) return showAlert("يرجى تحديد مكان وحجم الطباعة.");
             locVal = lNode.value; pSizeVal = pzNode.value;
