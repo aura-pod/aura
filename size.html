@@ -5,7 +5,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دليل المقاسات والعناية | متجر أورا</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #05D1CE;
@@ -33,7 +33,7 @@
         header { text-align: center; margin-bottom: 40px; animation: slideInTop 1s var(--bezier); }
         @keyframes slideInTop { from { opacity: 0; transform: translateY(-30px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
         
-        h1 { font-weight: 900; font-size: 2.5rem; color: var(--primary); margin: 0; }
+        h1 { font-weight: 900; font-size: 30px; color: var(--primary); margin: 0; }
         .subtitle { color: #64748b; font-weight: 600; margin-top: 5px; }
 
         .wrapper { max-width: 950px; margin: 0 auto; background: var(--card); border-radius: 45px; padding: 40px; box-shadow: var(--shadow-lux); border: 1px solid rgba(0,0,0,0.02); }
@@ -293,7 +293,7 @@ tg.ready();
             hoodie: { name: 'هودي', badge: 'Oversized', sizes: { 'M': [70, 57, 63, 10], 'L': [73, 60, 65, 11], 'XL': [76, 63, 67, 12] }, labels: ['الطول', 'العرض', 'طول الكم', 'قطر المعصم'] },
             jacket: { name: 'جاكيت', badge: 'قصة مريحة', sizes: { 'M': [72, 58, 64, 13], 'L': [74, 61, 66, 14] }, labels: ['الطول', 'العرض', 'طول الكم', 'قطر الكم'] },
             pants: { name: 'بنطال', badge: 'Straight Fit', sizes: { 'M': [102, 40, 22], 'L': [104, 43, 23] }, labels: ['الطول الكلي', 'عرض الخصر', 'قطر الرجل'] },
-            onesie: { name: 'بارباتوز', badge: 'قطن ناعم', sizes: { '3 أشهر وما دون': [36, 20], 'بين 3 و 6 أشهر': [38, 22], 'بين 6 أشهر وسنة': [41, 24] }, labels: ['الطول', 'العرض'] }
+            onesie: { name: 'بارباتوز', badge: 'قطن ناعم', sizes: { '3 أشهر': [36, 20], '6 أشهر': [38, 22], '12 شهر': [41, 24] }, labels: ['الطول', 'العرض'] }
         },
         acc: {
             mug: { name: 'ماغ', badge: 'سيراميك', sizes: { '11oz': [9.5, 8.2], '15oz': [11.5, 8.5] }, labels: ['الارتفاع', 'القطر العلوي'] },
