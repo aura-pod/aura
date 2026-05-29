@@ -5,6 +5,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تتبع الطلب | متجر أورا</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -15,7 +19,18 @@
             --step-inactive: #d1d8e0;
         }
 
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            font-family: 'Cairo', Tahoma, sans-serif; /* تعيين خط Cairo كخط أساسي للموقع */
+            margin: 0; 
+            padding: 0; 
+        }
+
+        /* استثناء الأيقونات لضمان ظهورها وعدم تأثر حركتها */
+        .fas, .far, .fab, .fa, i {
+            font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', sans-serif !important;
+            font-weight: 900 !important;
+        }
 
         body {
             background-color: var(--bg-body);
@@ -31,7 +46,7 @@
 
         /* دخول انسيابي للعنوان */
         .aura-header {
-            font-size: 2.3rem; font-weight: 900;
+            font-size: 30px; font-weight: 900;
             background: linear-gradient(to left, var(--primary-color), var(--success-color));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 35px;
@@ -48,7 +63,7 @@
         
         input {
             width: 100%; max-width: 420px; padding: 18px; border-radius: 20px;
-            border: 2px solid #e2e8f0; font-size: 17px; text-align: center;
+            border: 2px solid #e2e8f0; font-size: 14px; text-align: center;
             outline: none; transition: 0.3s;
         }
 
@@ -123,12 +138,12 @@
         .step.done .check-badge { opacity: 1; transform: scale(1); }
         .step.active .icon-circle { border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 10px 25px rgba(72, 52, 212, 0.15); }
 
-        .label { font-weight: 800; font-size: 15px; color: #2d3436; }
+        .label { font-weight: 700; font-size: 15px; color: #2d3436; }
         .time { font-size: 12px; color: #b2bec3; margin-top: 4px; min-height: 16px; font-weight: bold; }
 
         /* رسالة Aura النهائية */
         .congrats-msg {
-            margin-top: 50px; font-size: 1.3rem; font-weight: 900; color: var(--success-color);
+            margin-top: 50px; font-size: 1.3rem; font-weight: 700; color: var(--success-color);
             opacity: 0; transform: translateY(20px); transition: 1s ease; display: none;
             padding: 15px; border-radius: 20px; background: #f0fffb; border: 1px dashed var(--success-color);
         }
@@ -150,24 +165,24 @@
                 border-radius: 10px; transition-timing-function: linear;
             }
         }
-    /* إلغاء التحديد الأزرق والومضة عند اللمس لكل المتصفحات */
-button, 
-.btn-track, 
-input[type="button"], 
-input[type="submit"] {
-    outline: none !important;
-    box-shadow: none !important; /* لالغاء الظل الأزرق في بعض المتصفحات */
-    -webkit-tap-highlight-color: transparent !important;
-    -webkit-user-select: none; /* لمنع تحديد النص داخل الزر عند الضغط المطول */
-    user-select: none;
-}
+        
+        /* إلغاء التحديد الأزرق والومضة عند اللمس لكل المتصفحات */
+        button, 
+        .btn-track, 
+        input[type="button"], 
+        input[type="submit"] {
+            outline: none !important;
+            box-shadow: none !important; 
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-user-select: none; 
+            user-select: none;
+        }
 
-/* تأثير الضغط للأسفل - تأكد من اسم الكلاس */
-.btn-track:active {
-    transform: translateY(3px) scale(0.96) !important;
-    transition: transform 0.1s ease !important;
-}
-
+        /* تأثير الضغط للأسفل */
+        .btn-track:active {
+            transform: translateY(3px) scale(0.96) !important;
+            transition: transform 0.1s ease !important;
+        }
     </style>
 </head>
 <body>
@@ -176,7 +191,7 @@ input[type="submit"] {
     <h1 class="aura-header">تتبع الطلب</h1>
 
     <div class="search-area">
-        <input type="text" id="orderInput" placeholder="يا ترى شو صار بطلبك؟ اكتب رقم الطلب هون 📦">
+        <input type="text" id="orderInput" placeholder="شو صار بطلبك؟ اكتب رقم الطلب هون 📦">
         <br>
         <button class="btn-track" onclick="trackOrder()">
             <span>طمني عن طلبي</span>
@@ -228,22 +243,12 @@ input[type="submit"] {
 </div>
 
 <script>
-    // التأكد من أن مكتبة تيليجرام جاهزة
-const tg = window.Telegram.WebApp;
-
-// 1. إظهار زر الرجوع الرسمي في الأعلى
-tg.BackButton.show();
-
-// 2. تحديد ماذا يحدث عند الضغط عليه
-tg.BackButton.onClick(function() {
-    // العودة للرابط الرئيسي الخاص بك على GitHub
-    window.location.href = "index.html";
-    
-    // ملاحظة: يمكنك أيضاً استخدام window.history.back() للعودة للصفحة السابقة
-});
-
-// إبلاغ تيليجرام أن التطبيق جاهز للعرض
-tg.ready();
+    const tg = window.Telegram.WebApp;
+    tg.BackButton.show();
+    tg.BackButton.onClick(function() {
+        window.location.href = "index.html";
+    });
+    tg.ready();
 
     const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRAJVTG67wkszBpP_XVK8MGGn2FDVsic53RITJLNOD19uzVE3O327sGor2XqRexfoGt2K7mQBlOZuoM/pub?output=csv';
 
@@ -254,7 +259,6 @@ tg.ready();
 
         if (!id) { msg.innerText = "نسيت تكتب رقم الطلب! 😊"; return; }
         
-        // رسالة انتظار لطيفة
         msg.innerText = "ثواني بس.. عم ندور على طلبك 🧐";
         resetUI();
 
@@ -270,7 +274,6 @@ tg.ready();
                 runAnimation(parseInt(data[1]), data[2]);
             } else {
                 box.style.display = 'none';
-                // رسالة خطأ لطيفة
                 msg.innerText = "اممم، ما لقينا هالطلب، متأكد من الرقم؟ 🤔";
             }
         } catch (e) { msg.innerText = "في مشكلة صغيرة بالاتصال، جرب كمان شوي!"; }
