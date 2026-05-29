@@ -104,7 +104,18 @@
         .card-header { display: flex; justify-content: space-between; align-items: center; }
         
         /* التعديل هنا لترتيب اللوجو مع الاسم */
-        .aura-brand { font-size: 18px; font-weight: 900; letter-spacing: 2px; display: flex; align-items: center; gap: 8px; }
+        /* التعديل هنا لترتيب اللوجو مع الاسم */
+.aura-brand { 
+    font-size: 18px; 
+    font-weight: 900; 
+    letter-spacing: 2px; 
+    display: flex; 
+    align-items: center; 
+    align-self: center;
+    line-height: 1; /* يضمن تطابق الحدود العليا والسفلى للنص مع اللوجو */
+    gap: 8px; 
+}
+
         
         /* كلاس خاص للتحكم بحجم اللوجو */
         .brand-logo { 
