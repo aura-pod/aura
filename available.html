@@ -14,9 +14,9 @@
             --available-bg: #ecfdf5;
             --available-text: #059669;
             --unavailable-bg: #fff1f2;
-            --unavailable-text: #FF6B01;
+            --unavailable-text: #c4022f;
             --card-white: #ffffff;
-            --card-unavail-bg: #fffafa; /* أحمر باهت جداً للبطاقات غير المتوفرة */
+            --card-unavail-bg: #fffafa;
             --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
             --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
@@ -33,7 +33,6 @@
 
         .container { max-width: 900px; margin: 0 auto; padding: 20px; }
 
-        /* دخول انسيابي للرأس مع التدرج اللوني الفخم */
         header {
             text-align: center;
             padding: 50px 0 30px;
@@ -56,7 +55,6 @@
         
         p { color: #64748b; font-size: 1.1rem; margin-top: 10px; }
 
-        /* شاشة التحميل (جرد المستودع) */
         .loader-container {
             display: flex;
             flex-direction: column;
@@ -85,7 +83,6 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* منطقة الفلترة - شبكة مرنة (أزرار تلتف تلقائياً) */
         .filter-wrapper {
             margin-bottom: 40px;
             padding: 10px 0;
@@ -121,7 +118,6 @@
             transform: translateY(-2px);
         }
 
-        /* لافتات الأقسام (Banners) الملونة بألوان باستيل هادئة */
         .section-banner {
             display: inline-flex;
             align-items: center;
@@ -139,7 +135,6 @@
         .banner-avail { background: var(--available-bg); color: var(--available-text); border: 1px solid #d1fae5; }
         .banner-unavail { background: var(--unavailable-bg); color: var(--unavailable-text); border: 1px solid #ffe4e6; }
 
-        /* بطاقة المنتج الفخمة */
         .product-card {
             background: var(--card-white);
             border-radius: 24px;
@@ -150,12 +145,11 @@
             flex-direction: column;
             gap: 20px;
             transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid #f1f5f9;
+            border: 1px solid #ecfdf5;
             position: relative;
             overflow: hidden;
         }
 
-        /* تنسيق بطاقة المنتج الغير متوفر (اللون الأحمر الباهت) */
         .unavailable-card {
             background-color: var(--card-unavail-bg);
             border-color: #ffeded;
@@ -164,6 +158,7 @@
         .product-card:hover {
             transform: translateY(-8px) scale(1.01);
             box-shadow: var(--shadow-hover);
+            border-color: #a7fcd4;
         }
         
         .unavailable-card:hover {
@@ -175,7 +170,6 @@
         .item-name { font-weight: 800; font-size: 1.3rem; color: #0f172a; }
         .unavailable-card .item-name { color: #881337; } 
 
-        /* المقاسات كتفاعل بصري */
         .sizes-row { display: flex; gap: 8px; flex-wrap: wrap; }
         .size-pill {
             background: #f8fafc;
@@ -188,11 +182,9 @@
             transition: 0.3s;
         }
         
-        /* تأثير الهوفر على المقاسات */
-        .product-card:hover .size-pill { border-color: var(--primary-color); color: var(--primary-color); }
+        .product-card:hover .size-pill { border-color: var(--available-text); color: var(--available-text); }
         .unavailable-card:hover .size-pill { border-color: var(--unavailable-text); color: var(--unavailable-text); }
 
-        /* الألوان بظلال عميقة و Inset Shadow */
         .colors-row { display: flex; gap: 12px; }
         .color-item {
             width: 28px;
@@ -211,7 +203,6 @@
             .product-card { padding: 20px; }
         }
 
-        /* حركة ظهور البطاقات */
         @keyframes slideInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -253,25 +244,15 @@
 </div>
 
 <script>
-    // التأكد من أن مكتبة تيليجرام جاهزة
-const tg = window.Telegram.WebApp;
+    const tg = window.Telegram.WebApp;
+    tg.BackButton.show();
+    tg.BackButton.onClick(function() {
+        window.location.href = "index.html";
+    });
+    tg.ready();
 
-// 1. إظهار زر الرجوع الرسمي في الأعلى
-tg.BackButton.show();
-
-// 2. تحديد ماذا يحدث عند الضغط عليه
-tg.BackButton.onClick(function() {
-    // العودة للرابط الرئيسي الخاص بك على GitHub
-    window.location.href = "index.html";
-    
-    // ملاحظة: يمكنك أيضاً استخدام window.history.back() للعودة للصفحة السابقة
-});
-
-// إبلاغ تيليجرام أن التطبيق جاهز للعرض
-tg.ready();
-
-    // ضع رابط الـ CSV هنا
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSR9eL3t49hBFyxbrLUvJ2dF9Jp_vPoCQVX_L9EifOR5aoLuuPjP2jV8S50kdCwzedYpSlM8v9l7z2C/pub?output=csv';
+    // ضع رابط الـ Raw الخاص بملف الـ CSV من GitHub هنا داخل علامتي التنصيص
+    const GITHUB_CSV_URL = 'https://raw.githubusercontent.com/aura-pod/aura/refs/heads/main/available-status.csv';
     
     const colorMap = {
         'أبيض': '#ffffff', 'أسود': '#1a1a1a', 'أحمر': '#f43f5e', 
@@ -284,10 +265,11 @@ tg.ready();
 
     async function init() {
         try {
-            // جلب البيانات
-            const r = await fetch(csvUrl);
+            const r = await fetch(GITHUB_CSV_URL);
             const d = await r.text();
-            const lines = d.split('\n').slice(1);
+            
+            // قراءة الملف وتخطي السطر الأول (العناوين) وتجاهل الأسطر الفارغة
+            const lines = d.split(/\r?\n/).slice(1).filter(line => line.trim() !== '');
             const sizeSet = new Set();
 
             lines.forEach(line => {
@@ -305,7 +287,6 @@ tg.ready();
                 });
             });
 
-            // تأخير مصطنع لمدة 1.5 ثانية لإعطاء انطباع الجرد الدقيق
             await new Promise(resolve => setTimeout(resolve, 1500));
 
             const sortedSizes = Array.from(sizeSet).sort();
@@ -318,13 +299,11 @@ tg.ready();
                 bar.appendChild(b);
             });
 
-            // إخفاء شاشة التحميل وإظهار المحتوى
             document.getElementById('loader-section').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
 
             render();
         } catch (err) { 
-            // في حال حدوث خطأ في الرابط
             const loaderSec = document.getElementById('loader-section');
             loaderSec.innerHTML = '<div class="loader-text" style="color: var(--unavailable-text);">تعذر الاتصال بالمستودع، يرجى تحديث الصفحة.</div>';
             console.error("حدث خطأ في جلب البيانات من ملف CSV"); 
