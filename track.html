@@ -21,12 +21,11 @@
 
         * { 
             box-sizing: border-box; 
-            font-family: 'Cairo', Tahoma, sans-serif; /* تعيين خط Cairo كخط أساسي للموقع */
+            font-family: 'Cairo', Tahoma, sans-serif;
             margin: 0; 
             padding: 0; 
         }
 
-        /* استثناء الأيقونات لضمان ظهورها وعدم تأثر حركتها */
         .fas, .far, .fab, .fa, i {
             font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', sans-serif !important;
             font-weight: 900 !important;
@@ -44,7 +43,6 @@
             text-align: center; overflow: hidden;
         }
 
-        /* دخول انسيابي للعنوان */
         .aura-header {
             font-size: 30px; font-weight: 900;
             background: linear-gradient(to left, var(--primary-color), var(--success-color));
@@ -58,7 +56,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* منطقة البحث */
         .search-area { margin-bottom: 45px; }
         
         input {
@@ -78,7 +75,6 @@
 
         .btn-track:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(72, 52, 212, 0.3); }
 
-        /* حركة العدسة العشوائية واللطيفة */
         .search-icon {
             display: inline-block;
             animation: playfulBounce 2.5s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -93,7 +89,6 @@
             100% { transform: translate(0, 0) scale(1) rotate(0); }
         }
 
-        /* منطقة التتبع */
         .tracking-box { display: none; margin-top: 40px; padding-bottom: 20px; }
 
         .stepper-wrapper { position: relative; z-index: 2; }
@@ -102,7 +97,6 @@
             position: absolute; background: #edeff2; border-radius: 10px; z-index: -1;
         }
 
-        /* الخط الأفقي */
         .progress-line-h { top: 41px; left: 12.5%; right: 12.5%; height: 8px; }
         .fill-h {
             height: 100%; width: 0%;
@@ -115,7 +109,6 @@
         .stepper { display: flex; justify-content: space-between; }
         .step { flex: 1; text-align: center; position: relative; }
 
-        /* الدائرة والأيقونات */
         .icon-circle {
             width: 90px; height: 90px; background: #fff;
             border: 4px solid #edeff2; border-radius: 25px; 
@@ -124,7 +117,6 @@
             transition: 0.4s ease-in-out; position: relative;
         }
 
-        /* إشارة الصح الملاصقة */
         .check-badge {
             position: absolute; top: -10px; right: -10px;
             width: 30px; height: 30px; background: var(--success-color);
@@ -141,14 +133,12 @@
         .label { font-weight: 700; font-size: 15px; color: #2d3436; }
         .time { font-size: 12px; color: #b2bec3; margin-top: 4px; min-height: 16px; font-weight: bold; }
 
-        /* رسالة Aura النهائية */
         .congrats-msg {
             margin-top: 50px; font-size: 1.3rem; font-weight: 700; color: var(--success-color);
             opacity: 0; transform: translateY(20px); transition: 1s ease; display: none;
             padding: 15px; border-radius: 20px; background: #f0fffb; border: 1px dashed var(--success-color);
         }
 
-        /* تخصيص الموبايل */
         @media (max-width: 768px) {
             .progress-line-h { display: none; }
             .stepper { flex-direction: column; gap: 40px; align-items: flex-start; padding-right: 20px; }
@@ -166,7 +156,6 @@
             }
         }
         
-        /* إلغاء التحديد الأزرق والومضة عند اللمس لكل المتصفحات */
         button, 
         .btn-track, 
         input[type="button"], 
@@ -178,7 +167,6 @@
             user-select: none;
         }
 
-        /* تأثير الضغط للأسفل */
         .btn-track:active {
             transform: translateY(3px) scale(0.96) !important;
             transition: transform 0.1s ease !important;
@@ -250,7 +238,8 @@
     });
     tg.ready();
 
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRAJVTG67wkszBpP_XVK8MGGn2FDVsic53RITJLNOD19uzVE3O327sGor2XqRexfoGt2K7mQBlOZuoM/pub?output=csv';
+    // ضع رابط الـ Raw الخاص بملف الـ CSV من GitHub هنا داخل علامتي التنصيص
+    const GITHUB_CSV_URL = 'https://raw.githubusercontent.com/aura-pod/aura/refs/heads/main/order-status.csv';
 
     async function trackOrder() {
         const id = document.getElementById('orderInput').value.trim();
@@ -263,9 +252,11 @@
         resetUI();
 
         try {
-            const res = await fetch(SHEET_URL);
+            const res = await fetch(GITHUB_CSV_URL);
             const text = await res.text();
-            const rows = text.split(/\r?\n/).map(r => r.split(','));
+            
+            // قراءة الملف وتخطي الأسطر الفارغة
+            const rows = text.split(/\r?\n/).filter(r => r.trim() !== '').map(r => r.split(','));
             const data = rows.find(r => r[0] && r[0].trim() === id);
 
             if (data) {
