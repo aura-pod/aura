@@ -134,7 +134,7 @@
         .time { font-size: 12px; color: #b2bec3; margin-top: 4px; min-height: 16px; font-weight: bold; }
 
         .congrats-msg {
-            margin-top: 50px; font-size: 1.3rem; font-weight: 700; color: var(--success-color);
+            margin-top: 50px; font-size: 16px; font-weight: 700; color: var(--success-color);
             opacity: 0; transform: translateY(20px); transition: 1s ease; display: none;
             padding: 15px; border-radius: 20px; background: #f0fffb; border: 1px dashed var(--success-color);
         }
@@ -226,7 +226,7 @@
             </div>
         </div>
 
-        <div id="auraCongrats" class="congrats-msg">ألف مبروك 😊 وشكراً لثقتك بـ Aura</div>
+        <div id="auraCongrats" class="congrats-msg">ألف مبروك وشكراً لثقتك بـ AURA 😊</div>
     </div>
 </div>
 
@@ -238,7 +238,6 @@
     });
     tg.ready();
 
-    // ضع رابط الـ Raw الخاص بملف الـ CSV من GitHub هنا داخل علامتي التنصيص
     const GITHUB_CSV_URL = 'https://cdn.jsdelivr.net/gh/aura-pod/aura@main/order-status.csv';
 
     async function trackOrder() {
@@ -246,16 +245,21 @@
         const msg = document.getElementById('msg');
         const box = document.getElementById('trackBox');
 
-        if (!id) { msg.innerText = "نسيت تكتب رقم الطلب! 😊"; return; }
+        if (!id) { msg.innerText = "نسيت تكتب رقم الطلب! 🙄"; return; }
         
-        msg.innerText = "ثواني بس.. عم ندور على طلبك 🧐";
+        msg.innerText = "ثواني بس.. عم ندور على طلبك 💻";
         resetUI();
 
+        // نطلق عداد الـ 3 ثانية بالتوازي مع عملية جلب البيانات
+        const delayPromise = new Promise(resolve => setTimeout(resolve, 3000));
+
         try {
-            const res = await fetch(GITHUB_CSV_URL);
-            const text = await res.text();
+            // نقوم بطلب البيانات من GitHub
+            const fetchPromise = fetch(GITHUB_CSV_URL).then(res => res.text());
+
+            // ننتظر انتهاء العمليتين معاً (التحميل + مرور 3 ثواني على الأقل)
+            const [_, text] = await Promise.all([delayPromise, fetchPromise]);
             
-            // قراءة الملف وتخطي الأسطر الفارغة
             const rows = text.split(/\r?\n/).filter(r => r.trim() !== '').map(r => r.split(','));
             const data = rows.find(r => r[0] && r[0].trim() === id);
 
@@ -267,7 +271,11 @@
                 box.style.display = 'none';
                 msg.innerText = "اممم، ما لقينا هالطلب، متأكد من الرقم؟ 🤔";
             }
-        } catch (e) { msg.innerText = "في مشكلة صغيرة بالاتصال، جرب كمان شوي!"; }
+        } catch (e) { 
+            // نضمن ظهور رسالة الخطأ بعد انتهاء ال3 ثواني أيضاً لانتظام الواجهة
+            await delayPromise;
+            msg.innerText = "في مشكلة صغيرة بالاتصال، جرب كمان شوي!"; 
+        }
     }
 
     function runAnimation(status, time) {
