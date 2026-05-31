@@ -41,6 +41,8 @@
         *, *::before, *::after {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none; /* إضافة: تعطيل القائمة المنبثقة عند الضغط المطول للموبايل */
+            -webkit-user-drag: none; /* إضافة: تعطيل سحب الصور والروابط في الكمبيوتر */
         }
 
         body {
@@ -370,18 +372,6 @@
             .header-section h1 { font-size: 26px; }
             .filter-wrapper { padding: 16px; }
         }
-    /* تعطيل النقر اليميني والمطول على أزرار التواصل */
-/* تعطيل شامل للنقر المطول والقوائم على أزرار التواصل */
-.social-link-btn {
-    -webkit-touch-callout: none !important; /* تعطيل القائمة المنبثقة (iOS/Android) */
-    -webkit-user-select: none !important;   /* منع تحديد النص */
-    user-select: none !important;
-    -webkit-user-drag: none !important;     /* منع السحب */
-    -webkit-tap-highlight-color: transparent !important; /* إخفاء وميض الضغط */
-    touch-action: manipulation !important; /* منع التكبير أو القوائم عند اللمس */
-}
-
-
     </style>
 </head>
 <body>
@@ -481,6 +471,8 @@
         document.addEventListener('copy', event => event.preventDefault());
         document.addEventListener('cut', event => event.preventDefault());
         document.addEventListener('selectstart', event => event.preventDefault());
+        document.addEventListener('dragstart', event => event.preventDefault()); /* إضافة: منع سحب العناصر والروابط */
+        document.addEventListener('drop', event => event.preventDefault());      /* إضافة: منع الإفلات */
 
                 // نوافذ Pop-up السريعة
         const btnAcceptDisclaimer = document.getElementById('btn-accept-disclaimer');
@@ -900,17 +892,6 @@
                 processFilters();
             });
         });
-
-    // تعميم منع القائمة المنبثقة على أزرار التواصل
-document.querySelectorAll('.social-link-btn').forEach(btn => {
-    // منع النقر اليميني التقليدي
-    btn.addEventListener('contextmenu', e => e.preventDefault());
-    // منع النقر المطول في الهواتف
-    btn.addEventListener('touchstart', e => {
-        // لا نمنع النقر العادي، فقط نمنع السلوك الافتراضي الذي يؤدي للقائمة
-        // إذا كان هناك حاجة لمسح القائمة فقط عند الضغط المطول
-    }, {passive: false});
-});
 
         const sentinel = document.getElementById('sentinel');
         const observer = new IntersectionObserver((entries) => {
