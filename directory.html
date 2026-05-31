@@ -29,8 +29,13 @@
             --accent-success-light: #e8ffed;
             --border-color: #eaf4f4;
             --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.02);
-            --shadow-hover: 0 15px 35px rgba(5, 209, 206, 0.1);
+            --shadow-hover: 0 15px 35px rgba(5, 209, 206, 0.15);
             --transition-smooth: all 0.3s ease;
+            
+            /* ألوان المتابعين */
+            --badge-silver: #95a5a6;
+            --badge-emerald: #2ecc71;
+            --badge-gold: #f1c40f;
         }
 
         *, *::before, *::after {
@@ -55,9 +60,7 @@
             user-select: none;
         }
 
-        /* -------------------------------------------
-           إعدادات العلامة المائية (Watermark)
-        ---------------------------------------------- */
+        /* العلامة المائية */
         body::before {
             content: "";
             position: fixed;
@@ -66,16 +69,13 @@
             transform: translate(-50%, -50%);
             width: 100vw;
             height: 100vh;
-            
-            /* ضع رابط الصورة الخاصة بك هنا بدلاً من الرابط الحالي */
             background-image: url('directory-b1.png'); 
-            
-            background-repeat: repeat; /* منع التكرار */
+            background-repeat: repeat; 
             background-position: center;
-            background-size: 25%; /* حجم الصورة بالنسبة للشاشة، يمكنك تغييره */
-            opacity: 0.02; /* شفافية الصورة، 0.05 تعني خفيفة جداً */
+            background-size: 25%; 
+            opacity: 0.02; 
             z-index: -1;
-            pointer-events: none; /* لضمان عدم إعاقة النقر على العناصر الأخرى */
+            pointer-events: none; 
         }
 
         .container {
@@ -84,9 +84,7 @@
             padding: 30px 20px 60px 20px;
         }
 
-        /* -------------------------------------------
-           حركات الدخول الانسيابية الجديدة
-        ---------------------------------------------- */
+        /* حركات الدخول */
         .slide-in-top {
             transform: translateY(-150px);
             animation: slideDown 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -97,235 +95,114 @@
             animation: slideUp 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        @keyframes slideDown {
-            to { transform: translateY(0); }
-        }
+        @keyframes slideDown { to { transform: translateY(0); } }
+        @keyframes slideUp { to { transform: translateY(0); } }
 
-        @keyframes slideUp {
-            to { transform: translateY(0); }
-        }
-
-        /* -------------------------------------------
-           تنسيقات نافذة إخلاء المسؤولية (Pop-up)
-        ---------------------------------------------- */
-        .disclaimer-overlay {
+        /* نوافذ الـ Pop-up */        /* نوافذ الـ Pop-up - نسخة مطورة فائقة السلاسة */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.4); /* تخفيف الخلفية قليلاً لتقليل مجهود الرسم */
             z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px); /* لدعم هواتف الآيفون بسلاسة */
+            
+            /* تفعيل التلاشي السلس */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        visibility 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            /* إجبار كرت الشاشة على معالجة الحركة */
+            will-change: opacity, visibility;
+            transform: translateZ(0);
         }
 
-        .disclaimer-modal {
+        .modal-overlay.active { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+
+        .custom-modal {
             background: var(--card-bg);
             width: 90%;
             max-width: 480px;
-            border: 4px solid #e91e63;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 30px 25px;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(233, 30, 99, 0.2);
-            overflow: hidden;
-        }
-
-        .disclaimer-title {
-            color: #e91e63;
-            font-size: 22px;
-            font-weight: 900;
-            margin-top: 0;
-            margin-bottom: 15px;
-        }
-
-        .disclaimer-content {
-            color: var(--text-main);
-            font-size: 14.5px;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            text-align: justify;
-            font-weight: 600;
-        }
-
-        .disclaimer-content strong {
-            color: #d81b60;
-        }
-
-        .disclaimer-btn {
-            background-color: #e91e63;
-            color: #ffffff;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-            transition: var(--transition-smooth);
-        }
-
-        .disclaimer-btn:hover {
-            background-color: #c2185b;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
-        }
-
-        /* الترويسة */
-        .header-section {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header-section h1 {
-            font-size: 30px;
-            font-weight: 800;
-            color: var(--primary-color);
-            margin: 0 0 12px 0;
-        }
-
-        .header-section h1::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 3px;
-            background: var(--secondary-color);
-            margin: 8px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        .header-section p {
-            font-size: 14.5px;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 20px auto;
-        }
-
-        .premium-banner {
-            display: inline-block;
-            background-color: #FFFDE7;
-            color: #f2ae07;
-            border: 1px solid #FFF59D;
-            padding: 8px 24px;
-            border-radius: 30px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 4px 10px rgba(184, 134, 11, 0.1);
-        }
-
-        /* حاوية الفلاتر والبحث */
-        .filter-wrapper {
-            margin-bottom: 35px;
-            background: var(--card-bg);
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-soft);
-            border: 1px solid var(--border-color);
-        }
-
-        .search-group {
-            margin-bottom: 25px;
+            
+            /* تأثير الانبثاق من الداخل للخارج بسلاسة */
+            transform: scale(0.92) translateZ(0);
+            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); /* انحناء حركة مرن وأنظف */
+            
             position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 14px 45px 14px 15px;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            font-family: 'Cairo', sans-serif;
-            font-size: 15px;
-            outline: none;
-            transition: var(--transition-smooth);
-            background-color: var(--bg-color);
-        }
-
-        .search-input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(5, 209, 206, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 18px;
-        }
-
-        .filter-group {
-            margin-bottom: 20px;
-            text-align: right;
-        }
-
-        .filter-group:last-child { margin-bottom: 0; }
-
-        .filter-label {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 10px;
-            display: block;
+            will-change: transform;
         }
         
+        .modal-overlay.active .custom-modal { 
+            transform: scale(1) translateZ(0); 
+        }
+
+
+        /* ستايل إخلاء المسؤولية المخصص */
+        .disclaimer-modal { border: 4px solid #e91e63; box-shadow: 0 15px 40px rgba(233, 30, 99, 0.2); }
+        .disclaimer-title { color: #e91e63; font-size: 22px; font-weight: 900; margin-top: 0; margin-bottom: 15px; }
+        .disclaimer-content { color: var(--text-main); font-size: 14.5px; line-height: 1.8; margin-bottom: 25px; text-align: justify; font-weight: 600; }
+        .disclaimer-content strong { color: #d81b60; }
+        .disclaimer-btn { background-color: #e91e63; color: #ffffff; border: none; padding: 12px 40px; border-radius: 25px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: 'Cairo', sans-serif; transition: var(--transition-smooth); }
+        .disclaimer-btn:hover { background-color: #c2185b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3); }
+
+        /* ستايل نافذة أوقات العمل */
+        .hours-modal { border: 4px solid var(--primary-color); box-shadow: 0 15px 40px rgba(5, 209, 206, 0.2); }
+        .hours-title { color: var(--primary-dark); font-size: 20px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .hours-list { list-style: none; padding: 0; margin: 0 0 25px 0; text-align: right; }
+        .hours-list li { padding: 12px 15px; border-bottom: 1px dashed var(--border-color); display: flex; justify-content: space-between; font-weight: 600; font-size: 14.5px; }
+        .hours-list li:last-child { border-bottom: none; }
+        .hours-list li span:first-child { color: var(--secondary-color); }
+        .close-hours-btn { position: absolute; top: 15px; left: 15px; background: var(--bg-color); border: none; width: 35px; height: 35px; border-radius: 50%; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth); }
+        .close-hours-btn:hover { background: #ffebee; color: #f44336; }
+
+        /* الترويسة والفلاتر */
+        .header-section { text-align: center; margin-bottom: 40px; }
+        .header-section h1 { font-size: 30px; font-weight: 800; color: var(--primary-color); margin: 0 0 12px 0; }
+        .header-section h1::after { content: ''; display: block; width: 100px; height: 3px; background: var(--secondary-color); margin: 8px auto 0 auto; border-radius: 2px; }
+        .header-section p { font-size: 14.5px; color: var(--text-muted); max-width: 600px; margin: 0 auto 20px auto; }
+        .premium-banner { display: inline-block; background-color: #FFFDE7; color: #f2ae07; border: 1px solid #FFF59D; padding: 8px 24px; border-radius: 30px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 10px rgba(184, 134, 11, 0.1); }
+
+        .filter-wrapper { margin-bottom: 35px; background: var(--card-bg); padding: 24px; border-radius: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
+        .search-group { margin-bottom: 25px; position: relative; }
+        .search-input { width: 100%; padding: 14px 45px 14px 15px; border-radius: 12px; border: 2px solid var(--border-color); font-family: 'Cairo', sans-serif; font-size: 15px; outline: none; transition: var(--transition-smooth); background-color: var(--bg-color); }
+        .search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(5, 209, 206, 0.1); }
+        .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; }
+        .filter-group { margin-bottom: 20px; text-align: right; }
+        .filter-group:last-child { margin-bottom: 0; }
+        .filter-label { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 10px; display: block; }
         .filter-label i { color: var(--secondary-color); margin-left: 6px; }
-
-        .filter-scroll {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding: 4px 4px 12px 4px;
-            margin-bottom: -8px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
+        .filter-scroll { display: flex; flex-wrap: nowrap; overflow-x: auto; padding: 4px 4px 12px 4px; margin-bottom: -8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .filter-scroll::-webkit-scrollbar { display: none; }
+        .filter-btn { flex: 0 0 auto; background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 18px; margin-left: 8px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition-smooth); font-family: 'Cairo', sans-serif; }
+        .filter-btn.active { background-color: var(--primary-color); color: #ffffff; border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(5, 209, 206, 0.2); }
 
-        .filter-btn {
-            flex: 0 0 auto;
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            padding: 8px 18px;
-            margin-left: 8px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .filter-btn.active {
-            background-color: var(--primary-color);
-            color: #ffffff;
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 10px rgba(5, 209, 206, 0.2);
-        }
-
-        .filter-btn:hover:not(.active) {
-            background-color: var(--primary-light);
-            color: var(--primary-dark);
-            border-color: var(--primary-color);
-        }
-
-        /* شبكة بطاقات المشاريع */
-        .projects-grid {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 -12px;
+        /* تعديل 1: شبكة بطاقات المشاريع المبتكرة (تصحيح المحاذاة)
+           استخدام CSS Grid بدلاً من Flexbox لضمان المحاذاة الدقيقة مع الفلاتر 
+        */
+        .projects-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin: 0; 
         }
 
         .project-card {
-            flex: 0 0 calc(33.333% - 24px);
-            margin: 12px;
+            width: 100%;
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-soft);
             overflow: hidden;
@@ -334,165 +211,162 @@
             flex-direction: column;
             transform: translateY(150px);
             animation: slideUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            position: relative;
         }
 
         .project-card:hover {
             transform: translateY(-5px) !important;
             box-shadow: var(--shadow-hover);
-            border-color: rgba(5, 209, 206, 0.25);
+            border-color: rgba(5, 209, 206, 0.3);
         }
 
-        .card-header-table {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px dashed var(--border-color);
+        /* الكوفر والصورة الخلفية */
+        .card-cover {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 110px;
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+        .card-cover::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--card-bg) 95%);
         }
 
-        .card-avatar-cell { flex: 0 0 auto; }
-
-        .card-title-cell {
-            flex: 1 1 auto;
-            padding-right: 12px;
-            text-align: right;
+        /* تعديل 2: شارة المتابعين والفقاعة (Badge & Tooltip)
+        */
+        .badge-wrapper {
+            position: absolute;
+            top: 15px; left: 15px;
+            z-index: 5;
         }
-
-        .project-logo {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary-color);
-            background-color: var(--bg-color);
-            display: block;
-        }
-
-        .project-icon-fallback {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background-color: var(--primary-light);
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            border: 2px solid var(--primary-color);
-        }
-
-        .project-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin: 0 0 4px 0;
-        }
-
-        .project-category-badge {
-            display: inline-block;
-            background-color: var(--secondary-light);
-            color: var(--secondary-color);
+        .follower-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
             font-size: 11px;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        .card-body {
-            padding: 16px 20px;
-            text-align: right;
-            flex-grow: 1;
-        }
-
-        .project-desc {
-            color: var(--text-muted);
-            font-size: 13px;
-            margin: 0 0 14px 0;
-            height: 44px;
-            line-height: 1.6;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-
-        .project-location {
-            font-size: 12.5px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            font-weight: 700;
-        }
-
-        .project-location i { color: var(--primary-color); margin-left: 6px; }
-
-        .shipping-badge {
-            display: inline-block;
-            background-color: var(--accent-success-light);
-            color: var(--accent-success);
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-weight: 600;
-            margin-right: 6px;
-        }
-
-        .card-actions {
-            padding: 12px 20px 20px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(234, 244, 244, 0.5);
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .social-link-btn {
+            font-weight: 800;
+            color: #fff;
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            background-color: var(--bg-color);
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            border: 1px solid var(--border-color);
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        .follower-badge:active { transform: scale(0.9); }
+        .badge-silver { background: linear-gradient(135deg, #bdc3c7, #95a5a6); }
+        .badge-emerald { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .badge-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4); }
+
+                .card-tooltip {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 8px;
+            background-color: var(--text-main);
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            white-space: nowrap;
+            
+            /* تحسين الأنميشن والاعتماد على كرت الشاشة */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px) translateZ(0);
+            transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        visibility 0.2s;
+            
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        
+        .card-tooltip.show {
+            opacity: 1; 
+            visibility: visible; 
+            transform: translateY(0) translateZ(0);
         }
 
-        .social-link-btn i { font-size: 16px; }
-        .social-link-btn.btn-phone { color: #2ecc71; border-color: rgba(46, 204, 113, 0.15); }
-        .social-link-btn.btn-phone:hover { background-color: #2ecc71; color: #fff; transform: scale(1.08); }
-        .social-link-btn.btn-facebook { color: #1877f2; border-color: rgba(24, 119, 242, 0.15); }
-        .social-link-btn.btn-facebook:hover { background-color: #1877f2; color: #fff; transform: scale(1.08); }
-        .social-link-btn.btn-instagram { color: #e1306c; border-color: rgba(225, 48, 108, 0.15); }
-        .social-link-btn.btn-instagram:hover { background-color: #e1306c; color: #fff; transform: scale(1.08); }
-        .social-link-btn.btn-whatsapp { color: #25d366; border-color: rgba(37, 211, 102, 0.15); }
-        .social-link-btn.btn-whatsapp:hover { background-color: #25d366; color: #fff; transform: scale(1.08); }
-        .social-link-btn.btn-telegram { color: #0088cc; border-color: rgba(0, 136, 204, 0.15); }
-        .social-link-btn.btn-telegram:hover { background-color: #0088cc; color: #fff; transform: scale(1.08); }
 
-        .no-results {
-            display: none;
-            text-align: center;
-            width: 100%;
-            padding: 40px;
-            color: var(--text-muted);
-            font-size: 14.5px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px dashed var(--primary-color);
-            margin: 15px 0;
+        /* تعديل 3: شارة مشروع صغير جديد
+        */
+        .new-project-badge {
+            position: absolute;
+            top: 15px; right: 15px; /* الجهة المقابلة للمتابعين */
+            z-index: 5;
+            background: linear-gradient(135deg, #ff7eb3, #ff5252);
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            box-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+            animation: pulseGlow 2s infinite alternate;
+            pointer-events: none;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 82, 82, 0.3); transform: scale(1); }
+            100% { box-shadow: 0 0 15px rgba(255, 82, 82, 0.7); transform: scale(1.02); }
         }
 
-        .loading-sentinel {
-            width: 100%;
-            height: 20px;
-            margin-top: 20px;
-        }
+        /* إعدادات البطاقة الداخلية */
+        .card-header-table { display: flex; align-items: flex-end; padding: 20px 20px 15px 20px; margin-top: 40px; position: relative; z-index: 1; }
+        .card-avatar-cell { flex: 0 0 auto; position: relative; }
+        .project-logo, .project-icon-fallback { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 3px solid var(--card-bg); background-color: var(--card-bg); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .project-icon-fallback { color: var(--primary-color); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 3px solid var(--primary-color); }
+        .card-title-cell { flex: 1 1 auto; padding-right: 15px; text-align: right; }
+        .project-name { font-size: 17px; font-weight: 800; color: var(--text-main); margin: 0 0 5px 0; }
+        .project-category-badge { display: inline-block; background-color: var(--secondary-light); color: var(--secondary-color); font-size: 11px; padding: 3px 12px; border-radius: 12px; font-weight: 700; }
 
-        @media (max-width: 992px) { .project-card { flex: 0 0 calc(50% - 24px); } }
+        .card-body { padding: 5px 20px 15px 20px; text-align: right; flex-grow: 1; position: relative; z-index: 1; }
+        .project-desc { color: var(--text-muted); font-size: 13.5px; margin: 0 0 15px 0; line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .location-hours-wrapper { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .project-location { font-size: 13px; color: var(--text-main); font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .project-location i { color: var(--primary-color); }
+        
+        .btn-hours { background: var(--primary-light); color: var(--primary-dark); border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; transition: var(--transition-smooth); display: flex; align-items: center; gap: 5px; }
+        .btn-hours:hover { background: var(--primary-color); color: #fff; }
+
+        .services-wrapper { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .service-tag { display: inline-flex; align-items: center; gap: 6px; background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 11.5px; padding: 4px 10px; border-radius: 8px; font-weight: 700; }
+
+        @keyframes driveTruck { 0% { transform: translateX(0) translateY(0); } 25% { transform: translateX(-2px) translateY(-1px); } 50% { transform: translateX(-4px) translateY(0); } 75% { transform: translateX(-2px) translateY(1px); } 100% { transform: translateX(0) translateY(0); } }
+        .icon-truck { color: #3498db; animation: driveTruck 1.5s infinite linear; }
+        @keyframes popWheelie { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(-15deg) translateY(-3px); } }
+        .icon-bike { color: #e67e22; animation: popWheelie 1.2s infinite ease-in-out; }
+        @keyframes pulseWifi { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
+        .icon-remote { color: #9b59b6; animation: pulseWifi 1.5s infinite ease-in-out; }
+        @keyframes ringBell { 0%, 100% { transform: rotate(0); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-15deg); } 20%, 40%, 60%, 80% { transform: rotate(15deg); } }
+        .icon-booking { color: #e74c3c; animation: ringBell 2s infinite ease-in-out; transform-origin: top center; }
+
+        .card-actions { padding: 15px 20px; text-align: center; border-top: 1px dashed var(--border-color); display: flex; justify-content: center; gap: 10px; background: var(--bg-color); }
+        .social-link-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: var(--card-bg); color: var(--text-muted); text-decoration: none; transition: var(--transition-smooth); border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .social-link-btn i { font-size: 18px; }
+        .social-link-btn.btn-phone { color: #2ecc71; border-color: rgba(46, 204, 113, 0.2); }
+        .social-link-btn.btn-phone:hover { background-color: #2ecc71; color: #fff; transform: translateY(-3px); }
+        .social-link-btn.btn-facebook { color: #1877f2; border-color: rgba(24, 119, 242, 0.2); }
+        .social-link-btn.btn-facebook:hover { background-color: #1877f2; color: #fff; transform: translateY(-3px); }
+        .social-link-btn.btn-instagram { color: #e1306c; border-color: rgba(225, 48, 108, 0.2); }
+        .social-link-btn.btn-instagram:hover { background-color: #e1306c; color: #fff; transform: translateY(-3px); }
+        .social-link-btn.btn-whatsapp { color: #25d366; border-color: rgba(37, 211, 102, 0.2); }
+        .social-link-btn.btn-whatsapp:hover { background-color: #25d366; color: #fff; transform: translateY(-3px); }
+        .social-link-btn.btn-telegram { color: #0088cc; border-color: rgba(0, 136, 204, 0.2); }
+        .social-link-btn.btn-telegram:hover { background-color: #0088cc; color: #fff; transform: translateY(-3px); }
+
+        .no-results { display: none; text-align: center; width: 100%; padding: 40px; color: var(--text-muted); font-size: 14.5px; background: var(--card-bg); border-radius: 16px; border: 1px dashed var(--primary-color); margin: 15px 0; }
+        .loading-sentinel { width: 100%; height: 20px; margin-top: 20px; }
+
+        /* تعديل التصميم المتجاوب لـ CSS Grid */
+        @media (max-width: 992px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 680px) {
-            .project-card { flex: 0 0 calc(100% - 24px); margin: 12px; }
+            .projects-grid { grid-template-columns: 1fr; }
             .header-section h1 { font-size: 26px; }
             .filter-wrapper { padding: 16px; }
         }
@@ -500,9 +374,8 @@
 </head>
 <body>
 
-    <!-- رسالة إخلاء المسؤولية (Pop-up) -->
-    <div class="disclaimer-overlay" id="disclaimer-overlay">
-        <div class="disclaimer-modal">
+    <div class="modal-overlay active" id="disclaimer-overlay">
+        <div class="custom-modal disclaimer-modal">
             <h2 class="disclaimer-title">إخلاء مسؤولية</h2>
             <div class="disclaimer-content">
                 صفحة دليل أصحاب الأعمال في متجر أورا، هي صفحة خدمية مجانية تهدف أولاً لدعم المشاريع الصغيرة والناشئة، وثانياً لتسهيل الوصول والربط بين الزبائن وأصحاب الأعمال (B2B & B2C) في المحافظات السورية، وذلك من خلال تقديم مساحة إعلانية تتضمن اسم عملهم، مجاله، وصفه، موقعه، وطرق التواصل المتوفرة معهم.<br><br>
@@ -512,9 +385,17 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="hours-overlay">
+        <div class="custom-modal hours-modal">
+            <button class="close-hours-btn" id="btn-close-hours"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="hours-title"><i class="fa-regular fa-clock"></i> أوقات العمل</h2>
+            <ul class="hours-list" id="hours-list-container">
+            </ul>
+        </div>
+    </div>
+
     <div class="container">
         
-        <!-- الترويسة تنزلق من الأعلى -->
         <div class="header-section slide-in-top">
             <h1>دليل أصحاب الأعمال</h1>
             <h4>على نيّة الرزق منساعد بعض</h4>
@@ -525,9 +406,7 @@
             </div>
         </div>
 
-        <!-- الفلاتر تنزلق من الأسفل -->
         <div class="filter-wrapper slide-in-bottom">
-            
             <div class="search-group">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="search-input" class="search-input" placeholder="ابحث عن اسم عمل، منتج، خدمة، أو منطقة ...">
@@ -579,41 +458,48 @@
     </div>
 
     <script>
-        // ----------------------------------------------------
-        // إعدادات تطبيق تيليغرام المصغر (Telegram Web App) وإضافة زر الرجوع
-        // ----------------------------------------------------
+        // إعدادات تطبيق تيليغرام
         const tg = window.Telegram.WebApp;
-        tg.ready(); // إعلام تيليغرام بأن التطبيق جاهز
-        
-        // إظهار زر الرجوع الخاص بتيليغرام
+        tg.ready(); 
         tg.BackButton.show();
+        tg.BackButton.onClick(function() { window.location.href = 'index.html'; });
+
+        // حماية الصفحة
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        document.addEventListener('selectstart', event => event.preventDefault());
+
+                // نوافذ Pop-up السريعة
+        const btnAcceptDisclaimer = document.getElementById('btn-accept-disclaimer');
+        const disclaimerOverlay = document.getElementById('disclaimer-overlay');
         
-        // ربط زر الرجوع برابط الصفحة الرئيسية
-        tg.BackButton.onClick(function() {
-            window.location.href = 'index.html'; // التوجيه إلى صفحة index
-        });
-        // ----------------------------------------------------
-
-        // ----------------------------------------------------
-        // حماية الصفحة: منع النقر اليميني، والنسخ، والتحديد
-        // ----------------------------------------------------
-        document.addEventListener('contextmenu', event => event.preventDefault()); // منع النقر اليميني
-        document.addEventListener('copy', event => event.preventDefault());        // منع النسخ
-        document.addEventListener('cut', event => event.preventDefault());         // منع القص
-        document.addEventListener('selectstart', event => event.preventDefault()); // منع تحديد النص بالماوس (تأكيد إضافي للـ CSS)
-        // ----------------------------------------------------
-
-        // إغلاق رسالة إخلاء المسؤولية عند الضغط على موافق
-        document.addEventListener("DOMContentLoaded", () => {
-            const btnAcceptDisclaimer = document.getElementById('btn-accept-disclaimer');
-            const disclaimerOverlay = document.getElementById('disclaimer-overlay');
-            
-            btnAcceptDisclaimer.addEventListener('click', () => {
-                disclaimerOverlay.style.display = 'none';
-            });
+        btnAcceptDisclaimer.addEventListener('click', () => { 
+            disclaimerOverlay.classList.remove('active'); 
         });
 
-        // إعدادات المحافظات
+        const hoursOverlay = document.getElementById('hours-overlay');
+        const btnCloseHours = document.getElementById('btn-close-hours');
+        
+        btnCloseHours.addEventListener('click', () => { 
+            hoursOverlay.classList.remove('active'); 
+        });
+        
+        hoursOverlay.addEventListener('click', (e) => {
+            if(e.target === hoursOverlay) {
+                hoursOverlay.classList.remove('active');
+            }
+        });
+
+
+        // دالة عرض فقاعة التنبيه الخاصة بكل بطاقة
+        window.showCardTooltip = function(element, message) {
+            const tooltip = element.nextElementSibling;
+            tooltip.innerText = message;
+            tooltip.classList.add('show');
+            setTimeout(() => { tooltip.classList.remove('show'); }, 3000);
+        };
+
         const syrianProvincesVisibility = {
             "دمشق": true, "ريف دمشق": true, "حلب": true, "حمص": true,
             "حماة": false, "اللاذقية": true, "طرطوس": true, "إدلب": false,
@@ -631,15 +517,212 @@
             });
         });
 
+        // قاعدة البيانات (مضاف فيها isNewSmallProject)
         const projectsDB = [
-            { id: 1, name: "ياسمين الشام للهدايا", category: "أشغال يدوية", province: "دمشق", desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", locationText: "دمشق، الشعلان", shippingNote: "متوفر شحن خارج المحافظة", logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", fallbackIcon: "fa-regular fa-address-card", contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com/channel/0029VbB7MA2JENy6DFXjMN3p", telegram: "https://t.me" } },
-            { id: 2, name: "إبداع ديجيتال", category: "خدمات رقمية", province: "حلب", desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", locationText: "حلب، العزيزية", shippingNote: null, logoImg: null, fallbackIcon: "fa-solid fa-laptop-code", contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } },
-            { id: 3, name: "Raghed Cakes", category: "مأكولات", province: "حمص", desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", locationText: "حمص، فيروزة", shippingNote: "تلبية طلبات ضمن المدينة", logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", fallbackIcon: "fa-solid fa-cake-candles", contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } },
-            { id: 4, name: "أكاديمية أفق للتدريب", category: "مراكز خدمية", province: "اللاذقية", desc: "تقديم دورات تدريبية مجانية وشبه مجانية للشباب في مجالات السكرتارية، الإكسل والمحاسبة.", locationText: "اللاذقية، شارع بغداد", shippingNote: "إمكانية الحضور عن بعد", logoImg: null, fallbackIcon: "fa-solid fa-graduation-cap", contacts: { phone: "+963944555666", facebook: "https://facebook.com", telegram: "https://t.me" } },
-            { id: 5, name: "أكاديمية أفق للتدريب1", category: "مراكز خدمية", province: "اللاذقية", desc: "تقديم دورات تدريبية مجانية وشبه مجانية للشباب في مجالات السكرتارية، الإكسل والمحاسبة.", locationText: "اللاذقية، شارع بغداد", shippingNote: "إمكانية الحضور عن بعد", logoImg: null, fallbackIcon: "fa-solid fa-graduation-cap", contacts: { phone: "+963944555666", facebook: "https://facebook.com", telegram: "https://t.me" } },
-            { id: 6, name: "أكاديمية أفق للتدريب2", category: "مراكز خدمية", province: "اللاذقية", desc: "تقديم دورات تدريبية مجانية وشبه مجانية للشباب في مجالات السكرتارية، الإكسل والمحاسبة.", locationText: "اللاذقية، شارع بغداد", shippingNote: "إمكانية الحضور عن بعد", logoImg: null, fallbackIcon: "fa-solid fa-graduation-cap", contacts: { phone: "+963944555666", facebook: "https://facebook.com", telegram: "https://t.me" } },
-            { id: 7, name: "أكاديمية أفق للتدريب3", category: "مراكز خدمية", province: "اللاذقية", desc: "تقديم دورات تدريبية مجانية وشبه مجانية للشباب في مجالات السكرتارية، الإكسل والمحاسبة.", locationText: "اللاذقية، شارع بغداد", shippingNote: "إمكانية الحضور عن بعد", logoImg: null, fallbackIcon: "fa-solid fa-graduation-cap", contacts: { phone: "+963944555666", facebook: "https://facebook.com", telegram: "https://t.me" } },
-            { id: 8, name: "أكاديمية أفق للتدريب4", category: "مراكز خدمية", province: "اللاذقية", desc: "تقديم دورات تدريبية مجانية وشبه مجانية للشباب في مجالات السكرتارية، الإكسل والمحاسبة.", locationText: "اللاذقية، شارع بغداد", shippingNote: "إمكانية الحضور عن بعد", logoImg: null, fallbackIcon: "fa-solid fa-graduation-cap", contacts: { phone: "+963944555666", facebook: "https://facebook.com", telegram: "https://t.me" } }
+            { 
+                id: 1, 
+                name: "ياسمين الشام للهدايا", 
+                category: "أشغال يدوية", 
+                province: "دمشق", 
+                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
+                locationText: "دمشق، الشعلان", 
+                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
+                fallbackIcon: "fa-regular fa-address-card",
+                followers: 49999,
+                showFollowersBadge: true,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
+                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
+                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 2, 
+                name: "إبداع ديجيتال", 
+                category: "خدمات رقمية", 
+                province: "حلب", 
+                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
+                locationText: "حلب، العزيزية", 
+                logoImg: null, 
+                coverImg: "https://img.magnific.com/free-photo/3d-modern-technology-background-with-plexus-design_1048-16714.jpg?semt=ais_hybrid&w=740&q=80", 
+                fallbackIcon: "fa-solid fa-laptop-code", 
+                followers: 1000, 
+                showFollowersBadge: true,
+                isNewSmallProject: true, // إخفاء الشارة
+                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
+                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
+                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 3, 
+                name: "Raghed Cakes", 
+                category: "مأكولات", 
+                province: "حمص", 
+                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
+                locationText: "حمص، فيروزة", 
+                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
+                fallbackIcon: "fa-solid fa-cake-candles", 
+                followers: 14000,
+                showFollowersBadge: false,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
+                workingHours: null, 
+                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
+            },
+  { 
+                id: 1, 
+                name: "ياسمين الشام للهدايا", 
+                category: "أشغال يدوية", 
+                province: "دمشق", 
+                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
+                locationText: "دمشق، الشعلان", 
+                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
+                fallbackIcon: "fa-regular fa-address-card",
+                followers: 49999,
+                showFollowersBadge: true,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
+                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
+                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 2, 
+                name: "إبداع ديجيتال", 
+                category: "خدمات رقمية", 
+                province: "حلب", 
+                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
+                locationText: "حلب، العزيزية", 
+                logoImg: null, 
+                coverImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjidD5CsF2fMM8jRxzsPh90hnHeUIsJcU-8w&s", 
+                fallbackIcon: "fa-solid fa-laptop-code", 
+                followers: 1000,
+                showFollowersBadge: true,
+                isNewSmallProject: true, // إخفاء الشارة
+                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
+                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
+                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 3, 
+                name: "Raghed Cakes", 
+                category: "مأكولات", 
+                province: "حمص", 
+                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
+                locationText: "حمص، فيروزة", 
+                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
+                fallbackIcon: "fa-solid fa-cake-candles", 
+                followers: 14000,
+                showFollowersBadge: true,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
+                workingHours: null, 
+                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
+            },
+  { 
+                id: 1, 
+                name: "ياسمين الشام للهدايا", 
+                category: "أشغال يدوية", 
+                province: "دمشق", 
+                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
+                locationText: "دمشق، الشعلان", 
+                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
+                fallbackIcon: "fa-regular fa-address-card",
+                followers: 49999,
+                showFollowersBadge: false,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
+                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
+                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 2, 
+                name: "إبداع ديجيتال", 
+                category: "خدمات رقمية", 
+                province: "حلب", 
+                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
+                locationText: "حلب، العزيزية", 
+                logoImg: null, 
+                coverImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjidD5CsF2fMM8jRxzsPh90hnHeUIsJcU-8w&s", 
+                fallbackIcon: "fa-solid fa-laptop-code", 
+                followers: 123000,
+                showFollowersBadge: true,
+                isNewSmallProject: true, // إخفاء الشارة
+                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
+                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
+                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 3, 
+                name: "Raghed Cakes", 
+                category: "مأكولات", 
+                province: "حمص", 
+                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
+                locationText: "حمص، فيروزة", 
+                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
+                fallbackIcon: "fa-solid fa-cake-candles", 
+                followers: 14000,
+                showFollowersBadge: true,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
+                workingHours: null, 
+                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
+            },
+  { 
+                id: 1, 
+                name: "ياسمين الشام للهدايا", 
+                category: "أشغال يدوية", 
+                province: "دمشق", 
+                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
+                locationText: "دمشق، الشعلان", 
+                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
+                fallbackIcon: "fa-regular fa-address-card",
+                followers: 52979,
+                showFollowersBadge: true,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
+                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
+                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 2, 
+                name: "إبداع ديجيتال", 
+                category: "خدمات رقمية", 
+                province: "حلب", 
+                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
+                locationText: "حلب، العزيزية", 
+                logoImg: null, 
+                coverImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjidD5CsF2fMM8jRxzsPh90hnHeUIsJcU-8w&s", 
+                fallbackIcon: "fa-solid fa-laptop-code", 
+                followers: 1000,
+                showFollowersBadge: false,
+                isNewSmallProject: true, // إخفاء الشارة
+                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
+                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
+                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 3, 
+                name: "Raghed Cakes", 
+                category: "مأكولات", 
+                province: "حمص", 
+                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
+                locationText: "حمص، فيروزة", 
+                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
+                fallbackIcon: "fa-solid fa-cake-candles", 
+                followers: 50001,
+                showFollowersBadge: true,
+                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
+                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
+                workingHours: null, 
+                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
+            }
         ];
 
         const container = document.getElementById('projects-container');
@@ -649,18 +732,76 @@
         let filteredProjects = [...projectsDB];
         let currentLoadIndex = 0;
         const itemsPerLoad = 5;
-
         let activeProvince = 'all-provinces';
         let activeCategory = 'all-categories';
         let searchQuery = '';
 
+        // فتح نافذة أوقات العمل
+        window.openHoursModal = function(projectId) {
+            const project = projectsDB.find(p => p.id === projectId);
+            if(project && project.workingHours) {
+                const listContainer = document.getElementById('hours-list-container');
+                listContainer.innerHTML = '';
+                for (const [day, time] of Object.entries(project.workingHours)) {
+                    listContainer.innerHTML += `<li><span>${day}</span> <span>${time}</span></li>`;
+                }
+                document.getElementById('hours-overlay').classList.add('active');
+            }
+        };
+
         function createCardHTML(project) {
+    let coverHTML = project.coverImg ? `<div class="card-cover" style="background-image: url('${project.coverImg}')"></div>` : '';
+    
+    // --- تعديل شارة المتابعين الذكية (إخفاء وإظهار) ---
+    let badgeHTML = '';
+    // الشرط الجديد: يتأكد أولاً أن خيار الإظهار مفعّل (true) وأن عدد المتابعين موجود
+    if (project.showFollowersBadge && project.followers && project.followers > 0) {
+        let badgeClass = '', iconClass = '', tooltipMsg = '', badgeLabel = '';
+        
+        if (project.followers < 10000) {
+            badgeClass = 'badge-silver'; iconClass = 'fa-solid fa-user-group'; badgeLabel = '<10K';
+            tooltipMsg = 'عدد المتابعين < 10,000';
+        } else if (project.followers >= 10000 && project.followers <= 50000) {
+            badgeClass = 'badge-emerald'; iconClass = 'fa-solid fa-medal'; badgeLabel = '+10K';
+            tooltipMsg = '10,000 < عدد المتابعين < 50,000';
+        } else {
+            badgeClass = 'badge-gold'; iconClass = 'fa-solid fa-crown'; badgeLabel = '+50K';
+            tooltipMsg = 'عدد المتابعين > 50,000';
+        }
+
+        badgeHTML = `
+        <div class="badge-wrapper">
+            <div class="follower-badge ${badgeClass}" onclick="showCardTooltip(this, '${tooltipMsg}')">
+                <i class="${iconClass}"></i> ${badgeLabel}
+            </div>
+            <div class="card-tooltip"></div>
+        </div>`;
+    }
+
+    // --- تعديل شارة مشروع جديد (إخفاء وإظهار) ---
+    // الشرط يقرأ القيمة مباشرة، إذا كانت true تظهر، وإذا كانت false تختفي تلقائياً
+    let newProjectHTML = project.isNewSmallProject ? `<div class="new-project-badge">مشروع صغير جديد ❤</div>` : '';
+
+    // ... (باقي كود الدالة المعتاد يكمل هنا بدون أي تغيير) ...
+
+
             let logoHTML = project.logoImg 
                 ? `<img src="${project.logoImg}" alt="لوغو" class="project-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                    <div class="project-icon-fallback" style="display:none;"><i class="${project.fallbackIcon}"></i></div>`
                 : `<div class="project-icon-fallback"><i class="${project.fallbackIcon}"></i></div>`;
 
-            let shippingHTML = project.shippingNote ? `<span class="shipping-badge">${project.shippingNote}</span>` : '';
+            let servicesHTML = '';
+            if (project.services) {
+                if (project.services.hasShipping) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-truck-fast icon-truck"></i> متوفر الشحن</span>`;
+                if (project.services.hasDelivery) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-motorcycle icon-bike"></i> متوفر التوصيل</span>`;
+                if (project.services.isRemote) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-tower-broadcast icon-remote"></i> نعمل عن بعد</span>`;
+                if (project.services.requiresBooking) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-bell-concierge icon-booking"></i> حجز مسبق</span>`;
+            }
+            let servicesContainer = servicesHTML !== '' ? `<div class="services-wrapper">${servicesHTML}</div>` : '';
+
+            let hoursBtnHTML = project.workingHours 
+                ? `<button class="btn-hours" onclick="openHoursModal(${project.id})"><i class="fa-regular fa-clock"></i> أوقات العمل</button>` 
+                : '';
 
             let contactsHTML = '';
             if(project.contacts.phone) contactsHTML += `<a href="tel:${project.contacts.phone}" class="social-link-btn btn-phone"><i class="fa-solid fa-phone"></i></a>`;
@@ -671,6 +812,9 @@
 
             return `
             <div class="project-card">
+                ${coverHTML}
+                ${badgeHTML}
+                ${newProjectHTML}
                 <div class="card-header-table">
                     <div class="card-avatar-cell">${logoHTML}</div>
                     <div class="card-title-cell">
@@ -679,11 +823,12 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <p class="project-desc">${project.desc}</p>
-                    <div class="project-location">
-                        <i class="fa-solid fa-location-dot"></i>${project.locationText}
-                        ${shippingHTML}
+                    <div class="location-hours-wrapper">
+                        <div class="project-location"><i class="fa-solid fa-location-dot"></i>${project.locationText}</div>
+                        ${hoursBtnHTML}
                     </div>
+                    ${servicesContainer}
+                    <p class="project-desc">${project.desc}</p>
                 </div>
                 <div class="card-actions">${contactsHTML}</div>
             </div>`;
@@ -693,14 +838,12 @@
             filteredProjects = projectsDB.filter(p => {
                 const matchProvince = activeProvince === 'all-provinces' || p.province === activeProvince;
                 const matchCategory = activeCategory === 'all-categories' || p.category === activeCategory;
-                
                 const searchLower = searchQuery.toLowerCase();
                 const matchSearch = searchQuery === '' || 
                                     p.name.toLowerCase().includes(searchLower) || 
                                     p.desc.toLowerCase().includes(searchLower) ||
                                     p.locationText.toLowerCase().includes(searchLower) ||
                                     p.category.toLowerCase().includes(searchLower); 
-              
                 return matchProvince && matchCategory && matchSearch;
             });
 
@@ -720,18 +863,13 @@
             if (nextBatch.length === 0) return;
 
             let htmlString = '';
-            nextBatch.forEach(project => {
-                htmlString += createCardHTML(project);
-            });
+            nextBatch.forEach(project => { htmlString += createCardHTML(project); });
             
             container.insertAdjacentHTML('beforeend', htmlString);
             currentLoadIndex += itemsPerLoad;
         }
 
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            processFilters();
-        });
+        searchInput.addEventListener('input', (e) => { searchQuery = e.target.value; processFilters(); });
 
         document.querySelectorAll('#province-filters .filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -753,11 +891,8 @@
 
         const sentinel = document.getElementById('sentinel');
         const observer = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) {
-                loadMoreProjects();
-            }
+            if (entries[0].isIntersecting) { loadMoreProjects(); }
         }, { rootMargin: '100px' });
-        
         observer.observe(sentinel);
 
         processFilters();
