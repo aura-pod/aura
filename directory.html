@@ -41,8 +41,6 @@
         *, *::before, *::after {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none; /* إضافة: تعطيل القائمة المنبثقة عند الضغط المطول للموبايل */
-            -webkit-user-drag: none; /* إضافة: تعطيل سحب الصور والروابط في الكمبيوتر */
         }
 
         body {
@@ -471,8 +469,6 @@
         document.addEventListener('copy', event => event.preventDefault());
         document.addEventListener('cut', event => event.preventDefault());
         document.addEventListener('selectstart', event => event.preventDefault());
-        document.addEventListener('dragstart', event => event.preventDefault()); /* إضافة: منع سحب العناصر والروابط */
-        document.addEventListener('drop', event => event.preventDefault());      /* إضافة: منع الإفلات */
 
                 // نوافذ Pop-up السريعة
         const btnAcceptDisclaimer = document.getElementById('btn-accept-disclaimer');
