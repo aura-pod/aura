@@ -803,12 +803,18 @@
                 ? `<button class="btn-hours" onclick="openHoursModal(${project.id})"><i class="fa-regular fa-clock"></i> أوقات العمل</button>` 
                 : '';
 
-            let contactsHTML = '';
-            if(project.contacts.phone) contactsHTML += `<a href="tel:${project.contacts.phone}" class="social-link-btn btn-phone"><i class="fa-solid fa-phone"></i></a>`;
-            if(project.contacts.facebook) contactsHTML += `<a href="${project.contacts.facebook}" target="_blank" class="social-link-btn btn-facebook"><i class="fa-brands fa-facebook-f"></i></a>`;
-            if(project.contacts.instagram) contactsHTML += `<a href="${project.contacts.instagram}" target="_blank" class="social-link-btn btn-instagram"><i class="fa-brands fa-instagram"></i></a>`;
-            if(project.contacts.whatsapp) contactsHTML += `<a href="${project.contacts.whatsapp}" target="_blank" class="social-link-btn btn-whatsapp"><i class="fa-brands fa-whatsapp"></i></a>`;
-            if(project.contacts.telegram) contactsHTML += `<a href="${project.contacts.telegram}" target="_blank" class="social-link-btn btn-telegram"><i class="fa-brands fa-telegram"></i></a>`;
+                        let contactsHTML = '';
+            // استخدمنا onclick بدلاً من href لمنع النظام من التعرف عليها كروابط عند النقر المطول
+            if(project.contacts.phone) contactsHTML += `<a onclick="window.location.href='tel:${project.contacts.phone}'" class="social-link-btn btn-phone" style="cursor:pointer;"><i class="fa-solid fa-phone"></i></a>`;
+            
+            if(project.contacts.facebook) contactsHTML += `<a onclick="window.open('${project.contacts.facebook}', '_blank')" class="social-link-btn btn-facebook" style="cursor:pointer;"><i class="fa-brands fa-facebook-f"></i></a>`;
+            
+            if(project.contacts.instagram) contactsHTML += `<a onclick="window.open('${project.contacts.instagram}', '_blank')" class="social-link-btn btn-instagram" style="cursor:pointer;"><i class="fa-brands fa-instagram"></i></a>`;
+            
+            if(project.contacts.whatsapp) contactsHTML += `<a onclick="window.open('${project.contacts.whatsapp}', '_blank')" class="social-link-btn btn-whatsapp" style="cursor:pointer;"><i class="fa-brands fa-whatsapp"></i></a>`;
+            
+            if(project.contacts.telegram) contactsHTML += `<a onclick="window.open('${project.contacts.telegram}', '_blank')" class="social-link-btn btn-telegram" style="cursor:pointer;"><i class="fa-brands fa-telegram"></i></a>`;
+
 
             return `
             <div class="project-card">
