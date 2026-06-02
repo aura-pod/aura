@@ -98,28 +98,24 @@
         @keyframes slideDown { to { transform: translateY(0); } }
         @keyframes slideUp { to { transform: translateY(0); } }
 
-        /* نوافذ الـ Pop-up */        /* نوافذ الـ Pop-up - نسخة مطورة فائقة السلاسة */
+        /* نوافذ الـ Pop-up - نسخة مطورة فائقة السلاسة */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4); /* تخفيف الخلفية قليلاً لتقليل مجهود الرسم */
+            background: rgba(0, 0, 0, 0.4);
             z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px); /* لدعم هواتف الآيفون بسلاسة */
-            
-            /* تفعيل التلاشي السلس */
+            -webkit-backdrop-filter: blur(4px);
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), 
                         visibility 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
-            
-            /* إجبار كرت الشاشة على معالجة الحركة */
             will-change: opacity, visibility;
             transform: translateZ(0);
         }
@@ -136,11 +132,8 @@
             border-radius: 20px;
             padding: 30px 25px;
             text-align: center;
-            
-            /* تأثير الانبثاق من الداخل للخارج بسلاسة */
             transform: scale(0.92) translateZ(0);
-            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1); /* انحناء حركة مرن وأنظف */
-            
+            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             will-change: transform;
         }
@@ -177,7 +170,7 @@
 
         .filter-wrapper { margin-bottom: 35px; background: var(--card-bg); padding: 24px; border-radius: 16px; box-shadow: var(--shadow-soft); border: 1px solid var(--border-color); }
         .search-group { margin-bottom: 25px; position: relative; }
-        .search-input { width: 100%; padding: 14px 45px 14px 15px; border-radius: 12px; border: 2px solid var(--border-color); font-family: 'Cairo', sans-serif; font-size: 15px; outline: none; transition: var(--transition-smooth); background-color: var(--bg-color); }
+        .search-input { width: 100%; padding: 14px 45px 14px 15px; border-radius: 12px; border: 2px solid var(--border-color); font-family: 'Cairo', sans-serif; font-size: 13px; outline: none; transition: var(--transition-smooth); background-color: var(--bg-color); }
         .search-input:focus { border-color: var(--primary-color); box-shadow: 0 0 0 4px rgba(5, 209, 206, 0.1); }
         .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; }
         .filter-group { margin-bottom: 20px; text-align: right; }
@@ -189,9 +182,6 @@
         .filter-btn { flex: 0 0 auto; background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-muted); padding: 8px 18px; margin-left: 8px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition-smooth); font-family: 'Cairo', sans-serif; }
         .filter-btn.active { background-color: var(--primary-color); color: #ffffff; border-color: var(--primary-color); box-shadow: 0 4px 10px rgba(5, 209, 206, 0.2); }
 
-        /* تعديل 1: شبكة بطاقات المشاريع المبتكرة (تصحيح المحاذاة)
-           استخدام CSS Grid بدلاً من Flexbox لضمان المحاذاة الدقيقة مع الفلاتر 
-        */
         .projects-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr);
@@ -203,7 +193,7 @@
             width: 100%;
             background: var(--card-bg);
             border-radius: 20px;
-            border: 1px solid var(--border-color);
+            border: 2px solid var(--border-color);
             box-shadow: var(--shadow-soft);
             overflow: hidden;
             transition: var(--transition-smooth);
@@ -235,8 +225,6 @@
             background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, var(--card-bg) 95%);
         }
 
-        /* تعديل 2: شارة المتابعين والفقاعة (Badge & Tooltip)
-        */
         .badge-wrapper {
             position: absolute;
             top: 15px; left: 15px;
@@ -260,7 +248,7 @@
         .badge-emerald { background: linear-gradient(135deg, #2ecc71, #27ae60); }
         .badge-gold { background: linear-gradient(135deg, #f1c40f, #f39c12); box-shadow: 0 4px 15px rgba(241, 196, 15, 0.4); }
 
-                .card-tooltip {
+        .card-tooltip {
             position: absolute;
             top: 100%;
             left: 0;
@@ -273,15 +261,12 @@
             font-family: 'Cairo', sans-serif;
             font-weight: 700;
             white-space: nowrap;
-            
-            /* تحسين الأنميشن والاعتماد على كرت الشاشة */
             opacity: 0;
             visibility: hidden;
             transform: translateY(-6px) translateZ(0);
             transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
                         transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
                         visibility 0.2s;
-            
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             pointer-events: none;
             will-change: transform, opacity;
@@ -293,12 +278,9 @@
             transform: translateY(0) translateZ(0);
         }
 
-
-        /* تعديل 3: شارة مشروع صغير جديد
-        */
         .new-project-badge {
             position: absolute;
-            top: 15px; right: 15px; /* الجهة المقابلة للمتابعين */
+            top: 15px; right: 15px;
             z-index: 5;
             background: linear-gradient(135deg, #ff7eb3, #ff5252);
             color: #ffffff;
@@ -337,14 +319,38 @@
         .services-wrapper { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
         .service-tag { display: inline-flex; align-items: center; gap: 6px; background-color: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 11.5px; padding: 4px 10px; border-radius: 8px; font-weight: 700; }
 
+        /* الأيقونات المتحركة الأساسية */
         @keyframes driveTruck { 0% { transform: translateX(0) translateY(0); } 25% { transform: translateX(-2px) translateY(-1px); } 50% { transform: translateX(-4px) translateY(0); } 75% { transform: translateX(-2px) translateY(1px); } 100% { transform: translateX(0) translateY(0); } }
         .icon-truck { color: #3498db; animation: driveTruck 1.5s infinite linear; }
+        
         @keyframes popWheelie { 0%, 100% { transform: rotate(0deg) translateY(0); } 50% { transform: rotate(-15deg) translateY(-3px); } }
         .icon-bike { color: #e67e22; animation: popWheelie 1.2s infinite ease-in-out; }
+        
         @keyframes pulseWifi { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
         .icon-remote { color: #9b59b6; animation: pulseWifi 1.5s infinite ease-in-out; }
+        
         @keyframes ringBell { 0%, 100% { transform: rotate(0); } 10%, 30%, 50%, 70%, 90% { transform: rotate(-15deg); } 20%, 40%, 60%, 80% { transform: rotate(15deg); } }
         .icon-booking { color: #e74c3c; animation: ringBell 2s infinite ease-in-out; transform-origin: top center; }
+
+        /* الأيقونات المتحركة المضافة حديثاً */
+        @keyframes floatBriefcase { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .icon-freelancer { color: #f39c12; animation: floatBriefcase 2s infinite ease-in-out; }
+        
+        @keyframes pulseQuestion { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.8; } }
+        .icon-consult { color: #8e44ad; animation: pulseQuestion 1.5s infinite ease-in-out; }
+        
+        @keyframes spinSlow { 100% { transform: rotate(360deg); } }
+        .icon-support { color: #2980b9; animation: spinSlow 5s infinite linear; }
+        
+        @keyframes pulseHouse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); color: #2ecc71; } }
+        .icon-home-service { color: #27ae60; animation: pulseHouse 1.8s infinite ease-in-out; }
+        
+        @keyframes talkSession { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-8deg); } 75% { transform: rotate(8deg); } }
+        .icon-session { color: #d35400; animation: talkSession 2.5s infinite ease-in-out; }
+        
+        @keyframes pulseParking { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .icon-parking { color: #16a085; animation: pulseParking 1.5s infinite ease-in-out; }
+
 
         .card-actions { padding: 15px 20px; text-align: center; border-top: 1px dashed var(--border-color); display: flex; justify-content: center; gap: 10px; background: var(--bg-color); }
         .social-link-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: var(--card-bg); color: var(--text-muted); text-decoration: none; transition: var(--transition-smooth); border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
@@ -363,7 +369,6 @@
         .no-results { display: none; text-align: center; width: 100%; padding: 40px; color: var(--text-muted); font-size: 14.5px; background: var(--card-bg); border-radius: 16px; border: 1px dashed var(--primary-color); margin: 15px 0; }
         .loading-sentinel { width: 100%; height: 20px; margin-top: 20px; }
 
-        /* تعديل التصميم المتجاوب لـ CSS Grid */
         @media (max-width: 992px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 680px) {
             .projects-grid { grid-template-columns: 1fr; }
@@ -378,7 +383,7 @@
         <div class="custom-modal disclaimer-modal">
             <h2 class="disclaimer-title">إخلاء مسؤولية</h2>
             <div class="disclaimer-content">
-                صفحة دليل أصحاب الأعمال في متجر أورا، هي صفحة خدمية مجانية تهدف أولاً لدعم المشاريع الصغيرة والناشئة، وثانياً لتسهيل الوصول والربط بين الزبائن وأصحاب الأعمال (B2B & B2C) في المحافظات السورية، وذلك من خلال تقديم مساحة إعلانية تتضمن اسم عملهم، مجاله، وصفه، موقعه، وطرق التواصل المتوفرة معهم.<br><br>
+                صفحة دليل أصحاب الأعمال في متجر أورا، هي صفحة خدمية مجانية تهدف أولاً لدعم المشاريع الصغيرة والناشئة، وثانياً لتسهيل الوصول والتواصل بين الزبائن وأصحاب الأعمال (B2B & B2C) في المحافظات السورية، وذلك من خلال تقديم مساحة إعلانية تتضمن اسم عملهم، مجاله، وصفه، موقعه، وطرق التواصل المتوفرة معهم.<br><br>
                 <strong>إدارة متجر أورا غير مسؤولة بأي شكل من الأشكال عن جودة المنتجات أو الخدمات، أو أي تعاملات مالية أو تجارية أو خدمية تتم بين الأطراف.</strong>
             </div>
             <button class="disclaimer-btn" id="btn-accept-disclaimer">موافق</button>
@@ -399,7 +404,7 @@
         <div class="header-section slide-in-top">
             <h1>دليل أصحاب الأعمال</h1>
             <h4>على نيّة الرزق منساعد بعض</h4>
-            <p> صفحة هدفها المساعدة بنشر عناوين المشاريع الصغيرة والناشئة، أعمال تجارية أو خدمية قائمة، روّاد أعمال، موردين وشركات، لتسهيل الوصول لمقدّم منتج أو خدمة بيبحث عنهم أي مهتم عن طريق روابط التواصل المباشرة. <strong><br>منكبر بدعم بعضنا.</strong></p>
+            <p> صفحة هدفها المساعدة بنشر عناوين المشاريع الصغيرة والناشئة، أعمال تجارية أو خدمية قائمة، روّاد أعمال، موردين وشركات، لتسهيل الوصول لمقدّم منتج أو خدمة بيبحث عنهم أي مهتم للتواصل معهم عن طريق روابط مباشرة لصفحاتهم المتوفرة على وسائل التواصل الاجتماعي أو رقم للاتصال. <strong><br>منكبر بدعم بعضنا.</strong></p>
             
             <div class="premium-banner">
              تواصل معنا لنضيف عملك بالصفحة مجاناً <i class="fa-solid fa-hand-holding-heart"></i>
@@ -458,7 +463,6 @@
     </div>
 
     <script>
-        // إعدادات تطبيق تيليغرام
         const tg = window.Telegram.WebApp;
         tg.ready(); 
         tg.BackButton.show();
@@ -470,7 +474,6 @@
         document.addEventListener('cut', event => event.preventDefault());
         document.addEventListener('selectstart', event => event.preventDefault());
 
-                // نوافذ Pop-up السريعة
         const btnAcceptDisclaimer = document.getElementById('btn-accept-disclaimer');
         const disclaimerOverlay = document.getElementById('disclaimer-overlay');
         
@@ -491,8 +494,6 @@
             }
         });
 
-
-        // دالة عرض فقاعة التنبيه الخاصة بكل بطاقة
         window.showCardTooltip = function(element, message) {
             const tooltip = element.nextElementSibling;
             tooltip.innerText = message;
@@ -502,7 +503,7 @@
 
         const syrianProvincesVisibility = {
             "دمشق": true, "ريف دمشق": true, "حلب": true, "حمص": true,
-            "حماة": false, "اللاذقية": true, "طرطوس": true, "إدلب": false,
+            "حماة": false, "اللاذقية": true, "طرطوس": true, "إدلب": true,
             "دير الزور": false, "الرقة": false, "الحسكة": false, "درعا": false,
             "السويداء": false, "القنيطرة": false
         };
@@ -517,7 +518,7 @@
             });
         });
 
-        // قاعدة البيانات (مضاف فيها isNewSmallProject)
+        // قاعدة البيانات مع الإضافات الجديدة داخل كائن services
         const projectsDB = [
             { 
                 id: 1, 
@@ -531,8 +532,11 @@
                 fallbackIcon: "fa-regular fa-address-card",
                 followers: 49999,
                 showFollowersBadge: true,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: false, hasIndividualSessions: true, hasParking: false 
+                },
                 workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
                 contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
             },
@@ -548,8 +552,11 @@
                 fallbackIcon: "fa-solid fa-laptop-code", 
                 followers: 1000, 
                 showFollowersBadge: true,
-                isNewSmallProject: true, // إخفاء الشارة
-                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
+                isNewSmallProject: true,
+                services: { 
+                    hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false,
+                    isFreelancer: true, hasConsultation: true, hasSupport: true, hasHomeService: false, hasIndividualSessions: false, hasParking: false 
+                },
                 workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
                 contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
             },
@@ -563,14 +570,137 @@
                 logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
                 coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
                 fallbackIcon: "fa-solid fa-cake-candles", 
-                followers: 14000,
-                showFollowersBadge: false,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
+                followers: 52000,
+                showFollowersBadge: true,
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: true, hasIndividualSessions: false, hasParking: true 
+                },
                 workingHours: null, 
                 contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
             },
-  { 
+    { 
+                id: 1, 
+                name: "ياسمين الشام للهدايا", 
+                category: "أشغال يدوية", 
+                province: "اللاذقية", 
+                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
+                locationText: "دمشق، الشعلان", 
+                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
+                fallbackIcon: "fa-regular fa-address-card",
+                followers: 49999,
+                showFollowersBadge: true,
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: false, hasIndividualSessions: true, hasParking: false 
+                },
+                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
+                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 2, 
+                name: "إبداع ديجيتال", 
+                category: "خدمات رقمية", 
+                province: "طرطوس", 
+                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
+                locationText: "حلب، العزيزية", 
+                logoImg: null, 
+                coverImg: "https://img.magnific.com/free-photo/3d-modern-technology-background-with-plexus-design_1048-16714.jpg?semt=ais_hybrid&w=740&q=80", 
+                fallbackIcon: "fa-solid fa-laptop-code", 
+                followers: 1000, 
+                showFollowersBadge: true,
+                isNewSmallProject: true,
+                services: { 
+                    hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false,
+                    isFreelancer: true, hasConsultation: true, hasSupport: true, hasHomeService: false, hasIndividualSessions: false, hasParking: false 
+                },
+                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
+                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 3, 
+                name: "Raghed Cakes", 
+                category: "مأكولات", 
+                province: "حمص", 
+                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
+                locationText: "حمص، فيروزة", 
+                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
+                fallbackIcon: "fa-solid fa-cake-candles", 
+                followers: 52000,
+                showFollowersBadge: true,
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: true, hasIndividualSessions: false, hasParking: true 
+                },
+                workingHours: null, 
+                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
+            },
+    { 
+                id: 1, 
+                name: "ياسمين الشام للهدايا", 
+                category: "أشغال يدوية", 
+                province: "إدلب", 
+                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
+                locationText: "دمشق، الشعلان", 
+                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
+                fallbackIcon: "fa-regular fa-address-card",
+                followers: 49999,
+                showFollowersBadge: true,
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: false, hasIndividualSessions: true, hasParking: false 
+                },
+                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
+                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 2, 
+                name: "إبداع ديجيتال", 
+                category: "خدمات رقمية", 
+                province: "حلب", 
+                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
+                locationText: "حلب، العزيزية", 
+                logoImg: null, 
+                coverImg: "https://img.magnific.com/free-photo/3d-modern-technology-background-with-plexus-design_1048-16714.jpg?semt=ais_hybrid&w=740&q=80", 
+                fallbackIcon: "fa-solid fa-laptop-code", 
+                followers: 1000, 
+                showFollowersBadge: true,
+                isNewSmallProject: true,
+                services: { 
+                    hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false,
+                    isFreelancer: true, hasConsultation: true, hasSupport: true, hasHomeService: false, hasIndividualSessions: false, hasParking: false 
+                },
+                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
+                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
+            },
+            { 
+                id: 3, 
+                name: "Raghed Cakes", 
+                category: "مأكولات", 
+                province: "حمص", 
+                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
+                locationText: "حمص، فيروزة", 
+                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
+                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
+                fallbackIcon: "fa-solid fa-cake-candles", 
+                followers: 52000,
+                showFollowersBadge: true,
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: true, hasIndividualSessions: false, hasParking: true 
+                },
+                workingHours: null, 
+                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
+            },
+    { 
                 id: 1, 
                 name: "ياسمين الشام للهدايا", 
                 category: "أشغال يدوية", 
@@ -582,8 +712,11 @@
                 fallbackIcon: "fa-regular fa-address-card",
                 followers: 49999,
                 showFollowersBadge: true,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: false, hasIndividualSessions: true, hasParking: false 
+                },
                 workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
                 contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
             },
@@ -595,12 +728,15 @@
                 desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
                 locationText: "حلب، العزيزية", 
                 logoImg: null, 
-                coverImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjidD5CsF2fMM8jRxzsPh90hnHeUIsJcU-8w&s", 
+                coverImg: "https://img.magnific.com/free-photo/3d-modern-technology-background-with-plexus-design_1048-16714.jpg?semt=ais_hybrid&w=740&q=80", 
                 fallbackIcon: "fa-solid fa-laptop-code", 
-                followers: 1000,
+                followers: 1000, 
                 showFollowersBadge: true,
-                isNewSmallProject: true, // إخفاء الشارة
-                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
+                isNewSmallProject: true,
+                services: { 
+                    hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false,
+                    isFreelancer: true, hasConsultation: true, hasSupport: true, hasHomeService: false, hasIndividualSessions: false, hasParking: false 
+                },
                 workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
                 contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
             },
@@ -614,112 +750,13 @@
                 logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
                 coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
                 fallbackIcon: "fa-solid fa-cake-candles", 
-                followers: 14000,
+                followers: 52000,
                 showFollowersBadge: true,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
-                workingHours: null, 
-                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
-            },
-  { 
-                id: 1, 
-                name: "ياسمين الشام للهدايا", 
-                category: "أشغال يدوية", 
-                province: "دمشق", 
-                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
-                locationText: "دمشق، الشعلان", 
-                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
-                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
-                fallbackIcon: "fa-regular fa-address-card",
-                followers: 49999,
-                showFollowersBadge: false,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
-                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
-                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
-            },
-            { 
-                id: 2, 
-                name: "إبداع ديجيتال", 
-                category: "خدمات رقمية", 
-                province: "حلب", 
-                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
-                locationText: "حلب، العزيزية", 
-                logoImg: null, 
-                coverImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjidD5CsF2fMM8jRxzsPh90hnHeUIsJcU-8w&s", 
-                fallbackIcon: "fa-solid fa-laptop-code", 
-                followers: 123000,
-                showFollowersBadge: true,
-                isNewSmallProject: true, // إخفاء الشارة
-                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
-                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
-                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
-            },
-            { 
-                id: 3, 
-                name: "Raghed Cakes", 
-                category: "مأكولات", 
-                province: "حمص", 
-                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
-                locationText: "حمص، فيروزة", 
-                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
-                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
-                fallbackIcon: "fa-solid fa-cake-candles", 
-                followers: 14000,
-                showFollowersBadge: true,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
-                workingHours: null, 
-                contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
-            },
-  { 
-                id: 1, 
-                name: "ياسمين الشام للهدايا", 
-                category: "أشغال يدوية", 
-                province: "دمشق", 
-                desc: "صناعة وتنسيق صناديق هدايا خشبية يدوية وتطريز مخصص للمناسبات السعيدة بجودة عالية.", 
-                locationText: "دمشق، الشعلان", 
-                logoImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=100&auto=format&fit=crop&q=60", 
-                coverImg: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80", 
-                fallbackIcon: "fa-regular fa-address-card",
-                followers: 52979,
-                showFollowersBadge: true,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: true, hasDelivery: false, isRemote: false, requiresBooking: true },
-                workingHours: { "السبت - الخميس": "10:00 صباحاً - 8:00 مساءً", "الجمعة": "مغلق (عطلة رسمية)" },
-                contacts: { phone: "+963933111222", facebook: "https://facebook.com", instagram: "https://instagram.com", whatsapp: "https://whatsapp.com", telegram: "https://t.me" } 
-            },
-            { 
-                id: 2, 
-                name: "إبداع ديجيتال", 
-                category: "خدمات رقمية", 
-                province: "حلب", 
-                desc: "تصميم هويات بصرية وعروض تقديمة ومساعدة الطلاب في صياغة السير الذاتية باحترافية.", 
-                locationText: "حلب، العزيزية", 
-                logoImg: null, 
-                coverImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjidD5CsF2fMM8jRxzsPh90hnHeUIsJcU-8w&s", 
-                fallbackIcon: "fa-solid fa-laptop-code", 
-                followers: 1000,
-                showFollowersBadge: false,
-                isNewSmallProject: true, // إخفاء الشارة
-                services: { hasShipping: false, hasDelivery: false, isRemote: true, requiresBooking: false },
-                workingHours: { "أيام الأسبوع": "متاح 24/7 أونلاين" },
-                contacts: { phone: "+963955444333", instagram: "https://instagram.com", telegram: "https://t.me" } 
-            },
-            { 
-                id: 3, 
-                name: "Raghed Cakes", 
-                category: "مأكولات", 
-                province: "حمص", 
-                desc: "صناعة الحلويات الغربية والشرقية والمجففات المنزلية الطبيعية 100% بحسب الطلب.", 
-                locationText: "حمص، فيروزة", 
-                logoImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=100&auto=format&fit=crop&q=60", 
-                coverImg: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=600&auto=format&fit=crop&q=80",
-                fallbackIcon: "fa-solid fa-cake-candles", 
-                followers: 50001,
-                showFollowersBadge: true,
-                isNewSmallProject: false, // تفعيل شارة "مشروع صغير جديد"
-                services: { hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true },
+                isNewSmallProject: false,
+                services: { 
+                    hasShipping: false, hasDelivery: true, isRemote: false, requiresBooking: true,
+                    isFreelancer: false, hasConsultation: false, hasSupport: false, hasHomeService: true, hasIndividualSessions: false, hasParking: true 
+                },
                 workingHours: null, 
                 contacts: { phone: "+963988777666", whatsapp: "https://whatsapp.com" } 
             }
@@ -736,7 +773,6 @@
         let activeCategory = 'all-categories';
         let searchQuery = '';
 
-        // فتح نافذة أوقات العمل
         window.openHoursModal = function(projectId) {
             const project = projectsDB.find(p => p.id === projectId);
             if(project && project.workingHours) {
@@ -750,40 +786,33 @@
         };
 
         function createCardHTML(project) {
-    let coverHTML = project.coverImg ? `<div class="card-cover" style="background-image: url('${project.coverImg}')"></div>` : '';
-    
-    // --- تعديل شارة المتابعين الذكية (إخفاء وإظهار) ---
-    let badgeHTML = '';
-    // الشرط الجديد: يتأكد أولاً أن خيار الإظهار مفعّل (true) وأن عدد المتابعين موجود
-    if (project.showFollowersBadge && project.followers && project.followers > 0) {
-        let badgeClass = '', iconClass = '', tooltipMsg = '', badgeLabel = '';
-        
-        if (project.followers < 10000) {
-            badgeClass = 'badge-silver'; iconClass = 'fa-solid fa-user-group'; badgeLabel = '<10K';
-            tooltipMsg = 'عدد المتابعين < 10,000';
-        } else if (project.followers >= 10000 && project.followers <= 50000) {
-            badgeClass = 'badge-emerald'; iconClass = 'fa-solid fa-medal'; badgeLabel = '+10K';
-            tooltipMsg = '10,000 < عدد المتابعين < 50,000';
-        } else {
-            badgeClass = 'badge-gold'; iconClass = 'fa-solid fa-crown'; badgeLabel = '+50K';
-            tooltipMsg = 'عدد المتابعين > 50,000';
-        }
+            let coverHTML = project.coverImg ? `<div class="card-cover" style="background-image: url('${project.coverImg}')"></div>` : '';
+            
+            let badgeHTML = '';
+            if (project.showFollowersBadge && project.followers && project.followers > 0) {
+                let badgeClass = '', iconClass = '', tooltipMsg = '', badgeLabel = '';
+                
+                if (project.followers < 10000) {
+                    badgeClass = 'badge-silver'; iconClass = 'fa-solid fa-user-group'; badgeLabel = '<10K';
+                    tooltipMsg = 'عدد المتابعين < 10,000';
+                } else if (project.followers >= 10000 && project.followers <= 50000) {
+                    badgeClass = 'badge-emerald'; iconClass = 'fa-solid fa-medal'; badgeLabel = '+10K';
+                    tooltipMsg = '10,000 < عدد المتابعين < 50,000';
+                } else {
+                    badgeClass = 'badge-gold'; iconClass = 'fa-solid fa-crown'; badgeLabel = '+50K';
+                    tooltipMsg = 'عدد المتابعين > 50,000';
+                }
 
-        badgeHTML = `
-        <div class="badge-wrapper">
-            <div class="follower-badge ${badgeClass}" onclick="showCardTooltip(this, '${tooltipMsg}')">
-                <i class="${iconClass}"></i> ${badgeLabel}
-            </div>
-            <div class="card-tooltip"></div>
-        </div>`;
-    }
+                badgeHTML = `
+                <div class="badge-wrapper">
+                    <div class="follower-badge ${badgeClass}" onclick="showCardTooltip(this, '${tooltipMsg}')">
+                        <i class="${iconClass}"></i> ${badgeLabel}
+                    </div>
+                    <div class="card-tooltip"></div>
+                </div>`;
+            }
 
-    // --- تعديل شارة مشروع جديد (إخفاء وإظهار) ---
-    // الشرط يقرأ القيمة مباشرة، إذا كانت true تظهر، وإذا كانت false تختفي تلقائياً
-    let newProjectHTML = project.isNewSmallProject ? `<div class="new-project-badge">مشروع صغير جديد ❤</div>` : '';
-
-    // ... (باقي كود الدالة المعتاد يكمل هنا بدون أي تغيير) ...
-
+            let newProjectHTML = project.isNewSmallProject ? `<div class="new-project-badge">مشروع صغير جديد ❤</div>` : '';
 
             let logoHTML = project.logoImg 
                 ? `<img src="${project.logoImg}" alt="لوغو" class="project-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -792,10 +821,19 @@
 
             let servicesHTML = '';
             if (project.services) {
+                // الأيقونات القديمة
                 if (project.services.hasShipping) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-truck-fast icon-truck"></i> متوفر الشحن</span>`;
                 if (project.services.hasDelivery) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-motorcycle icon-bike"></i> متوفر التوصيل</span>`;
-                if (project.services.isRemote) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-tower-broadcast icon-remote"></i> نعمل عن بعد</span>`;
+                if (project.services.isRemote) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-tower-broadcast icon-remote"></i> عمل عن بعد</span>`;
                 if (project.services.requiresBooking) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-bell-concierge icon-booking"></i> حجز مسبق</span>`;
+                
+                // الأيقونات الجديدة المطلوبة
+                if (project.services.isFreelancer) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-briefcase icon-freelancer"></i> مستقل</span>`;
+                if (project.services.hasConsultation) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-circle-question icon-consult"></i> استشارات</span>`;
+                if (project.services.hasSupport) servicesHTML += `<span class="service-tag"><i class="fa-regular fa-clock icon-support"></i> دعم فني</span>`;
+                if (project.services.hasHomeService) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-house-chimney icon-home-service"></i> خدمة في المنزل</span>`;
+                if (project.services.hasIndividualSessions) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-users icon-session"></i> جلسات خاصة</span>`;
+                if (project.services.hasParking) servicesHTML += `<span class="service-tag"><i class="fa-solid fa-square-parking icon-parking"></i> موقف سيارات</span>`;
             }
             let servicesContainer = servicesHTML !== '' ? `<div class="services-wrapper">${servicesHTML}</div>` : '';
 
@@ -803,18 +841,12 @@
                 ? `<button class="btn-hours" onclick="openHoursModal(${project.id})"><i class="fa-regular fa-clock"></i> أوقات العمل</button>` 
                 : '';
 
-                        let contactsHTML = '';
-            // استخدمنا onclick بدلاً من href لمنع النظام من التعرف عليها كروابط عند النقر المطول
+            let contactsHTML = '';
             if(project.contacts.phone) contactsHTML += `<a onclick="window.location.href='tel:${project.contacts.phone}'" class="social-link-btn btn-phone" style="cursor:pointer;"><i class="fa-solid fa-phone"></i></a>`;
-            
             if(project.contacts.facebook) contactsHTML += `<a onclick="window.open('${project.contacts.facebook}', '_blank')" class="social-link-btn btn-facebook" style="cursor:pointer;"><i class="fa-brands fa-facebook-f"></i></a>`;
-            
             if(project.contacts.instagram) contactsHTML += `<a onclick="window.open('${project.contacts.instagram}', '_blank')" class="social-link-btn btn-instagram" style="cursor:pointer;"><i class="fa-brands fa-instagram"></i></a>`;
-            
             if(project.contacts.whatsapp) contactsHTML += `<a onclick="window.open('${project.contacts.whatsapp}', '_blank')" class="social-link-btn btn-whatsapp" style="cursor:pointer;"><i class="fa-brands fa-whatsapp"></i></a>`;
-            
             if(project.contacts.telegram) contactsHTML += `<a onclick="window.open('${project.contacts.telegram}', '_blank')" class="social-link-btn btn-telegram" style="cursor:pointer;"><i class="fa-brands fa-telegram"></i></a>`;
-
 
             return `
             <div class="project-card">
