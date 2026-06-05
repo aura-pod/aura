@@ -365,8 +365,18 @@
                 <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">تصفح تجارب زبائننا وتقييماتهم</small>
             </div>
         </div>
+        
+        <div id="ai-btn" onclick="window.location.href='ai.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 1.0s; display: none;">
+            <div class="icon-box">
+                <i class="fas fa-wand-magic-sparkles"></i>
+            </div>
+            <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
+                <span style="font-weight: 600; font-size: 17px;">إنت والـ AI</span>
+                <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">عدل على أنماط ذكاء اصطناعي جاهزة</small>
+            </div>
+        </div>
             
-        <div id="directory-btn" onclick="window.location.href='directory.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 1.0s; display: none;">
+        <div id="directory-btn" onclick="window.location.href='directory.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 1.1s; display: none;">
             <div class="icon-box">
                 <i class="fas fa-handshake"></i>
             </div>
@@ -401,7 +411,8 @@
     const showTrackBtn = true;        // تتبع الطلب
     const showMockupBtn = true;       // معاينة التصميم
     const showFlashSaleBtn = true;    // عروض سريعة خاصة
-    const showReviewsBtn = true;     // تقييمات الزبائن (مخفي كمثال)
+    const showReviewsBtn = true;     // تقييمات الزبائن
+    const showAiBtn = true;          // إنت وال AI (مخفي حالياً للتجهيز)
     const showDirectoryBtn = true;    // دليل أصحاب الأعمال
 
     // تفعيل شريط الإعلانات
@@ -419,6 +430,7 @@
     if (showMockupBtn) document.getElementById('mockup-btn').style.display = 'flex';
     if (showFlashSaleBtn) document.getElementById('flash-sale-btn').style.display = 'flex';
     if (showReviewsBtn) document.getElementById('reviews-btn').style.display = 'flex';
+    if (showAiBtn) document.getElementById('ai-btn').style.display = 'flex';
     if (showDirectoryBtn) document.getElementById('directory-btn').style.display = 'flex';
 
     // ==========================================
