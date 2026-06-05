@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>إنت وال AI | متجر أورا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #05D1CE;   
+            --secondary-color: #FF6B01; 
+            --dark-bg: #121214;         
+            --card-bg: #FFFFFF;
+            --body-bg: #F4F7F6;
+            --text-main: #2D3436;
+            --text-light: #636E72;
+            --highlight-bg: rgba(5, 209, 206, 0.1);
+        }
+
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* تعديل المطلب الثالث: الخلفية المكررة (Pattern) مع التحكم بالحجم */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://png.pngtree.com/png-vector/20220819/ourmid/pngtree-eucalyptus-leaves-logo-vector-template-set-tree-silhouette-vector-png-image_38469626.png'); 
+            background-repeat: repeat;
+            background-size: 100px 100px; /* هنا يمكنك تعديل حجم اللوغو ليناسبك */
+            opacity: 0.1; 
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* تعديل المطلب الأول: شريط ميزة تحت التجربة (أحمر أرجواني وتوسيط ثابت) */
+        .beta-ribbon {
+            position: fixed;
+            top: 30px;
+            left: -55px;
+            width: 220px; /* عرض ثابت يمنع الزوايا من الظهور مهما طال النص */
+            text-align: center;
+            background: linear-gradient(135deg, #e91e63, #e91e63); /* تدرج أحمر أرجواني */
+            color: white;
+            padding: 8px 0;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            transform: rotate(-45deg);
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(216, 27, 96, 0.4);
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .beta-ribbon.hidden {
+            display: none;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: cubicFadeInDown 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        .header-section h1 {
+            color: #05D1CE;
+            font-weight: 800;
+            font-size: 2.6rem;
+            margin-bottom: 8px;
+        }
+
+        .header-section h1 span {
+            color: var(--secondary-color);
+            position: relative;
+        }
+
+        /* تعديل المطلب الرابع: قسم مراحل العمل المبتكر والحديث */
+        .how-it-works-container {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            opacity: 0;
+            animation: cubicFadeInUp 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards;
+        }
+
+        .how-it-works-title {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        /* تصميم الكروت بنظام Grid مرن ومتجاوب */
+        .steps-wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 20px 15px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            border: 1px solid rgba(5, 209, 206, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* تأثير الخط السحري المتوهج عند مرور الماوس/اللمس */
+        .step-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--secondary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: right;
+        }
+
+        .step-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(5, 209, 206, 0.12);
+            border-color: rgba(5, 209, 206, 0.3);
+        }
+
+        .step-item:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .step-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(5, 209, 206, 0.15), rgba(255, 107, 1, 0.05));
+            color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            /* حركة طفو ذكية للأيقونات */
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+
+        /* تفاوت في تأخير حركة الأيقونات لتعطي حيوية للبزنس */
+        .step-item:nth-child(1) .step-icon { animation-delay: 0s; }
+        .step-item:nth-child(2) .step-icon { animation-delay: 0.3s; }
+        .step-item:nth-child(3) .step-icon { animation-delay: 0.6s; }
+        .step-item:nth-child(4) .step-icon { animation-delay: 0.9s; }
+        .step-item:nth-child(5) .step-icon { animation-delay: 1.2s; }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .step-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text-light);
+        }
+
+        .step-text strong {
+            display: block;
+            color: var(--text-main);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+  /* تنسيق عنوان قسم البرومبتس الجديد */
+.section-divider-title {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 40px auto 25px auto;
+    position: relative;
+    display: table; /* مشان الخط السفلي يجي ع قد الكلمة تماماً */
+    padding-bottom: 10px;
+    opacity: 0;
+    /* تحريك ناعم للعنوان عند فتح الصفحة */
+    animation: cubicFadeInUp 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.5s forwards;
+}
+
+/* الخط المتدرج الأنيق تحت العنوان */
+.section-divider-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+}
+
+  
+        .prompts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .prompt-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid rgba(5, 209, 206, 0.08);
+            display: none;
+            opacity: 0;
+            transform: translateY(25px);
+        }
+
+        .prompt-card:hover {
+            box-shadow: 0 12px 30px rgba(5, 209, 206, 0.12);
+            border-color: var(--primary-color);
+        }
+
+        .accordion-header {
+            padding: 25px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.88)), var(--card-bg-img);
+            background-size: cover;
+            background-position: center;
+            transition: all 0.4s ease;
+        }
+
+        .accordion-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1A1A1A;
+            text-shadow: 0 1px 3px rgba(255,255,255,0.9);
+            position: relative;
+            z-index: 2;
+        }
+
+        .accordion-icon {
+            font-size: 1.1rem;
+            color: #1A1A1A;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255,255,255,0.7);
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+        }
+
+        .prompt-card.active .accordion-header {
+            background-image: none !important;
+            background-color: #FAFAFA;
+            padding: 20px;
+        }
+
+        .prompt-card.active .accordion-icon {
+            transform: rotate(180deg);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(1, 0, 0, 1);
+            background-color: #FFFFFF;
+            border-top: 0 solid rgba(0,0,0,0.03);
+        }
+
+        .prompt-card.active .accordion-content {
+            max-height: 1200px;
+            border-top-width: 1px;
+        }
+
+        .card-inner-body {
+            padding: 20px;
+        }
+
+        .style-preview-img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: block;
+        }
+
+        .customizer-box {
+            background: #F8FAF9;
+            padding: 16px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-light);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background-color: #FFFFFF;
+            transition: all 0.3s ease;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(5, 209, 206, 0.15);
+        }
+
+        .prompt-box {
+            background-color: var(--dark-bg);
+            padding: 18px;
+            border-radius: 12px;
+            direction: ltr;
+            text-align: left;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: #E0E6ED;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        .highlight-word {
+            color: var(--primary-color);
+            font-weight: bold;
+            background: rgba(5, 209, 206, 0.12);
+            padding: 2px 6px;
+            border-radius: 4px;
+            border-bottom: 1px dashed var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-copy {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--secondary-color);
+            color: white;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 15px rgba(255, 107, 1, 0.25);
+            outline: none;
+        }
+
+        .btn-copy:hover {
+            background-color: #E05E00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 1, 0.35);
+        }
+
+        .load-more-container {
+            text-align: center;
+            margin: 35px 0 50px 0;
+        }
+
+        .btn-load-more {
+    background-color: #1A1A1A;
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 30px;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    /* إضافة الترانزيشن لتنعيم تأثير الضغط والعودة */
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    outline: none;
+}
+
+/* التأثير عند تمرير الماوس (للكمبيوتر فقط) */
+@media (hover: hover) {
+    .btn-load-more:hover {
+        background-color: var(--primary-color);
+        color: #1A1A1A;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(5, 209, 206, 0.3);
+    }
+}
+
+/* الحل الجذري للتفاعل عند الضغط (للموبايل والكمبيوتر معاً) */
+.btn-load-more:active {
+    background-color: var(--primary-color) !important; /* يتغير للون التيل اللامع فوراً عند اللمس */
+    color: #1A1A1A !important;
+    transform: scale(0.95); /* تأثير ارتدادي (ينضغط للداخل قليلاً) يعطي إيحاء حقيقي بالنقرة */
+    box-shadow: 0 2px 10px rgba(5, 209, 206, 0.2);
+}
+
+
+        .ai-pulse-icon {
+            animation: aiGlow 2s infinite ease-in-out;
+        }
+
+        @keyframes cubicFadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cubicFadeInUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes aiGlow {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; color: var(--secondary-color); }
+            100% { transform: scale(1) rotate(360deg); opacity: 0.8; }
+        }
+
+        .ai-magic-glow {
+            display: inline-block;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            animation: aiSuperPulse 3s infinite ease-in-out;
+            vertical-align: middle;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes aiSuperPulse {
+            0% {
+                transform: scale(1) rotate(0deg);
+                color: var(--primary-color);
+                text-shadow: 0 0 10px rgba(5, 209, 206, 0.4);
+            }
+            50% {
+                transform: scale(1.15) rotate(180deg);
+                color: var(--secondary-color);
+                text-shadow: 0 0 20px rgba(255, 107, 1, 0.6);
+            }
+            100% {
+                transform: scale(1) rotate(360deg);
+                color: var(--primary-color);
+                text-shadow: 0 0 10px rgba(5, 209, 206, 0.4);
+            }
+        }
+
+        .ai-size-sm { font-size: 1.2rem; }
+        
+        /* تحسينات للشاشات الصغيرة لتظل الشبكة أنيقة */
+        @media (max-width: 600px) {
+            .steps-wrapper {
+                grid-template-columns: 1fr; /* عرض عمودي بالكامل على الشاشات الضيقة */
+            }
+            .step-item {
+                flex-direction: row; /* الأيقونة بجانب النص */
+                text-align: right;
+            }
+            .step-icon {
+                margin-bottom: 0;
+                margin-left: 15px;
+                flex-shrink: 0;
+            }
+            .step-item::before {
+                top: 0; right: 0; left: auto;
+                width: 4px; height: 100%;
+                transform: scaleY(0);
+                transform-origin: bottom;
+            }
+            .step-item:hover::before {
+                transform: scaleY(1);
+                transform-origin: top;
+            }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div id="betaRibbon" class="beta-ribbon">ميزة قيد التجربة</div>
+
+    <div class="header-section">
+        <h1>إنت والـ <span>AI</span> <i class="fa-solid fa-wand-magic-sparkles ai-magic-glow ai-size-sm"></i></h1>
+        <p style="color: var(--text-light); font-weight: 700; font-size: 1.05rem;">أنماط من الرسومات المجهزة بموجّهات (Prompts) عن طريق الذكاء الاصطناعي، وفيك تعدّل عليها بحقول تعديل أساسية من ألوان، اسم، شخصية، نقش، أو غيرهم حسب الحقول المتاحة لكل موجّه لتناسب تصميمك.</p>
+    </div>
+
+    <div class="how-it-works-container">
+        <div class="how-it-works-title">كيف بيتم العمل هون؟ <i class="fa-solid fa-lightbulb" style="color:#FFB100; margin-right: 5px;"></i></div>
+        <div class="steps-wrapper">
+            <div class="step-item">
+                <div class="step-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+                <div class="step-text"><strong>1. اختر النمط</strong> اضغط على نمط الموجّه (Prompt) اللي بيعجبك من القائمة.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                <div class="step-text"><strong>2. حط لمستك</strong> عدّل التفاصيل الأساسية المتاحة للتعديل لتناسب تصميمك الخاص.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-icon"><i class="fa-solid fa-copy"></i></div>
+                <div class="step-text"><strong>3. انسخ والصق</strong> انسخ الموجّه والصقه ببرامج AI لتوليد الصور متل ChatGPT, Copilot, Gemini .. أو أي برنامج أو موقع AI  بتتعامل فيه.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-icon"><i class="fa-solid fa-images"></i></div>
+                <div class="step-text"><strong>4. أرسل الصورة</strong> احفظ الصورة لما النتيجة تعجبك، عبي طلب الشراء مع اختيار "تصميم خاص" وأرسله، وابعت الصورة بعده كملف بمحادثة الواتساب.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-icon"><i class="fa-solid fa-face-smile-beam"></i></div>
+                <div class="step-text"><strong>5. انطر إبداعك</strong> صار دورنا بالشغل، لنطبع تصميمك ويوصلك عالمنتج بأحلى شكل 😊</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 👇 هذا هو سطر العنوان الجديد المضاف -->
+<h2 class="section-divider-title">اختر الموجّه | Prompt</h2>
+
+<div class="prompts-container" id="promptsGrid">
+   <!-- كروت البرومبتس الحالية بتضل هون متل ما هي -->
+
+        
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500');">
+                <span class="accordion-title">فيكتور مسطح (Flat Vector)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt1">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>العنصر الأساسي:</label>
+                            <input type="text" class="custom-input" data-target="v_obj1" value="Cute Cat" oninput="updatePrompt(1)">
+                        </div>
+                        <div class="input-group">
+                            <label>النشاط أو الوضعية:</label>
+                            <input type="text" class="custom-input" data-target="v_act1" value="reading a big book" oninput="updatePrompt(1)">
+                        </div>
+                        <div class="input-group">
+                            <label>باليت الألوان المرغوبة:</label>
+                            <input type="text" class="custom-input" data-target="v_col1" value="pastel shades" oninput="updatePrompt(1)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text1">Minimalist flat vector illustration of a <span id="v_obj1" class="highlight-word">Cute Cat</span> <span id="v_act1" class="highlight-word">reading a big book</span>, solid bold shapes, <span id="v_col1" class="highlight-word">pastel shades</span>, isolated on white background, premium commercial t-shirt print.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text1', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=500');">
+                <span class="accordion-title">رسومات خطية حديثة (Modern Flat Line)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt2">
+                    <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>الشخصية / المحور العام:</label>
+                            <input type="text" class="custom-input" data-target="f_char2" value="Coffee barista" oninput="updatePrompt(2)">
+                        </div>
+                        <div class="input-group">
+                            <label>طبيعة الخلفية المحيطة:</label>
+                            <input type="text" class="custom-input" data-target="f_bg2" value="abstract geometric lines" oninput="updatePrompt(2)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text2">Modern aesthetic flat illustration style showing a <span id="f_char2" class="highlight-word">Coffee barista</span>, vibrant flat colors with <span id="f_bg2" class="highlight-word">abstract geometric lines</span>, vector graphic art, isolated white background.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text2', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1560942485-b2a11cc13456?w=500');">
+                <span class="accordion-title">شخصيات كرتونية (Mascot Cartoon)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt3">
+                    <img src="https://images.unsplash.com/photo-1560942485-b2a11cc13456?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>الشخصية أو الحيوان الكرتوني:</label>
+                            <input type="text" class="custom-input" data-target="c_char3" value="Angry Panda" oninput="updatePrompt(3)">
+                        </div>
+                        <div class="input-group">
+                            <label>ستايل اللباس / المظهر السطحي:</label>
+                            <input type="text" class="custom-input" data-target="c_wear3" value="wearing a streetwear leather jacket" oninput="updatePrompt(3)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text3">Funny cartoon mascot logo design of an <span id="c_char3" class="highlight-word">Angry Panda</span> <span id="c_wear3" class="highlight-word">wearing a streetwear leather jacket</span>, thick line art, vibrant colors, vector illustration for printing.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text3', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500');">
+                <span class="accordion-title">تايبوغرافي مدمج (Typography Art)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt4">
+                    <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>الكلمة أو الجملة الإنجليزية الرئيسية:</label>
+                            <input type="text" class="custom-input" data-target="t_txt4" value="CREATE" oninput="updatePrompt(4)">
+                        </div>
+                        <div class="input-group">
+                            <label>النمط الجمالي للحروف:</label>
+                            <input type="text" class="custom-input" data-target="t_sty4" value="bold 70s retro psychedelic font" oninput="updatePrompt(4)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text4">Creative typography t-shirt design featuring the word "<span id="t_txt4" class="highlight-word">CREATE</span>", using a <span id="t_sty4" class="highlight-word">bold 70s retro psychedelic font</span>, vector graphics, colorful, isolated on a clean background.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text4', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500');">
+                <span class="accordion-title">سايبر بوب نيون (Cyber-Pop)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt5">
+                    <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>العنصر الأساسي في المركز:</label>
+                            <input type="text" class="custom-input" data-target="p_sub5" value="Cybernetic Tiger head" oninput="updatePrompt(5)">
+                        </div>
+                        <div class="input-group">
+                            <label>المزيج اللوني للإضاءة:</label>
+                            <input type="text" class="custom-input" data-target="p_glow5" value="electric neon teal and bright orange" oninput="updatePrompt(5)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text5">Stunning cyber-pop vector illustration of a <span id="p_sub5" class="highlight-word">Cybernetic Tiger head</span>, glowing with <span id="p_glow5" class="highlight-word">electric neon teal and bright orange</span> outline effects, futuristic 8k synthwave graphics, solid white background.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text5', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=500');">
+                <span class="accordion-title">أنمي كاواي لطيف (Kawaii Style)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt6">
+                    <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>نوع الطعام أو الكائن:</label>
+                            <input type="text" class="custom-input" data-target="k_obj6" value="Boba Bubble Tea cup" oninput="updatePrompt(6)">
+                        </div>
+                        <div class="input-group">
+                            <label>التعابير والملامح البارزة:</label>
+                            <input type="text" class="custom-input" data-target="k_face6" value="winking eye and happy smile" oninput="updatePrompt(6)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text6">Super cute Japanese kawaii sticker vector illustration of a <span id="k_obj6" class="highlight-word">Boba Bubble Tea cup</span> with a <span id="k_face6" class="highlight-word">winking eye and happy smile</span>, pastel color scheme, clean bold outlines, white background.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text6', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1561055657-b9e0bf0fa360?w=500');">
+                <span class="accordion-title">جرافيتي شوارع وهيب هوب (Graffiti Style)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt7">
+                    <img src="https://images.unsplash.com/photo-1561055657-b9e0bf0fa360?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>الكلمة أو اسم البراند:</label>
+                            <input type="text" class="custom-input" data-target="g_txt7" value="AURA" oninput="updatePrompt(7)">
+                        </div>
+                        <div class="input-group">
+                            <label>عنصر رسم جرافيتي إضافي:</label>
+                            <input type="text" class="custom-input" data-target="g_el7" value="dripping spray paint splashes" oninput="updatePrompt(7)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text7">Urban street art graffiti style design showcasing the word "<span id="g_txt7" class="highlight-word">AURA</span>", wildstyle lettering, mixed with <span id="g_el7" class="highlight-word">dripping spray paint splashes</span>, raw colorful elements, vector mockup ready.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text7', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1509281373149-e957c6296406?w=500');">
+                <span class="accordion-title">ريترو كلاسيكي (Vintage 80s)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt8">
+                    <img src="https://images.unsplash.com/photo-1509281373149-e957c6296406?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>المشهد / العنصر القديم:</label>
+                            <input type="text" class="custom-input" data-target="r_sub8" value="Classic cassette tape" oninput="updatePrompt(8)">
+                        </div>
+                        <div class="input-group">
+                            <label>تأثير القوام أو الفلتر:</label>
+                            <input type="text" class="custom-input" data-target="r_tex8" value="highly distressed grunge texture" oninput="updatePrompt(8)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text8">Distressed vintage 1980s retro vector design of a <span id="r_sub8" class="highlight-word">Classic cassette tape</span>, neon sunset grid background style, <span id="r_tex8" class="highlight-word">highly distressed grunge texture</span>, vector art for apparel printing.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text8', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1581078426775-802804d2e03e?w=500');">
+                <span class="accordion-title">فن الخط الواحد (One Line Art)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt9">
+                    <img src="https://images.unsplash.com/photo-1581078426775-802804d2e03e?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>العنصر البشري أو الحيواني:</label>
+                            <input type="text" class="custom-input" data-target="l_sub9" value="Holding hands" oninput="updatePrompt(9)">
+                        </div>
+                        <div class="input-group">
+                            <label>الزخرفة الجانبية اللطيفة:</label>
+                            <input type="text" class="custom-input" data-target="l_dec9" value="minimalist botanical leaves" oninput="updatePrompt(9)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text9">Elegant continuous single one-line illustration of <span id="l_sub9" class="highlight-word">Holding hands</span>, beautifully intertwined with <span id="l_dec9" class="highlight-word">minimalist botanical leaves</span>, black ink line art on pure isolated white background.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text9', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="prompt-card">
+            <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1579783928621-7a13d66a6211?w=500');">
+                <span class="accordion-title">ألوان مائية حرة (Watercolor Splatter)</span>
+                <i class="fa-solid fa-chevron-down accordion-icon"></i>
+            </div>
+            <div class="accordion-content">
+                <div class="card-inner-body" id="prompt10">
+                    <img src="https://images.unsplash.com/photo-1579783928621-7a13d66a6211?w=500" alt="معاينة الستايل" class="style-preview-img">
+                    <div class="customizer-box">
+                        <div class="input-group">
+                            <label>العنصر المراد تلوينه:</label>
+                            <input type="text" class="custom-input" data-target="w_sub10" value="Majestic Eagle in flight" oninput="updatePrompt(10)">
+                        </div>
+                        <div class="input-group">
+                            <label>تأثير انتشار الحبر واللون:</label>
+                            <input type="text" class="custom-input" data-target="w_spl10" value="vibrant paint dripping splatters" oninput="updatePrompt(10)">
+                        </div>
+                    </div>
+                    <div class="prompt-box">
+                        <span id="text10">Beautiful abstract watercolor sketch of a <span id="w_sub10" class="highlight-word">Majestic Eagle in flight</span>, filled with <span id="w_spl10" class="highlight-word">vibrant paint dripping splatters</span>, highly detailed artistic design, white background.</span>
+                    </div>
+                    <button class="btn-copy" onclick="copyText('text10', this)"><i class="fa-solid fa-copy"></i> نسخ الموجه جاهزاً</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="load-more-container">
+        <button id="loadMoreBtn" class="btn-load-more" onclick="loadMoreCards(); setTimeout(() => this.blur(), 150);">
+    <span>عرض المزيد من الأنماط</span>
+    <i class="fa-solid fa-wand-magic-sparkles ai-pulse-icon"></i>
+</button>
+
+    </div>
+
+    <script>
+        const isBetaFeatureActive = true; 
+        
+        if (!isBetaFeatureActive) {
+            document.getElementById('betaRibbon').classList.add('hidden');
+        }
+
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            tg.BackButton.show();
+            tg.BackButton.onClick(function() {
+                window.location.href = 'index.html';
+            });
+        }
+
+        function toggleAccordion(header) {
+            const currentCard = header.parentElement;
+            const isAlreadyActive = currentCard.classList.contains('active');
+            
+            document.querySelectorAll('.prompt-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            if (!isAlreadyActive) {
+                currentCard.classList.add('active');
+            }
+        }
+
+        function updatePrompt(id) {
+            const cardBody = document.getElementById('prompt' + id);
+            const inputs = cardBody.querySelectorAll('.custom-input');
+            
+            inputs.forEach(input => {
+                const targetId = input.getAttribute('data-target');
+                const targetSpan = document.getElementById(targetId);
+                if (targetSpan) {
+                    targetSpan.innerText = input.value || '...';
+                }
+            });
+        }
+
+        function copyText(textId, btn) {
+            const textToCopy = document.getElementById(textId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-square-check"></i> تم النسخ بنجاح!';
+                btn.style.backgroundColor = '#00B894';
+                btn.style.boxShadow = '0 4px 15px rgba(0, 184, 148, 0.3)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.style.backgroundColor = 'var(--secondary-color)';
+                    btn.style.boxShadow = '0 4px 15px rgba(255, 107, 1, 0.25)';
+                }, 2000);
+            }).catch(err => {
+                console.error('خطأ أثناء عملية النسخ: ', err);
+            });
+        }
+
+        let visibleCount = 4;
+        const allCards = Array.from(document.querySelectorAll('.prompt-card'));
+        
+        function renderCards() {
+            for (let i = 0; i < visibleCount; i++) {
+                if (allCards[i]) {
+                    allCards[i].style.display = 'block';
+                    setTimeout(() => {
+                        allCards[i].style.opacity = '1';
+                        allCards[i].style.transform = 'translateY(0)';
+                        allCards[i].style.transition = 'all 0.6s cubic-bezier(0.19, 1, 0.22, 1)';
+                    }, (i % 5) * 80); 
+                }
+            }
+        }
+
+        function loadMoreCards() {
+            visibleCount += 5;
+            renderCards();
+            
+            if (visibleCount >= allCards.length) {
+                document.getElementById('loadMoreBtn').style.display = 'none';
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCards();
+        });
+    </script>
+</body>
+</html>
