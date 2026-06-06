@@ -65,7 +65,7 @@
 
         .preview-section {
             flex: 0 0 45vh; 
-            min-height: 300px;
+            min-height: 350px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -95,8 +95,8 @@
 
         .watermark-label {
             position: absolute;
-            top: 15px;
-            right: 15px; 
+            top: 10px;
+            right: 10px; 
             padding: 4px 8px; 
             border-radius: 6px;
             font-size: 9px; 
@@ -251,8 +251,8 @@
 <body>
 
     <header class="app-header">معاينة التصميم</header>
-<div style="background-color: #fdffd7; color: #FF6B01; padding: 8px 15px; font-size: 11px; font-weight: 700; text-align: center; border-bottom: 1px solid #FF6B01;">
-    ⚠️ تنبيه: هذه المعاينة رسومية تقريبية من حيث لون المنتج الظاهر ونوع الخط في النص، وهي فقط للمساعدة في تحديد وتوضيح موقع التصميم على بعض المنتجات عند الحاجة (يتم التأكيد والشرح عند الطلب).
+<div style="background-color: #fdffd7; color: #FF6B01; padding: 4px 5px; font-size: 8px; font-weight: 700; text-align: center; border-bottom: 1px solid #FF6B01;">
+    ⚠️ تنبيه: هذه المعاينة رسومية تقريبية من حيث لون المنتج الظاهر ونوع الخط في النص، وهي فقط للمساعدة في توضيح موقع وحجم التصميم على المنتجات عند الحاجة (يتم التأكيد عند الطلب).
 </div>
 
     <div class="main-wrapper">
@@ -294,11 +294,11 @@
             <div class="control-card">
                 <span class="group-title">3. أضف التصاميم لـ (<span id="view-name-label" style="color:var(--accent)">الصدر</span>)</span>
                 <div class="add-grid">
-                    <label class="add-slot" id="btn-img-1">شعار 1<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 1)"></label>
-                    <label class="add-slot" id="btn-img-2">شعار 2<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 2)"></label>
-                    <label class="add-slot" id="btn-img-3">شعار 3<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 3)"></label>
-                    <label class="add-slot" id="btn-img-4">شعار 4<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 4)"></label>
-                    <label class="add-slot" id="btn-img-5">شعار 5<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 5)"></label>
+                    <label class="add-slot" id="btn-img-1">صورة 1<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 1)"></label>
+                    <label class="add-slot" id="btn-img-2">صورة 2<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 2)"></label>
+                    <label class="add-slot" id="btn-img-3">صورة 3<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 3)"></label>
+                    <label class="add-slot" id="btn-img-4">صورة 4<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 4)"></label>
+                    <label class="add-slot" id="btn-img-5">صورة 5<input type="file" hidden accept="image/*" onchange="handleAdd(event, 'img', 5)"></label>
                 </div>
                 <div class="add-grid">
                     <button class="add-slot" id="btn-text-1" onclick="handleAdd(null, 'text', 1)">نص 1</button>
@@ -314,6 +314,8 @@
                         <button style="background:#fee2e2; border:none; color:var(--danger); padding:4px 10px; border-radius:6px; font-weight:800; cursor:pointer; font-size:11px;" onclick="deleteActive()">حذف 🗑️</button>
                     </div>
                     <input type="range" id="size-slider" min="10" max="350" value="100" oninput="resizeActive(this.value)">
+                    <div style="font-weight:800; font-size:12px; margin-top:10px;">التدوير:</div>
+                    <input type="range" id="rotate-slider" min="-180" max="180" value="0" step="1" oninput="rotateActive(this.value)">
                     <div id="text-edit-zone" style="display:none; gap:10px; margin-top:5px;">
                         <input type="text" id="text-input" style="flex:1; padding:8px; border-radius:8px; border:1px solid var(--border); outline:none;" oninput="updateText(this.value)">
                         <input type="color" id="color-input" style="width:40px; height:40px; border:none; padding:0; background:none; cursor:pointer;" oninput="updateTextColor(this.value)">
@@ -572,6 +574,7 @@
             el.dataset.t = tag==='div'?'text':'img';
             el.dataset.s = id.split('-')[2];
             el.dataset.p = curProd; el.dataset.v = curView;
+            el.dataset.rot = "0";
             el.addEventListener('mousedown', startDrag);
             el.addEventListener('touchstart', startDrag, {passive:false});
             zone.appendChild(el); 
@@ -589,6 +592,8 @@
             deselect(); activeEl = el; el.classList.add('active');
             document.getElementById('active-panel').style.display = 'block';
             
+            document.getElementById('rotate-slider').value = el.dataset.rot || "0";
+
             const isText = el.dataset.t === 'text';
             document.getElementById('text-edit-zone').style.display = isText ? 'flex' : 'none';
             if(isText) document.getElementById('text-input').value = el.innerText;
@@ -643,6 +648,13 @@
             if(!activeEl) return;
             if(activeEl.dataset.t === 'text') activeEl.style.fontSize = (v/4) + 'px';
             else activeEl.style.width = v + 'px';
+            updateLabelLogic();
+        }
+
+        function rotateActive(v) {
+            if(!activeEl) return;
+            activeEl.dataset.rot = v;
+            activeEl.style.transform = `rotate(${v}deg)`;
             updateLabelLogic();
         }
 
