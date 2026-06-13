@@ -344,7 +344,7 @@
 
     <script>
         // ====== إعدادات اللعبة ======
-        const GAME_VERSION = "v2.11"; 
+        const GAME_VERSION = "v2.17"; 
         const GAME_DURATION = 30; 
         const COLS = 10;  
         const ROWS = 12; 
@@ -362,11 +362,15 @@
 
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        tg.expand();
-        tg.BackButton.onClick(() => {
-            bgMusic.pause();
-            tg.close();
-        });
+        const tgApp = window.Telegram?.WebApp;
+        if(tgApp) {
+            tgApp.expand();
+            tgApp.BackButton.show();
+            tgApp.BackButton.onClick(() => {
+                document.getElementById('bg-music').pause();
+                window.location.href = 'index.html'; 
+            });
+        }
 
         window.onload = () => {
             checkSession();
