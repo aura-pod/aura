@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aura Flip Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #05D1CE;
+            --secondary: #FF6B01;
+            --bg-color: #FAF9F6;
+            --accent-pink: #E63946;
+            --accent-gray: #8D99AE;
+            --text-dark: #2b2b2b;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .popup-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 90%;
+            border: 2px solid var(--primary);
+        }
+
+        .popup-box h1 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary), #04b3b0);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(5, 209, 206, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 10px rgba(5, 209, 206, 0.4);
+        }
+
+        #game-screen {
+            justify-content: flex-start;
+            padding-top: 10px;
+            height: auto;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-gray);
+        }
+
+        .header span { color: var(--secondary); font-size: 1.3rem; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            gap: 6px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            perspective: 1000px;
+            cursor: pointer;
+            width: 100%;
+            aspect-ratio: 3/4;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .card.flipped .card-inner, .card.matched .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: 2px solid white;
+        }
+
+        .card-back::after {
+            content: "Aura";
+            color: white;
+            font-weight: 800;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            transform: rotate(-45deg);
+        }
+
+        .card-front {
+            background: white;
+            transform: rotateY(180deg);
+            border: 2px solid var(--primary);
+            position: relative;
+        }
+
+        .card-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card:hover .card-inner {
+            box-shadow: 0 8px 16px rgba(255, 107, 1, 0.3);
+        }
+
+        .card.matched .card-front::after {
+            content: "✨";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border-radius: 6px;
+            animation: matchSparkle 0.8s forwards;
+        }
+
+        @keyframes matchSparkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            30% { opacity: 1; transform: scale(1.2); color: var(--secondary); text-shadow: 0 0 10px white; }
+            60% { opacity: 1; transform: scale(1); color: var(--primary); }
+            100% { opacity: 1; transform: scale(1); color: transparent; text-shadow: none; }
+        }
+
+        .result-box {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 95%;
+            width: 400px;
+            border-top: 5px solid var(--secondary);
+        }
+
+        #win-screen {
+            height: 100vh;
+            overflow-y: auto;
+            justify-content: flex-start;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .win-box {
+            border-top: none;
+            padding: 20px 15px;
+            width: 100%;
+            max-width: 360px;
+        }
+        .win-icons {
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+        }
+        .win-title {
+            color: var(--primary);
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 3px;
+        }
+        .win-subtitle {
+            color: #5c677d;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .prize-box {
+            border: 2px dashed var(--secondary);
+            background-color: #FFF5EC;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            color: var(--secondary);
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+        .prize-box .prize-sub {
+            color: #4a4e69;
+            font-size: 0.9rem;
+            display: block;
+            margin-top: 3px;
+        }
+        
+        .solution-screenshot-container {
+            width: 100%;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        .solution-screenshot-container p {
+            font-size: 0.85rem;
+            color: var(--accent-gray);
+            margin: 0 0 5px 0;
+            font-weight: 700;
+        }
+        .screenshot-preview {
+            width: 130px;
+            height: auto;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: inline-block;
+            background: #eee;
+        }
+
+        .warning-text {
+            color: var(--accent-pink);
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .user-details-box {
+            border: 1px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 12px 15px;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            text-align: right;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #4a4e69;
+        }
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+        .detail-row .value {
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+        .detail-row .value-sec {
+            color: var(--secondary);
+            font-size: 0.85rem;
+        }
+        .detail-divider {
+            height: 1px;
+            background-color: #e2e8f0;
+            margin: 10px 0;
+            border: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-header-container">
+    <h1 class="game-main-title">إمرح واربح مع أورا</h1>
+    <div class="title-bottom-line"></div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #05D1CE; 
+        --text-dark-color: #1e2530;
+    }
+
+    .game-header-container {
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 5px;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    .game-main-title {
+        font-family: 'Tajawal', sans-serif !important;
+        font-size: 26px;
+        font-weight: 900;
+        color: var(--primary-color);
+        margin: 0 0 8px 0;
+        letter-spacing: -0.5px;
+    }
+
+    .title-bottom-line {
+        width: 0px;
+        height: 4px;
+        background: var(--primary-color);
+        border-radius: 2px;
+        margin: 0 auto;
+        opacity: 0.8;
+    }
+</style>    
+    
+    <audio id="bg-music" loop preload="auto">
+        <source src="https://cdn.jsdelivr.net/gh/aura-pod/aura@main/flip-game.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="start-screen" class="screen">
+        <div class="popup-box">
+            <h1>لعبة مطابقة Aura</h1>
+            <p>العب وطابق الكروت لتربح تيشيرت مجاني أو خصم مميز!</p>
+            <p>معك <strong style="color:var(--accent-pink)" id="display-duration">90</strong> ثانية لمطابقة الأزواج المطلوبة.</p>
+            <button class="btn" onclick="startGame()">بدء اللعبة</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div class="header">
+            <div>الوقت: <span id="time-left">90</span>ث</div>
+            <div>المطابقة: <span id="score">0/20</span></div>
+        </div>
+        <div class="grid-container" id="grid">
+        </div>
+    </div>
+
+    <div id="win-screen" class="screen">
+        <div class="result-box win-box">
+            <div class="win-icons">🎉 🔓</div>
+            <h1 class="win-title">كفو! فتحت الشنتة بنجاح</h1>
+            <p class="win-subtitle">أنت من بين الأسرع ذكاءً! هديتك الفورية هي:</p>
+
+            <div class="prize-box">
+                👕 تيشيرت مجاني من Aura
+                <span class="prize-sub">أو خصم 50% على سلتك</span>
+            </div>
+
+            <div class="solution-screenshot-container">
+                <p>📸 نظرة على لوحة حلّك الأسطوري:</p>
+                <img id="screenshot-img" class="screenshot-preview" alt="لقطة الحل الفائز">
+            </div>
+
+            <p class="warning-text">
+                ⚠️ سجل فيديو للشاشة (3 ثوان) يوضح اسمك والوقت أدناه وأرسله لنا فوراً لتأكيد الجائزة.
+            </p>
+
+            <div class="user-details-box">
+                <div class="detail-row">
+                    <span>المستكشف:</span>
+                    <span class="value" id="win-username" dir="ltr">Aura_Guest@</span>
+                </div>
+                <div class="detail-row">
+                    <span>الوقت المستغرق:</span>
+                    <span class="value" id="win-time-taken">00:00 دقيقة</span>
+                </div>
+                <div class="detail-row">
+                    <span>توقيت الفوز الثابت:</span>
+                    <span class="value value-sec" id="win-timestamp-fixed" dir="ltr"></span>
+                </div>
+                <hr class="detail-divider">
+                <div class="detail-row">
+                    <span>توقيت التوثيق الحي:</span>
+                    <span class="value" id="win-timestamp-live" dir="ltr" style="color: #E63946; font-weight: 800;"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="lose-screen" class="screen">
+        <div class="result-box">
+            <h1 style="color: var(--accent-gray);">انتهى الوقت! ⏳</h1>
+            <p style="font-size: 1.2rem; margin-top:20px;">هالمرة ما زبطت بس انشالله بالمرات الجاية بتزبط معك 😉</p>
+        </div>
+    </div>
+
+    <div id="wait-screen" class="screen">
+        <div class="result-box">
+            <h1 style="color: var(--secondary);">لعبت اليوم!</h1>
+            <p>اللعبة متاحة مرة واحدة كل 24 ساعة. ناطرينك بكرا يا بطل.</p>
+        </div>
+    </div>
+
+    <script>
+        const GAME_VERSION = "v2.5.4"; 
+        const GAME_DURATION = 90; // قم بتغييرها إلى 60 إذا أردت
+        const WIN_TARGET = 1;
+        const TOTAL_PAIRS = 20;
+
+        const imageUrls = [
+            "img1 url github", "img2 url github", "img3 url github", "img4 url github",
+            "img5 url github", "img6 url github", "img7 url github", "img8 url github",
+            "img9 url github", "img10 url github", "img11 url github", "img12 url github",
+            "img13 url github", "img14 url github", "img15 url github", "img16 url github",
+            "img17 url github", "img18 url github", "img19 url github", "img20 url github"
+        ];
+
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let timerInterval;
+        let timeLeft = GAME_DURATION;
+        let liveTimeInterval; 
+
+        const tg = window.Telegram.WebApp;
+        const bgMusic = document.getElementById('bg-music');
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        tg.expand();
+        tg.BackButton.onClick(() => {
+            bgMusic.pause();
+            tg.close();
+        });
+
+        window.onload = () => {
+            document.getElementById('display-duration').innerText = GAME_DURATION;
+            checkSession();
+        };
+
+        function checkSession() {
+            const sessionData = JSON.parse(localStorage.getItem('auraGameData'));
+            const now = Date.now();
+
+            if (sessionData) {
+                if (sessionData.version === GAME_VERSION) {
+                    if (sessionData.status === 'won') {
+                        const hoursPassed = (now - sessionData.endTime) / (1000 * 60 * 60);
+                        if (hoursPassed < 24) {
+                            restoreWinScreen(sessionData);
+                            return;
+                        } else {
+                            localStorage.removeItem('auraGameData');
+                        }
+                    }
+                    else if (sessionData.status === 'lost') {
+                        const hoursPassed = (now - sessionData.endTime) / (1000 * 60 * 60);
+                        if (hoursPassed < 24) {
+                            showScreen('wait-screen');
+                            return;
+                        } else {
+                            localStorage.removeItem('auraGameData');
+                        }
+                    }
+                    else if (sessionData.status === 'playing') {
+                        const elapsed = Math.floor((now - sessionData.startTime) / 1000);
+                        if (elapsed < GAME_DURATION) {
+                            timeLeft = GAME_DURATION - elapsed;
+                            matchedPairs = sessionData.matchedPairs || 0;
+                            startGame(true, sessionData.boardState);
+                            return;
+                        } else {
+                            saveSession('lost', { endTime: Date.now() });
+                            showScreen('lose-screen');
+                            return;
+                        }
+                    }
+                } else {
+                    // مسح البيانات القديمة كلياً عند اختلاف الإصدار لتفادي استخدام توقيتات قديمة
+                    localStorage.removeItem('auraGameData');
+                }
+            }
+            showScreen('start-screen');
+        }
+
+        function startGame(isResume = false, savedBoard = null) {
+            showScreen('game-screen');
+            tg.BackButton.show();
+            bgMusic.play().catch(e => console.log("Audio play prevented"));
+
+            if (!isResume) {
+                timeLeft = GAME_DURATION;
+                matchedPairs = 0;
+                let deck = [...imageUrls, ...imageUrls];
+                
+                for (let i = deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [deck[i], deck[j]] = [deck[j], deck[i]];
+                }
+
+                cards = deck.map(url => ({ url, isMatched: false }));
+                // حفظ توقيت جديد كلياً وتجاوز أي توقيتات قديمة
+                saveSession('playing', { startTime: Date.now() });
+            } else {
+                cards = savedBoard;
+            }
+
+            updateScore();
+            renderGrid();
+
+            // تحديث العرض فوراً
+            document.getElementById('time-left').innerText = timeLeft;
+
+            // الاعتماد على التوقيت الفعلي المخزن لضمان عدم تأثر العداد بخروج اللاعب ورجوعه
+            const currentSession = JSON.parse(localStorage.getItem('auraGameData'));
+            const realStartTime = currentSession.startTime;
+
+            timerInterval = setInterval(() => {
+                const now = Date.now();
+                const elapsed = Math.floor((now - realStartTime) / 1000);
+                timeLeft = GAME_DURATION - elapsed;
+
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    document.getElementById('time-left').innerText = timeLeft;
+                    endGame(matchedPairs >= WIN_TARGET);
+                } else {
+                    document.getElementById('time-left').innerText = timeLeft;
+                }
+            }, 1000);
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            cards.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = `card ${card.isMatched ? 'matched' : ''}`;
+                cardEl.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-face card-back"></div>
+                        <div class="card-face card-front"><img src="${card.url}" alt="card"></div>
+                    </div>
+                `;
+                if (!card.isMatched) {
+                    cardEl.onclick = () => handleCardClick(cardEl, index);
+                }
+                grid.appendChild(cardEl);
+            });
+        }
+
+        function handleCardClick(cardEl, index) {
+            if (flippedCards.length >= 2 || cardEl.classList.contains('flipped') || cards[index].isMatched) return;
+
+            cardEl.classList.add('flipped');
+            flippedCards.push({ element: cardEl, index });
+
+            if (flippedCards.length === 2) {
+                setTimeout(checkMatch, 600);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            if (cards[card1.index].url === cards[card2.index].url) {
+                card1.element.classList.replace('flipped', 'matched');
+                card2.element.classList.replace('flipped', 'matched');
+                cards[card1.index].isMatched = true;
+                cards[card2.index].isMatched = true;
+                matchedPairs++;
+                updateScore();
+                saveSession('playing');
+
+                if (matchedPairs >= WIN_TARGET) {
+                    endGame(true);
+                }
+            } else {
+                card1.element.classList.remove('flipped');
+                card2.element.classList.remove('flipped');
+            }
+            flippedCards = [];
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = `${matchedPairs}/${TOTAL_PAIRS}`;
+        }
+
+        function endGame(isWin) {
+            clearInterval(timerInterval);
+            bgMusic.pause(); 
+
+            if (isWin) {
+                const timeTakenSec = GAME_DURATION - Math.max(0, timeLeft);
+                const min = Math.floor(timeTakenSec / 60).toString().padStart(2, '0');
+                const sec = (timeTakenSec % 60).toString().padStart(2, '0');
+                const timeTakenStr = `${min}:${sec} دقيقة`;
+                
+                let tgUser = tg.initDataUnsafe?.user?.username ? '@' + tg.initDataUnsafe.user.username : undefined;
+                if (!tgUser) tgUser = tg.initDataUnsafe?.user?.first_name ? tg.initDataUnsafe.user.first_name : '@Aura_Guest';
+                
+                const winDate = new Date();
+                const timeStringFixed = winDate.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second:'2-digit' });
+                const dateStringFixed = `${winDate.getFullYear()}/${winDate.getMonth() + 1}/${winDate.getDate()}`;
+                const timestampFixedStr = `${timeStringFixed} | ${dateStringFixed}`; 
+
+                const winData = {
+                    timeTaken: timeTakenStr,
+                    username: tgUser,
+                    timestampFixed: timestampFixedStr
+                }; 
+
+                const gridTarget = document.getElementById('grid');
+                
+                html2canvas(gridTarget, {
+                    useCORS: true, 
+                    logging: false,
+                    backgroundColor: null,
+                    scrollX: 0,
+                    scrollY: -window.scrollY
+                }).then(canvas => {
+                    const base64Image = canvas.toDataURL('image/png');
+                    winData.screenshot = base64Image; 
+
+                    saveSession('won', winData);
+                    restoreWinScreen(winData);
+                }).catch(err => {
+                    console.log("خطأ أثناء التقاط الصورة المصغرة:", err);
+                    saveSession('won', winData);
+                    restoreWinScreen(winData);
+                }); 
+
+            } else {
+                saveSession('lost', { endTime: Date.now() });
+                showScreen('lose-screen');
+            }
+        }
+
+        function saveSession(status, extraData = {}) {
+            const existingSession = JSON.parse(localStorage.getItem('auraGameData')) || {};
+            const sessionData = {
+                ...existingSession,
+                version: GAME_VERSION,
+                status: status,
+                startTime: status === 'playing' ? (existingSession.startTime || Date.now()) : existingSession.startTime,
+                endTime: (status === 'won' || status === 'lost') ? (existingSession.endTime || Date.now()) : existingSession.endTime,
+                boardState: cards,
+                matchedPairs: matchedPairs,
+                ...extraData
+            };
+            localStorage.setItem('auraGameData', JSON.stringify(sessionData));
+        }
+
+        function restoreWinScreen(data) {
+            document.getElementById('win-username').innerText = data.username || '@Aura_Guest';
+            document.getElementById('win-time-taken').innerText = data.timeTaken || '00:00 دقيقة';
+            
+            document.getElementById('win-timestamp-fixed').innerText = data.timestampFixed || '';
+            
+            const imgEl = document.getElementById('screenshot-img');
+            if (data.screenshot) {
+                imgEl.src = data.screenshot;
+                document.querySelector('.solution-screenshot-container').style.display = 'block';
+            } else {
+                document.querySelector('.solution-screenshot-container').style.display = 'none';
+            } 
+
+            showScreen('win-screen');
+
+            if (liveTimeInterval) clearInterval(liveTimeInterval); 
+            
+            function updateLiveClock() {
+                const now = new Date();
+                const liveTimeStr = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const liveDateStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+                
+                const liveClockEl = document.getElementById('win-timestamp-live');
+                if (liveClockEl) {
+                    liveClockEl.innerText = `${liveTimeStr} | ${liveDateStr}`;
+                }
+            }
+            
+            updateLiveClock();
+            liveTimeInterval = setInterval(updateLiveClock, 1000); 
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
