@@ -41,7 +41,9 @@
             min-height: 100vh;
             padding: 20px 15px;
             user-select: none;
-            overflow: hidden;
+            /* تم السماح بالتمرير العمودي لتجنب اقتطاع الشاشة */
+            overflow-y: auto; 
+            overflow-x: hidden;
         }
 
         .modal-overlay {
@@ -328,9 +330,9 @@
         .win-page {
             width: 100%;
             max-width: 400px;
-            background: var(--panel-bg);
+            background: #ffffff;
             border-radius: 24px;
-            padding: 40px 20px;
+            padding: 20px 15px; /* تم تصغير المسافات لاحتواء الشاشة */
             box-shadow: 0 15px 30px var(--shadow);
             text-align: center;
             border: 2px solid var(--primary);
@@ -338,30 +340,39 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            margin-bottom: 20px; /* مسافة بسيطة من الأسفل عند التمرير */
         }
 
-        .win-page h2 {
-            color: var(--primary);
-            font-size: 32px;
-            margin-bottom: 20px;
-            margin-top: 0;
-            font-weight: 900;
-        }
+  .lose-page {
+    width: 100%;
+    max-width: 400px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px 20px;
+    box-shadow: 0 15px 30px var(--shadow);
+    text-align: center;
+    border: 2px solid var(--secondary); /* استخدمنا اللون البرتقالي ليعبر عن الخسارة */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-        .time-box {
-            background: var(--gray-light);
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 25px;
-            width: 100%;
-            border: 1px dashed var(--primary);
-        }
+.lose-page h2 {
+    color: var(--secondary);
+    font-size: 24px;
+    margin-bottom: 15px;
+    margin-top: 0;
+    font-weight: 900;
+}
 
+  
         .live-clock {
-            font-size: 34px;
+            font-size: 24px; /* تم تصغير الخط قليلاً لتوفير المساحة */
             font-weight: 900;
-            color: var(--text-dark);
-            margin: 10px 0 0 0;
+            color: var(--secondary);
+            margin: 10px 0 0 0; /* تصغير الهامش */
             letter-spacing: 2px;
         }
     </style>
@@ -369,51 +380,42 @@
 <body>
 
     <div class="game-header-container">
-    <h1 class="game-main-title">إمرح واربح مع أورا</h1>
-    <div class="title-bottom-line"></div>
-</div>
+        <h1 class="game-main-title">إمرح واربح مع أورا</h1>
+        <div class="title-bottom-line"></div>
+    </div>
 
-<style>
-    :root {
-        --primary-color: #05D1CE; 
-        --text-dark-color: #1e2530;
-    }
+    <style>
+        .game-header-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            margin-top: 5px;    
+            margin-bottom: 30px; /* تم تقليلها قليلاً لرفع مساحة اللعب */
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
 
-    .game-header-container {
-        width: 100%;
-        max-width: 400px;
-        text-align: center;
-        
-        /* التحكم بالمسافات هنا */
-        margin-top: 5px;    /* المسافة بين العنوان وحد الشاشة العلوي */
-        margin-bottom: 40px; /* المسافة بين العنوان وأول عنصر في اللعبة */
-        
-        padding: 0 10px;
-        box-sizing: border-box;
-    }
+        .game-main-title {
+            font-family: 'Tajawal', sans-serif !important;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 0 0 8px 0; 
+            letter-spacing: -0.5px;
+        }
 
-    .game-main-title {
-        font-family: 'Tajawal', sans-serif !important;
-        font-size: 26px;
-        font-weight: 900;
-        color: var(--primary-color);
-        margin: 0 0 8px 0; /* مسافة صغيرة بين النص والخط السفلي */
-        letter-spacing: -0.5px;
-    }
-
-    .title-bottom-line {
-        width: 0px;
-        height: 4px;
-        background: var(--primary-color);
-        border-radius: 2px;
-        margin: 0 auto;
-        opacity: 0.8;
-    }
-</style>    
+        .title-bottom-line {
+            width: 0px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+    </style>    
     
     <audio id="bg-music" src="https://cdn.jsdelivr.net/gh/aura-pod/aura@main/hp-game.mp3" loop preload="auto"></audio>
 
-    <!-- تم إضافة style="display: none;" لمنع الوميض -->
     <div class="modal-overlay" id="intro-modal" style="display: none;">
         <div class="modal-content">
             <h2>تحدي المكبس الذكي 👕🔥</h2>
@@ -425,12 +427,6 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="lose-modal" style="display: none;">
-        <div class="modal-content">
-            <h2 style="color: var(--secondary);">انتهت اللعبة!</h2>
-            <p id="lose-desc"></p>
-        </div>
-    </div>
 
     <div class="game-container" id="main-game">
         <h1>تحدي المكبس الذكي من Aura</h1>
@@ -455,7 +451,7 @@
 
             <div class="t-shirt-target" id="tshirt-box">
                 <div class="t-shirt-shape" id="tshirt-core">
-                    <img src="YOUR_LOGO_IMAGE_LINK_HERE.png" class="printed-logo" id="tshirt-logo" alt="Aura Logo">
+                    <img src="aura-logo.png" class="printed-logo" id="tshirt-logo" alt="Aura Logo">
                 </div>
             </div>
 
@@ -465,23 +461,55 @@
         <button class="action-button" id="press-btn" onclick="triggerPressDown()" disabled>كبس وطباعة! 🎯</button>
     </div>
 
+  <div class="lose-page" id="lose-page" style="display: none;">
+    <div style="font-size: 34px; margin-bottom: 5px; display: flex; justify-content: center; gap: 10px;">
+        <span>😔</span><span>💔</span>
+    </div>
+    <h2>انتهت اللعبة!</h2>
+    <p id="lose-desc" style="font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 15px; line-height: 1.6;"></p>
+</div>
+
+  
     <div class="win-page" id="win-page" style="display: none;">
-        <h2>كفو يا بطل! 🎉</h2>
-        <p style="font-size: 16px; font-weight: 500;">عشت جوّك وطبعت <strong id="win-score-final" style="color: var(--primary); font-size: 20px;"></strong> تيشيرتات بنجاح!</p>
-        <p style="font-weight: 700;">لقد ربحت (تيشيرت مجاني / خصم خاص).</p>
-        
-        <p style="color: var(--pink-red); font-size: 15px; font-weight: 500; background: #fff0f3; padding: 10px; border-radius: 8px; margin-top: 15px;">
-            يرجى تصوير الشاشة فيديو لمدة 3 ثوان وإرساله لمتجر Aura لاستلام هديتك فوراً!
+        <div style="font-size: 34px; margin-bottom: 5px; display: flex; justify-content: center; gap: 10px;">
+            <span>🖨️</span><span>🎉</span>
+        </div>
+        <h2 style="color: var(--primary); font-size: 22px; margin-bottom: 10px; font-weight: 900;">كفو! تمت الطباعة بنجاح</h2>
+      <p style="font-size: 15px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;">
+    برافو عليك 👏🏻 طبعت <span id="win-score-display" style="color: var(--primary); font-size: 18px; font-weight: 900;"></span> بنجاح!
+</p>
+
+        <p style="font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;">أنت من بين الأسرع ذكاءً! هديتك الفورية هي:</p>
+
+        <div style="border: 2px dashed var(--secondary); border-radius: 12px; padding: 12px; margin-bottom: 10px; width: 100%; background-color: #fffaf5;">
+            <p style="color: var(--secondary); font-size: 16px; font-weight: 900; margin: 0 0 5px 0;">تيشيرت مجاني من Aura 👕</p>
+            <p style="color: var(--text-dark); font-size: 14px; font-weight: 700; margin: 0;">أو خصم 50% على سلتك</p>
+        </div>
+
+        <p style="color: var(--pink-red); font-size: 13px; font-weight: 700; margin-bottom: 15px; line-height: 1.5;">
+            ⚠️ سجل فيديو للشاشة (3 ثوان) يوضح اسمك والوقت أدناه وأرسله لنا فوراً لتأكيد الجائزة.
         </p>
 
-        <div class="time-box">
-            <p id="win-exact-time" style="font-size: 12px; color: var(--gray-dark); margin: 0;"></p>
-            <p class="live-clock" id="live-clock-display">00:00:00</p>
+        <div style="width: 100%; border: 1px solid var(--gray-light); border-radius: 12px; padding: 12px; text-align: right; background: #ffffff;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-weight: 700; color: var(--text-dark); font-size: 13px;">المستكشف:</span>
+                <span id="win-username" style="font-weight: 900; color: var(--primary); font-size: 13px; direction: ltr;">@Guest</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-weight: 700; color: var(--text-dark); font-size: 13px;">الوقت المستغرق:</span>
+                <span id="win-time-taken" style="font-weight: 900; color: var(--primary); font-size: 13px;">00:00 دقيقة</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+                <span style="font-weight: 700; color: var(--text-dark); font-size: 13px;">توقيت التوثيق:</span>
+                <span id="win-exact-time" style="font-weight: 900; color: var(--secondary); font-size: 13px; direction: ltr;"></span>
+            </div>
         </div>
+
+        <p class="live-clock" id="live-clock-display"></p>
     </div>
 
     <script>
-        const GAME_VERSION = "v4.75"; // تم تحديث الإصدار لتطبيق التغييرات
+        const GAME_VERSION = "v4.83"; 
         const MAX_ATTEMPTS = 15; 
         
         document.getElementById('version-display').innerText = "الإصدار: " + GAME_VERSION;
@@ -527,45 +555,63 @@
             }
         }
 
-        // دالة لعرض صفحة الفوز فوراً
-        function showWinPage(score, exactTimeString) {
+        function showWinPage(score, exactTimeString, timeTakenStr) {
             document.getElementById('intro-modal').style.display = 'none';
             document.getElementById('main-game').style.display = 'none';
             
             const winPage = document.getElementById('win-page');
             winPage.style.display = 'flex';
-            
-            document.getElementById('win-score-final').innerText = score;
-            document.getElementById('win-exact-time').innerText = "وقت تحقيق الفوز: " + exactTimeString;
+            document.getElementById('win-score-display').innerText = score;
+            // سحب اسم المستكشف من تيليغرام
+            let username = "@Guest";
+            if (tgApp && tgApp.initDataUnsafe && tgApp.initDataUnsafe.user) {
+                if (tgApp.initDataUnsafe.user.username) {
+                    username = "@" + tgApp.initDataUnsafe.user.username;
+                } else {
+                    username = tgApp.initDataUnsafe.user.first_name || "@Guest";
+                }
+            }
+            document.getElementById('win-username').innerText = username;
+
+            // عرض الوقت المستغرق
+            if(!timeTakenStr) timeTakenStr = "00:00 دقيقة";
+            document.getElementById('win-time-taken').innerText = timeTakenStr;
+
+            // عرض توقيت التوثيق الثابت
+            document.getElementById('win-exact-time').innerText = exactTimeString;
             
             updateLiveClock();
             if(!liveClockInterval) liveClockInterval = setInterval(updateLiveClock, 1000);
         }
 
-        // دالة لعرض رسالة الخسارة فوراً
         function showLoseModal(score) {
-            document.getElementById('intro-modal').style.display = 'none';
-            const loseModal = document.getElementById('lose-modal');
-            const loseDesc = document.getElementById('lose-desc');
-            
-            loseDesc.innerHTML = `تمكنت من طباعة <strong>${score} تيشيرتات</strong> فقط.<br><br>هالمرة ما زبطت.. بلكي المرة الجاية بتعيش جوك صح وبتربح معنا! 😉`;
-            loseModal.style.display = 'flex';
-        }
+    // إخفاء شاشة البداية وشاشة اللعبة الرئيسية عشان نفضي الشاشة
+    document.getElementById('intro-modal').style.display = 'none';
+    document.getElementById('main-game').style.display = 'none';
+    
+    // إظهار صفحة الخسارة العادية
+    const losePage = document.getElementById('lose-page');
+    const loseDesc = document.getElementById('lose-desc');
+    
+    loseDesc.innerHTML = `تمكنت من طباعة <strong style="color: var(--secondary);">${score} تيشيرتات</strong> فقط.<br><br>هالمرة ما زبطت.. بلكي المرة الجاية بتعيش جوك صح وبتربح معنا! 😉`;
+    
+    // إظهار الصفحة
+    losePage.style.display = 'flex';
+}
+
 
         window.onload = () => {
             let lastPlayed = localStorage.getItem('auraGameLastPlayed');
             const savedVersion = localStorage.getItem('auraGameVersion');
 
-            // تصفير البيانات إذا تغير الإصدار
             if (savedVersion !== GAME_VERSION) {
                 localStorage.removeItem('auraGameLastPlayed');
                 localStorage.setItem('auraGameVersion', GAME_VERSION);
                 localStorage.removeItem('auraGameState'); 
-                localStorage.removeItem('auraGameResult'); // مسح النتيجة السابقة
+                localStorage.removeItem('auraGameResult'); 
                 lastPlayed = null; 
             }
 
-            // التحقق من آخر لعب وعرض النتيجة المحفوظة فوراً بدون شاشة البداية
             if (lastPlayed) {
                 const hoursPassed = (Date.now() - parseInt(lastPlayed)) / (1000 * 60 * 60);
                 if (hoursPassed < 24) {
@@ -573,12 +619,11 @@
                     if (savedResult) {
                         const result = JSON.parse(savedResult);
                         if (result.status === 'win') {
-                            showWinPage(result.score, result.time);
+                            showWinPage(result.score, result.time, result.timeTakenStr);
                         } else {
                             showLoseModal(result.score);
                         }
                     } else {
-                        // في حال عدم وجود نتيجة لسبب ما، نمنعه من اللعب برسالة عامة
                         document.getElementById('intro-modal').style.display = 'flex';
                         document.getElementById('intro-modal').innerHTML = `
                             <div class="modal-content">
@@ -587,7 +632,7 @@
                             </div>
                         `;
                     }
-                    return; // إيقاف تنفيذ الكود هنا لمنع أي تلاعب
+                    return; 
                 }
             }
             
@@ -615,7 +660,6 @@
                     resumeGame(); 
                 }
             } else {
-                // عرض شاشة البداية فقط إذا كان زبوناً جديداً أو انتهت مدة الحظر ولم تكن هناك لعبة جارية
                 document.getElementById('intro-modal').style.display = 'flex';
             }
         };
@@ -792,19 +836,31 @@
             localStorage.setItem('auraGameLastPlayed', Date.now());
             localStorage.setItem('auraGameVersion', GAME_VERSION);
 
+            // تجهيز الوقت الثابت للمطابقة مع التصميم
             const now = new Date();
-            const exactTimeString = now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const dateStr = now.getFullYear() + '/' + (now.getMonth()+1) + '/' + now.getDate();
+            let hours = now.getHours();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            let hoursStr = hours < 10 ? '0' + hours : hours;
+            let minutes = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes();
+            let seconds = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds();
+            const exactTimeString = hoursStr + ':' + minutes + ':' + seconds + ' ' + ampm + ' | ' + dateStr;
+
+            // حساب الوقت المستغرق
+            const timeTaken = 60 - timeLeft;
+            const timeTakenStr = `00:${timeTaken < 10 ? '0' + timeTaken : timeTaken} دقيقة`;
 
             if (currentScore >= 7) {
-                // حفظ نتيجة الفوز 
                 localStorage.setItem('auraGameResult', JSON.stringify({
                     status: 'win',
                     score: currentScore,
-                    time: exactTimeString
+                    time: exactTimeString,
+                    timeTakenStr: timeTakenStr
                 }));
-                showWinPage(currentScore, exactTimeString);
+                showWinPage(currentScore, exactTimeString, timeTakenStr);
             } else {
-                // حفظ نتيجة الخسارة
                 localStorage.setItem('auraGameResult', JSON.stringify({
                     status: 'lose',
                     score: currentScore
