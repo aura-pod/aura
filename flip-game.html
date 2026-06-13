@@ -474,11 +474,18 @@
 
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        tg.expand();
-        tg.BackButton.onClick(() => {
-            bgMusic.pause();
-            tg.close();
-        });
+        const telegramApp = window.Telegram?.WebApp;
+        if(telegramApp) {
+            telegramApp.expand();
+            telegramApp.BackButton.show();
+            telegramApp.BackButton.onClick(function() {
+                const bgMusic = document.getElementById('bg-music');
+                if (bgMusic) {
+                    bgMusic.pause();
+                }
+                window.location.href = 'index.html'; 
+            });
+        }
 
         window.onload = () => {
             document.getElementById('display-duration').innerText = GAME_DURATION;
