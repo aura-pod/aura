@@ -6,6 +6,8 @@
     <title>Aura Connect Challenge</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
         :root {
@@ -186,28 +188,63 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .win-box { border-top: none; padding: 15px; }
-        .win-icons { font-size: 2.2rem; margin-bottom: 2px; }
-        .win-title { color: var(--primary); font-size: 1.4rem; font-weight: 800; margin-bottom: 2px; }
-        .win-subtitle { color: #5c677d; font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; }
+                /* --- تحديثات شاشة الفوز لتناسب شاشات الموبايل بدون تمرير --- */
+        .win-box { 
+            border-top: none; 
+            padding: 10px; 
+            max-width: 92%;
+        }
+        .win-icons { 
+            font-size: 1.8rem; 
+            margin-bottom: 0px; 
+        }
+        .win-title { 
+            color: var(--primary); 
+            font-size: 1.2rem; 
+            font-weight: 800; 
+            margin: 2px 0; 
+        }
+        .win-subtitle { 
+            color: #5c677d; 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            margin-bottom: 6px; 
+        }
         
         .prize-box {
             border: 2px dashed var(--secondary);
             background-color: #FFF5EC;
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 12px;
+            padding: 6px 10px;
+            border-radius: 10px;
+            margin-bottom: 6px;
             color: var(--secondary);
             font-weight: 800;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
         
-        .warning-text { color: var(--accent-pink); font-size: 0.85rem; font-weight: 800; margin-bottom: 12px; line-height: 1.3; }
+        /* تصغير الصورة المصغرة لتوفير مساحة عمودية */
+        .win-thumbnail {
+            width: 105px;
+            height: auto;
+            border-radius: 6px;
+            border: 2px solid var(--primary);
+            margin: 5px auto;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .warning-text { 
+            color: var(--accent-pink); 
+            font-size: 0.78rem; 
+            font-weight: 800; 
+            margin-bottom: 6px; 
+            line-height: 1.2; 
+        }
         
         .user-details-box {
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 8px 12px;
             background: #fff;
             box-shadow: 0 4px 15px rgba(0,0,0,0.02);
             text-align: right;
@@ -216,21 +253,28 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             font-weight: 800;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #4a4e69;
         }
         .detail-row:last-child { margin-bottom: 0; }
-        .detail-row .value { color: var(--primary); font-size: 1rem; }
-        .detail-divider { height: 1px; background-color: #e2e8f0; margin: 8px 0; border: none; }
+        .detail-row .value { color: var(--primary); font-size: 0.85rem; }
+        .detail-divider { height: 1px; background-color: #e2e8f0; margin: 4px 0; border: none; }
 
-        .live-clock { color: var(--secondary); font-size: 1.1rem; font-weight: 800; font-family: monospace; letter-spacing: 1px; margin-top: 5px; }
-    </style>
+        .live-clock { 
+            color: var(--secondary); 
+            font-size: 1rem; 
+            font-weight: 800; 
+            font-family: monospace; 
+            letter-spacing: 1px; 
+            margin-top: 4px; 
+        }
+   </style>
 </head>
-<body>
-
-    <div class="game-header-container">
+<body>   
+    
+      <div class="game-header-container">
     <h1 class="game-main-title">إمرح واربح مع أورا</h1>
     <div class="title-bottom-line"></div>
 </div>
@@ -272,7 +316,7 @@
         opacity: 0.8;
     }
 </style>  
-  
+    
     <audio id="bg-music" loop preload="auto">
         <source src="https://cdn.jsdelivr.net/gh/aura-pod/aura@main/connect-game.mp3" type="audio/mpeg">
     </audio>
@@ -282,14 +326,14 @@
             <h1>Aura Connect</h1>
             <p style="font-size: 1.1rem; font-weight: 500; color: #5c677d;">الماكينة جاهزة والتيشيرت ناطر!</p>
             <p style="margin-bottom: 15px; font-size: 0.95rem;">الشبكة صارت أعقد! دَوّر الأنابيب لتوصل مسار الحبر من الماكينة إلى التيشيرت قبل ما يخلص الوقت.</p>
-            <p>معك <strong id="display-duration" style="color:var(--accent-pink)">30</strong> ثانية ⏳</p>
+            <p>معك <strong id="display-duration" style="color:var(--accent-pink)">60</strong> ثانية ⏳</p>
             <button class="btn" onclick="startGame()">بدء التحدي 🚀</button>
         </div>
     </div>
 
     <div id="game-screen" class="screen">
         <div class="header">
-            <div>الوقت: <span id="time-left">30</span>ث</div>
+            <div>الوقت: <span id="time-left">60</span>ث</div>
             <div style="font-size: 0.9rem; color: var(--secondary);">صل الأنابيب 🔄</div>
         </div>
         <div class="grid-container" id="grid">
@@ -306,6 +350,8 @@
                 👕 تيشيرت مجاني من Aura
                 <span style="display:block; font-size: 0.9rem; color: #4a4e69; margin-top: 3px;">أو خصم 50% على سلتك</span>
             </div>
+
+            <img id="win-screenshot" class="win-thumbnail" src="" alt="لقطة حل اللعبة" style="display: none;">
 
             <p class="warning-text">⚠️ سجل فيديو للشاشة (3 ثوان) يوضح اسمك والوقت أدناه وأرسله لنا فوراً لتأكيد الجائزة.</p>
 
@@ -344,10 +390,10 @@
 
     <script>
         // ====== إعدادات اللعبة ======
-        const GAME_VERSION = "v2.17"; 
-        const GAME_DURATION = 30; 
-        const COLS = 10;  
-        const ROWS = 12; 
+        const GAME_VERSION = "v3.1.2"; 
+        const GAME_DURATION = 60; // يمكنك تغيير الوقت من هنا بسهولة
+        const COLS = 10;  // تم زيادة الأعمدة
+        const ROWS = 12; // تم زيادة الصفوف لتناسب الموبايل
         const TOTAL_TILES = COLS * ROWS;
 
         let tilesData = [];
@@ -362,15 +408,11 @@
 
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        const tgApp = window.Telegram?.WebApp;
-        if(tgApp) {
-            tgApp.expand();
-            tgApp.BackButton.show();
-            tgApp.BackButton.onClick(() => {
-                document.getElementById('bg-music').pause();
-                window.location.href = 'index.html'; 
-            });
-        }
+        tg.expand();
+        tg.BackButton.onClick(() => {
+            bgMusic.pause();
+            tg.close();
+        });
 
         window.onload = () => {
             checkSession();
@@ -399,7 +441,7 @@
                         startGame(true);
                         return;
                     } else {
-                        saveSession('lost', { endTime: now }); 
+                        saveSession('lost');
                         showScreen('lose-screen');
                         return;
                     }
@@ -422,15 +464,17 @@
             let cx = 0, cy = 0;
             let visited = new Set([0]);
 
+            // خوارزمية تتبع المسار مع تعرجات لزيادة التعقيد
             while (cx !== COLS - 1 || cy !== ROWS - 1) {
                 let moves = [];
                 if (cx < COLS - 1 && !visited.has(cy * COLS + (cx + 1))) moves.push({dx: 1, dy: 0, bit: 2, nbit: 8});
                 if (cy < ROWS - 1 && !visited.has((cy + 1) * COLS + cx)) moves.push({dx: 0, dy: 1, bit: 4, nbit: 1});
                 
+                // إضافة احتمالية للرجوع للخلف أو للأعلى لعمل مسار متعرج ومضلل
                 if (cy > 0 && !visited.has((cy - 1) * COLS + cx) && Math.random() > 0.6) moves.push({dx: 0, dy: -1, bit: 1, nbit: 4});
                 if (cx > 0 && !visited.has(cy * COLS + (cx - 1)) && Math.random() > 0.6) moves.push({dx: -1, dy: 0, bit: 8, nbit: 2});
 
-                if (moves.length === 0) return null; 
+                if (moves.length === 0) return null; // في حال انحصر المسار، نعيد البناء
 
                 let move = moves[Math.floor(Math.random() * moves.length)];
                 board[cy * COLS + cx] |= move.bit;
@@ -444,12 +488,16 @@
 
         function generateBoard() {
             let board = null;
+            // ضمان بناء مسار سليم
             while (!board) { board = buildComplexPath(); }
 
+            // تعبئة صارمة ومضللة جداً
             for (let i = 0; i < TOTAL_TILES; i++) {
                 if (board[i] === 0) {
+                    // حشو المربعات الفارغة بقطع عشوائية متصلة
                     board[i] = Math.floor(Math.random() * 15) + 1;
                 } else if (i !== 0 && i !== TOTAL_TILES - 1) {
+                    // إضافة أذرع تمويه (تفرعات كاذبة) للمسار الأساسي بنسبة 70%
                     if (Math.random() > 0.3) {
                         let available = [1, 2, 4, 8].filter(b => (board[i] & b) === 0);
                         if (available.length > 0) {
@@ -477,8 +525,7 @@
             if (!isResume) {
                 timeLeft = GAME_DURATION;
                 generateBoard();
-                // الحل: وضع وقت البداية وإعطاء وقت النهاية null مبدئياً لحين الانتهاء
-                saveSession('playing', { startTime: Date.now(), endTime: null });
+                saveSession('playing');
             }
 
             document.getElementById('time-left').innerText = timeLeft;
@@ -610,39 +657,43 @@
                 const winData = {
                     timeTaken: `${min}:${sec} دقيقة`,
                     username: tgUser,
-                    timestamp: `${timeStr} | ${dateStr}`,
-                    endTime: Date.now() // إضافة وقت النهاية صراحة عند الفوز
+                    timestamp: `${timeStr} | ${dateStr}`
                 };
 
-                saveSession('won', winData);
-                restoreWinScreen(winData);
+                const gridElement = document.getElementById('grid');
+                
+                html2canvas(gridElement, {
+                    backgroundColor: "#cbd5e1", 
+                    scale: 1.5 
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    winData.screenshot = imgData; 
+
+                    saveSession('won', winData);
+                    restoreWinScreen(winData);
+                }).catch(err => {
+                    console.error("خطأ في التقاط الشاشة:", err);
+                    saveSession('won', winData);
+                    restoreWinScreen(winData);
+                });
+
             } else {
-                saveSession('lost', { endTime: Date.now() }); // إضافة وقت النهاية صراحة عند الخسارة
+                saveSession('lost');
                 showScreen('lose-screen');
             }
         }
 
         function saveSession(status, extraData = {}) {
             const existingSession = JSON.parse(localStorage.getItem('auraConnectData')) || {};
-            
             const sessionData = {
                 ...existingSession,
                 version: GAME_VERSION,
                 status: status,
+                startTime: status === 'playing' ? (existingSession.startTime || Date.now()) : existingSession.startTime,
+                endTime: (status === 'won' || status === 'lost') ? (existingSession.endTime || Date.now()) : existingSession.endTime,
+                boardState: tilesData,
                 ...extraData
             };
-            
-            // التأكد من عدم ضياع وقت البداية
-            if (!sessionData.startTime) {
-                sessionData.startTime = existingSession.startTime || Date.now();
-            }
-
-            // ضمان تسجيل وقت النهاية الفعلي في حال الانتقال للربح أو الخسارة
-            if ((status === 'won' || status === 'lost') && !sessionData.endTime) {
-                sessionData.endTime = Date.now();
-            }
-            
-            sessionData.boardState = tilesData;
             localStorage.setItem('auraConnectData', JSON.stringify(sessionData));
         }
 
@@ -650,6 +701,15 @@
             document.getElementById('win-username').innerText = data.username || '@Alaa_Guest';
             document.getElementById('win-time-taken').innerText = data.timeTaken || '00:00 دقيقة';
             document.getElementById('win-timestamp').innerText = data.timestamp || '';
+            
+            const screenshotImg = document.getElementById('win-screenshot');
+            if (data.screenshot) {
+                screenshotImg.src = data.screenshot;
+                screenshotImg.style.display = 'block';
+            } else {
+                screenshotImg.style.display = 'none';
+            }
+
             showScreen('win-screen');
             startLiveClock();
         }
