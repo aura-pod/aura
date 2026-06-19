@@ -189,6 +189,9 @@
             <div class="form-group" style="margin-bottom: 0;">
                 <label class="form-label">📏 حجم الطباعة:</label>
                 <div class="grid-options" id="p_size_grid"></div>
+                <div id="small_size_note" class="hidden" style="color: #FF6B01; font-size: 11px; font-weight: 700; margin-top: 10px; text-align: center; animation: slideIn 0.3s ease;">
+                    ⚠️ ملاحظة: المنتجات ذات المقاسات الصغيرة قد لا يطبق عليها حجم طباعة أكبر من A4 للجهة الواحدة
+                </div>
             </div>
         </div>
 
@@ -323,8 +326,8 @@ tg.ready();
 
     // 💡 تم إضافة حقل الوزن w بالغرام لكل منتج لتعديله بسهولة
     const db = { 
-        'تيشرت': { s: ['S','M','L','XL','2XL'], p: 10, w: 100, show: true }, 
-        'هودي': { s: ['S','M','L','XL','2XL'], p: 20, w: 400, show: true }, 
+        'تيشرت': { s: ['ولادي', 'S','M','L','XL','2XL'], p: 10, w: 100, show: true }, 
+        'هودي': { s: ['ولادي', 'S','M','L','XL','2XL'], p: 20, w: 400, show: true }, 
         'بارباتوز': { s: ['3 أشهر','6 أشهر','12 شهر'], p: 20, w: 150, show: true }, 
         'توت باغ': { s: ['30cm×30cm'], p: 5, w: 120, show: true }, 
         'ماغ': { s: ['15oz'], p: 4, w: 200, show: true },
@@ -352,7 +355,7 @@ tg.ready();
     };
 
     const extraCosts = {
-        size: { 'Babies': 0, 'S': 0, 'M': 0, 'L': 0, 'XL': 1, '2XL': 2, 'موحد': 0 },
+        size: { 'ولادي': 0, 'Babies': 0, 'S': 0, 'M': 0, 'L': 0, 'XL': 1, '2XL': 2, 'موحد': 0 },
         p_loc: { 'صدر/أمام فقط': 0, 'ظهر/خلف فقط': 0, 'صدر/أمام + ظهر/خلف': 3, 'مخصص (التوضيح والتسعير عند الطلب)': 0 },
         p_size: { 'حجم مناسب لألبسة الB B': 0, 'أقل او تساوي A4': 0, 'بين A4 وA3': 2, 'مخصص (التوضيح والتسعير عند الطلب)': 0 }
     };
@@ -433,6 +436,22 @@ tg.ready();
         if(!pNode || (pNode.value !== 'تيشرت' && pNode.value !== 'هودي' && pNode.value !== 'توت باغ' && pNode.value !== 'بارباتوز')) return;
         const sNode = document.querySelector('input[name="size"]:checked');
         const s = sNode ? sNode.value : '';
+
+        // --- التحكم في ظهور ملاحظة المقاس الصغير ---
+        const smallSizes = ['ولادي']; // يمكنك إضافة مقاسات صغيرة مستقبلية هنا
+        const smallProducts = ['بارباتوز']; // يمكنك إضافة منتجات صغيرة مستقبلية هنا
+
+        const isSmall = smallProducts.includes(pNode.value) || smallSizes.includes(s);
+        const noteEl = document.getElementById('small_size_note');
+        if(noteEl) {
+            if(isSmall) {
+                noteEl.classList.remove('hidden');
+            } else {
+                noteEl.classList.add('hidden');
+            }
+        }
+        // ------------------------------------------
+
         let printSizes = (s === 'Babies') ? ['حجم مناسب لألبسة الB B'] : ['أقل او تساوي A4', 'بين A4 وA3', 'مخصص (التوضيح والتسعير عند الطلب)'];
         document.getElementById('p_size_grid').innerHTML = printSizes.map((pz,i) => {
             let costText = extraCosts.p_size[pz] > 0 ? `<br><small style="color:#10b981">(+${extraCosts.p_size[pz]}$)</small>` : '';
@@ -497,6 +516,7 @@ tg.ready();
         document.getElementById('size_grid').innerHTML = "";
         document.getElementById('color_grid').innerHTML = "";
         document.getElementById('print_options_area').classList.add('hidden');
+        document.getElementById('small_size_note').classList.add('hidden');
         document.getElementById('p_qty').value = "1";
         document.getElementById('notes').value = "";
         // تفريغ حقول الهدية بعد الإضافة وإلغاء التحديد
