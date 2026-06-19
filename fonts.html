@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>معرض خطوط أورا | متجر أورا</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        :root {
+            --primary: #05D1CE;
+            --secondary: #FF6B01;
+            --bg-main: #f8fbfb;
+            --text-dark: #1e2530;
+            --card-bg: #ffffff;
+            --shadow-soft: 0 4px 15px rgba(5, 209, 206, 0.06);
+            --shadow-hover: 0 10px 25px rgba(255, 107, 1, 0.12);
+            --border-radius: 12px;
+            --preview-bg: #ffffff;
+            --preview-text-color: #1e2530;
+        }
+
+        /* --- الخطوط العربية (AR) --- */
+        @font-face { font-family: 'AuraFont_AR-001'; src: url('https://cdn.jsdelivr.net/gh/aura-pod/aura@main/fonts/ar-001.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-002'; src: url('https://cdn.jsdelivr.net/gh/aura-pod/aura@main/fonts/ar-002.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-003'; src: url('fonts/AR-003.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-004'; src: url('fonts/AR-004.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-005'; src: url('fonts/AR-005.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-006'; src: url('fonts/AR-006.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-007'; src: url('fonts/AR-007.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-008'; src: url('fonts/AR-008.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-009'; src: url('fonts/AR-009.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-010'; src: url('fonts/AR-010.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-011'; src: url('fonts/AR-011.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-012'; src: url('fonts/AR-012.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-013'; src: url('fonts/AR-013.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-014'; src: url('fonts/AR-014.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-015'; src: url('fonts/AR-015.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-016'; src: url('fonts/AR-016.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-017'; src: url('fonts/AR-017.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-018'; src: url('fonts/AR-018.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-019'; src: url('fonts/AR-019.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-020'; src: url('fonts/AR-020.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-021'; src: url('fonts/AR-021.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-022'; src: url('fonts/AR-022.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-023'; src: url('fonts/AR-023.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-024'; src: url('fonts/AR-024.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_AR-025'; src: url('fonts/AR-025.woff2') format('woff2'); font-display: swap; }
+
+        /* --- الخطوط الإنجليزية (EN) --- */
+        @font-face { font-family: 'AuraFont_EN-001'; src: url('fonts/EN-001.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-002'; src: url('fonts/EN-002.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-003'; src: url('fonts/EN-003.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-004'; src: url('fonts/EN-004.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-005'; src: url('fonts/EN-005.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-006'; src: url('fonts/EN-006.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-007'; src: url('fonts/EN-007.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-008'; src: url('fonts/EN-008.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-009'; src: url('fonts/EN-009.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-010'; src: url('fonts/EN-010.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-011'; src: url('fonts/EN-011.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-012'; src: url('fonts/EN-012.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-013'; src: url('fonts/EN-013.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-014'; src: url('fonts/EN-014.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-015'; src: url('fonts/EN-015.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-016'; src: url('fonts/EN-016.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-017'; src: url('fonts/EN-017.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-018'; src: url('fonts/EN-018.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-019'; src: url('fonts/EN-019.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-020'; src: url('fonts/EN-020.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-021'; src: url('fonts/EN-021.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-022'; src: url('fonts/EN-022.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-023'; src: url('fonts/EN-023.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-024'; src: url('fonts/EN-024.woff2') format('woff2'); font-display: swap; }
+        @font-face { font-family: 'AuraFont_EN-025'; src: url('fonts/EN-025.woff2') format('woff2'); font-display: swap; }
+
+        /* التنسيقات العامة */
+        * {
+            font-family: 'Tajawal', sans-serif;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-main); color: var(--text-dark);
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; padding-bottom: 20px;
+        }
+
+        .header-container { width: 100%; text-align: center; padding: 25px 15px 15px; }
+
+        #animated-title {
+            font-size: 30px; font-weight: 900; color: var(--primary);
+            margin: 0; display: flex; justify-content: center; gap: 2px;
+        }
+
+        @keyframes letterDrop {
+            0% { opacity: 0; transform: translateY(-15px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        #animated-title span {
+            display: inline-block; opacity: 0;
+            animation: letterDrop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .control-panel {
+            width: 92%; max-width: 500px; background: var(--card-bg);
+            padding: 12px; border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft); margin-bottom: 12px;
+            border: 1px solid rgba(5, 209, 206, 0.15); position: sticky;
+            top: 5px; z-index: 100; animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .input-group { margin-bottom: 8px; }
+        .input-group label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 4px; color: #5e6c84; }
+
+        .text-input {
+            width: 100%; 
+            padding: 12px 14px; 
+            border-radius: 8px;
+            border: 1.5px solid #e4ebf5; 
+            font-size: 18px; 
+            line-height: 1.6; 
+            transition: all 0.3s; 
+            background: #fafcfc;
+        }
+        .text-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 209, 206, 0.08); }
+
+        .tools-box {
+            display: flex; flex-direction: column; gap: 8px;
+            background: #fdfdfd; padding: 8px; border-radius: 8px; border: 1px solid #e4ebf5;
+            margin-bottom: 8px;
+        }
+
+        .filter-group { display: flex; width: 100%; gap: 6px; }
+        .btn-filter {
+            flex: 1; background: #f0f4f8; border: none; color: #5e6c84;
+            padding: 6px 2px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; text-align: center;
+        }
+        .btn-filter.active {
+            background: var(--secondary); color: #ffffff;
+            box-shadow: 0 3px 8px rgba(255, 107, 1, 0.25);
+        }
+
+        /* 🌟 تعديلات صف الألوان لمنع التداخل 🌟 */
+        .colors-row {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; /* المحاذاة للأعلى عشان لو سطر الألوان نزل لتحت */
+            gap: 15px; /* مسافة أمان بين ألوان الخلفية ولون الخط */
+            border-top: 1px dashed #e4ebf5; 
+            padding-top: 8px; 
+            flex-wrap: nowrap; /* نمنع قسم لون الخط من النزول للسطر الثاني إلا بالشاشات الصغيرة جداً */
+        }
+
+        .fabric-section { 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 6px; 
+            flex-grow: 1; /* ياخذ المساحة المتاحة */
+        }
+        .fabric-title { font-size: 11px; font-weight: 700; color: #5e6c84; white-space: nowrap; margin-top: 2px; }
+        
+        /* 🌟 السماح للألوان بالنزول لسطر جديد بانتظام 🌟 */
+        .fabric-colors-list { 
+            display: flex; 
+            flex-wrap: wrap; /* السماح بالتفاف الألوان لسطر جديد */
+            gap: 6px; 
+            align-items: center; 
+        }
+        
+        .fabric-color-label {
+            width: 18px; height: 18px; border-radius: 50%; cursor: pointer;
+            border: 1.5px solid #e4ebf5; position: relative; transition: all 0.15s;
+        }
+        .fabric-color-input { display: none; }
+        .fabric-color-input:checked + .fabric-color-label {
+            border-color: var(--primary); transform: scale(1.15); box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        /* 🌟 زر قوس قزح 🌟 */
+        .rainbow-btn {
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            width: 22px !important; /* أكبر بشوي */
+            height: 22px !important;
+            border-color: #fff !important;
+            box-shadow: 0 0 4px rgba(0,0,0,0.1);
+        }
+
+        .text-color-wrap { 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+            font-size: 11px; 
+            font-weight: 700; 
+            color: #5e6c84; 
+            flex-shrink: 0; /* منع زر لون الخط من الانضغاط أو الاختفاء */
+            margin-top: 2px; 
+        }
+        .text-color-wrap input[type="color"] {
+            -webkit-appearance: none; border: none; width: 20px; height: 20px;
+            border-radius: 50%; cursor: pointer; padding: 0; background: transparent;
+        }
+        .text-color-wrap input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        .text-color-wrap input[type="color"]::-webkit-color-swatch { border: none; border-radius: 50%; }
+
+        .slider-container { display: flex; align-items: center; gap: 10px; width: 100%; }
+        .font-slider { flex-grow: 1; -webkit-appearance: none; height: 4px; background: #e4ebf5; border-radius: 2px; }
+        .font-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+            background: var(--primary); cursor: pointer;
+        }
+
+        .fonts-grid { width: 92%; max-width: 500px; display: flex; flex-direction: column; gap: 10px; position: relative; }
+
+        .font-card {
+            background: var(--card-bg); border-radius: var(--border-radius);
+            padding: 10px; box-shadow: var(--shadow-soft); border: 1.5px solid transparent;
+            transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; position: relative;
+        }
+
+        .font-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed #f0f4f8;
+        }
+
+        .font-name { font-weight: 700; font-size: 13px; color: var(--text-dark); display: flex; align-items: center; gap: 6px;}
+        .font-id { background: rgba(5, 209, 206, 0.08); color: var(--primary); padding: 2px 6px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+
+        .sort-actions { display: flex; gap: 4px; }
+        .btn-sort {
+            background: #f0f4f8; border: none; color: #5e6c84; width: 26px; height: 26px; border-radius: 6px;
+            font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; padding: 0;
+        }
+        .btn-sort:active { background: var(--primary); color: #fff; transform: scale(0.9); }
+
+        .preview-box {
+            background: var(--preview-bg); color: var(--preview-text-color);
+            border-radius: 8px; padding: 12px 10px; font-size: 20px; line-height: 1.4; text-align: center;
+            margin-bottom: 8px; word-break: break-word; transition: background 0.2s, color 0.2s;
+            min-height: 55px; display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, var(--primary), #04b3b0); color: #fff; border: none; 
+            padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; width: 100%;
+            transition: all 0.2s; box-shadow: 0 3px 10px rgba(5, 209, 206, 0.15);
+        }
+        .btn-copy:active { transform: scale(0.98); }
+        .btn-copy.copied { background: var(--secondary); box-shadow: none; }
+
+        #load-trigger { width: 100%; height: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1 id="animated-title"></h1>
+    </div>
+
+    <div class="control-panel">
+        <div class="input-group">
+            <label>اكتب عبارتك أو اسمك هنا:</label>
+            <input type="text" class="text-input" id="user-text" value="أورا Aura 2026" placeholder="اكتب شيئاً لمعاينته...">
+        </div>
+        
+        <div class="tools-box">
+            <div class="filter-group">
+                <button class="btn-filter active" onclick="applyFilter('all', this)">الكل</button>
+                <button class="btn-filter" onclick="applyFilter('ar', this)">عربي</button>
+                <button class="btn-filter" onclick="applyFilter('en', this)">English</button>
+            </div>
+
+            <div class="colors-row">
+                <div class="fabric-section" id="fabric-panel">
+                    <span class="fabric-title">الخلفية:</span>
+                    <div class="fabric-colors-list">
+                        <input type="radio" name="fabricColor" id="fc-white" class="fabric-color-input" value="#ffffff" checked>
+                        <label for="fc-white" class="fabric-color-label" style="background-color: #ffffff;" title="أبيض"></label>
+                        <input type="radio" name="fabricColor" id="fc-black" class="fabric-color-input" value="#1e2530">
+                        <label for="fc-black" class="fabric-color-label" style="background-color: #1e2530;" title="أسود"></label>
+                        <input type="radio" name="fabricColor" id="fc-red" class="fabric-color-input" value="#e63946">
+                        <label for="fc-red" class="fabric-color-label" style="background-color: #e63946;" title="أحمر"></label>
+                        <input type="radio" name="fabricColor" id="fc-blue" class="fabric-color-input" value="#4361ee">
+                        <label for="fc-blue" class="fabric-color-label" style="background-color: #4361ee;" title="أزرق"></label>
+                        <input type="radio" name="fabricColor" id="fc-navy" class="fabric-color-input" value="#14213d">
+                        <label for="fc-navy" class="fabric-color-label" style="background-color: #14213d;" title="كحلي"></label>
+                        <input type="radio" name="fabricColor" id="fc-green" class="fabric-color-input" value="#2a9d8f">
+                        <label for="fc-green" class="fabric-color-label" style="background-color: #2a9d8f;" title="أخضر"></label>
+                        <input type="radio" name="fabricColor" id="fc-yellow" class="fabric-color-input" value="#ffb703">
+                        <label for="fc-yellow" class="fabric-color-label" style="background-color: #ffb703;" title="أصفر"></label>
+                        
+                        <input type="color" id="custom-bg-picker" style="position: absolute; opacity: 0; pointer-events: none;">
+                        <label id="rainbow-trigger" class="fabric-color-label rainbow-btn" title="لون مخصص"></label>
+                    </div>
+                </div>
+
+                <div class="text-color-wrap" id="text-color-panel">
+                    <span>الخط:</span>
+                    <input type="color" id="text-color-picker" style="position: absolute; opacity: 0; pointer-events: none;">
+                    <label id="text-rainbow-trigger" class="fabric-color-label rainbow-btn" title="لون الخط مخصص" style="margin-right: 4px;"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 0;">
+            <div class="slider-container">
+                <span style="font-size: 11px; font-weight:bold;">A-</span>
+                <input type="range" class="font-slider" id="size-slider" min="16" max="45" value="22" step="1">
+                <span style="font-size: 14px; font-weight:bold;">A+</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="fonts-grid" id="fonts-container"></div>
+    <div id="load-trigger"></div>
+
+    <script>
+        const SHOW_FABRIC_COLORS = true; 
+        const SHOW_TEXT_COLOR = true; 
+
+        if (!SHOW_FABRIC_COLORS) document.getElementById('fabric-panel').style.display = 'none';
+        if (!SHOW_TEXT_COLOR) document.getElementById('text-color-panel').style.display = 'none';
+
+        document.addEventListener('contextmenu', e => {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
+        });
+
+        const tg = window.Telegram?.WebApp;
+        if(tg) {
+            tg.expand(); tg.BackButton.show();
+            tg.BackButton.onClick(() => window.location.href = 'index.html');
+        }
+
+        const titleEl = document.getElementById('animated-title');
+        "معرض خطوط أورا".split('').forEach((char, index) => {
+            let span = document.createElement('span');
+            span.innerText = char === ' ' ? '\u00A0' : char;
+            span.style.animationDelay = `${index * 0.05}s`;
+            titleEl.appendChild(span);
+        });
+
+        const ALL_FONTS = [];
+        for(let i = 1; i <= 25; i++) {
+            let num = String(i).padStart(3, '0'); 
+            ALL_FONTS.push({ id: `AR-${num}`, name: `خط عربي أورا ${i}`, family: `AuraFont_AR-${num}`, lang: 'ar' });
+            ALL_FONTS.push({ id: `EN-${num}`, name: `English Font Aura ${i}`, family: `AuraFont_EN-${num}`, lang: 'en' });
+        }
+
+        let currentIndex = 0;
+        let currentFilter = 'all';
+        const CHUNK_SIZE = 6;
+        const container = document.getElementById('fonts-container');
+        const textInput = document.getElementById('user-text');
+        const sizeSlider = document.getElementById('size-slider');
+
+        // 🌟 برمجة زر قوس قزح للخط (اللون المخصص) 🌟
+        const textColorPicker = document.getElementById('text-color-picker');
+        const textRainbowTrigger = document.getElementById('text-rainbow-trigger');
+
+        textRainbowTrigger.addEventListener('click', () => {
+            textColorPicker.click(); // يفتح لوحة ألوان النظام للخط
+        });
+
+        textColorPicker.addEventListener('input', e => {
+            let selectedColor = e.target.value;
+            document.documentElement.style.setProperty('--preview-text-color', selectedColor);
+            
+            // إعطاء تأثير للزر الدائري للدلالة على أنه مفعل
+            textRainbowTrigger.style.transform = 'scale(1.15)';
+            textRainbowTrigger.style.boxShadow = '0 0 0 2px var(--primary)';
+        });
+
+        // 🌟 برمجة زر قوس قزح للخلفية (اللون المخصص) 🌟
+        const customBgPicker = document.getElementById('custom-bg-picker');
+        const rainbowTrigger = document.getElementById('rainbow-trigger');
+
+        rainbowTrigger.addEventListener('click', () => {
+            customBgPicker.click(); // يفتح لوحة ألوان النظام
+        });
+
+        customBgPicker.addEventListener('input', e => {
+            let selectedColor = e.target.value;
+            document.documentElement.style.setProperty('--preview-bg', selectedColor);
+            
+            // إلغاء تحديد كل أزرار الراديو العادية
+            document.querySelectorAll('.fabric-color-input').forEach(r => r.checked = false);
+            
+            // إعطاء تأثير للزر الدائري للدلالة على أنه مفعل
+            rainbowTrigger.style.transform = 'scale(1.15)';
+            rainbowTrigger.style.boxShadow = '0 0 0 2px var(--primary)';
+        });
+
+        // إرجاع الأزرار العادية لحالتها وتحديث اللون
+        document.querySelectorAll('.fabric-color-input').forEach(radio => {
+            radio.addEventListener('change', e => {
+                document.documentElement.style.setProperty('--preview-bg', e.target.value);
+                
+                // إلغاء تأثير التفعيل عن زر قوس قزح
+                rainbowTrigger.style.transform = 'none';
+                rainbowTrigger.style.boxShadow = '0 0 4px rgba(0,0,0,0.1)';
+            });
+        });
+
+        function applyFilter(lang, btnElement) {
+            currentFilter = lang;
+            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            currentIndex = 0;
+            container.innerHTML = '';
+            loadNextFonts();
+        }
+
+        function loadNextFonts() {
+            let filteredList = currentFilter === 'all' ? ALL_FONTS : ALL_FONTS.filter(f => f.lang === currentFilter);
+            let nextChunk = filteredList.slice(currentIndex, currentIndex + CHUNK_SIZE);
+            if (nextChunk.length === 0) return;
+
+            let currentText = textInput.value || ' ';
+            let currentSize = sizeSlider.value + 'px';
+
+            nextChunk.forEach(font => {
+                let card = document.createElement('div');
+                card.className = 'font-card';
+                let textDir = font.lang === 'en' ? 'ltr' : 'rtl'; 
+                
+                card.innerHTML = `
+                    <div class="font-header">
+                        <span class="font-name">${font.name}</span>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <div class="sort-actions">
+                                <button class="btn-sort" onclick="moveCard(this, 'top')" title="للأعلى تماماً">⏫</button>
+                                <button class="btn-sort" onclick="moveCard(this, 'up')" title="لأعلى خطوة">🔼</button>
+                                <button class="btn-sort" onclick="moveCard(this, 'down')" title="لأسفل خطوة">🔽</button>
+                                <button class="btn-sort" onclick="moveCard(this, 'bottom')" title="للأسفل تماماً">⏬</button>
+                            </div>
+                            <span class="font-id">#${font.id}</span>
+                        </div>
+                    </div>
+                    <div class="preview-box" dir="${textDir}" style="font-family: '${font.family}', 'Tajawal', sans-serif; font-size: ${currentSize};">
+                        ${currentText}
+                    </div>
+                    <button class="btn-copy" onclick="copyFontId(this, '${font.id}')">نسخ رقم الخط ورمز الألوان</button>
+                `;
+                container.appendChild(card);
+            });
+
+            currentIndex += CHUNK_SIZE;
+        }
+
+        loadNextFonts();
+
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) loadNextFonts();
+        }, { rootMargin: "10px" });
+        observer.observe(document.getElementById('load-trigger'));
+
+        textInput.addEventListener('input', e => {
+            document.querySelectorAll('.preview-box').forEach(box => box.innerText = e.target.value || ' ');
+        });
+        sizeSlider.addEventListener('input', e => {
+            let newSize = e.target.value + 'px';
+            document.querySelectorAll('.preview-box').forEach(box => box.style.fontSize = newSize);
+        });
+
+        // 🌟 تعديل دالة النسخ لنسخ الكود والألوان في 3 أسطر 🌟
+        function copyFontId(btn, fontId) {
+            // سحب الألوان الحالية المطبقة من النظام 
+            let currentBgColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-bg').trim();
+            let currentTextColor = getComputedStyle(document.documentElement).getPropertyValue('--preview-text-color').trim();
+
+            let textToCopy = `رقم الخط: ${fontId}\nلون الخط: ${currentTextColor}\nلون الخلفية: ${currentBgColor}`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                let originalText = btn.innerText;
+                btn.innerText = "تم النسخ بنجاح! ✔️";
+                btn.classList.add('copied');
+                if(tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+                setTimeout(() => { btn.innerText = originalText; btn.classList.remove('copied'); }, 1500);
+            });
+        }
+
+        function moveCard(btnElement, direction) {
+            const card = btnElement.closest('.font-card');
+            const parentContainer = card.parentElement;
+
+            if (direction === 'top') {
+                parentContainer.insertBefore(card, parentContainer.firstElementChild);
+            } else if (direction === 'up') {
+                if (card.previousElementSibling) parentContainer.insertBefore(card, card.previousElementSibling);
+            } else if (direction === 'down') {
+                if (card.nextElementSibling) parentContainer.insertBefore(card, card.nextElementSibling.nextElementSibling);
+            } else if (direction === 'bottom') {
+                parentContainer.appendChild(card);
+            }
+
+            if(tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+    </script>
+</body>
+</html>
