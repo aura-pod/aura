@@ -206,34 +206,33 @@
             margin-bottom: 5px;
         }
 
-  /* تنسيق عنوان قسم البرومبتس الجديد */
-.section-divider-title {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--text-main);
-    margin: 40px auto 25px auto;
-    position: relative;
-    display: table; /* مشان الخط السفلي يجي ع قد الكلمة تماماً */
-    padding-bottom: 10px;
-    opacity: 0;
-    /* تحريك ناعم للعنوان عند فتح الصفحة */
-    animation: cubicFadeInUp 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.5s forwards;
-}
+        /* تنسيق عنوان قسم البرومبتس الجديد */
+        .section-divider-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 40px auto 25px auto;
+            position: relative;
+            display: table; /* مشان الخط السفلي يجي ع قد الكلمة تماماً */
+            padding-bottom: 10px;
+            opacity: 0;
+            /* تحريك ناعم للعنوان عند فتح الصفحة */
+            animation: cubicFadeInUp 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.5s forwards;
+        }
 
-/* الخط المتدرج الأنيق تحت العنوان */
-.section-divider-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    width: 80%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border-radius: 2px;
-}
+        /* الخط المتدرج الأنيق تحت العنوان */
+        .section-divider-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 2px;
+        }
 
-  
         .prompts-container {
             display: flex;
             flex-direction: column;
@@ -328,6 +327,9 @@
             margin-bottom: 20px;
             border: 1px solid rgba(0,0,0,0.05);
             display: block;
+            /* 👇 الخصائص التي تم إضافتها لمنع النقر اليميني والضغط المطول على الصور */
+            pointer-events: none;
+            -webkit-user-drag: none;
         }
 
         .customizer-box {
@@ -432,42 +434,38 @@
         }
 
         .btn-load-more {
-    background-color: #1A1A1A;
-    color: white;
-    border: none;
-    padding: 14px 32px;
-    border-radius: 30px;
-    font-family: inherit;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    /* إضافة الترانزيشن لتنعيم تأثير الضغط والعودة */
-    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-    outline: none;
-}
+            background-color: #1A1A1A;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            outline: none;
+        }
 
-/* التأثير عند تمرير الماوس (للكمبيوتر فقط) */
-@media (hover: hover) {
-    .btn-load-more:hover {
-        background-color: var(--primary-color);
-        color: #1A1A1A;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(5, 209, 206, 0.3);
-    }
-}
+        @media (hover: hover) {
+            .btn-load-more:hover {
+                background-color: var(--primary-color);
+                color: #1A1A1A;
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(5, 209, 206, 0.3);
+            }
+        }
 
-/* الحل الجذري للتفاعل عند الضغط (للموبايل والكمبيوتر معاً) */
-.btn-load-more:active {
-    background-color: var(--primary-color) !important; /* يتغير للون التيل اللامع فوراً عند اللمس */
-    color: #1A1A1A !important;
-    transform: scale(0.95); /* تأثير ارتدادي (ينضغط للداخل قليلاً) يعطي إيحاء حقيقي بالنقرة */
-    box-shadow: 0 2px 10px rgba(5, 209, 206, 0.2);
-}
-
+        .btn-load-more:active {
+            background-color: var(--primary-color) !important; 
+            color: #1A1A1A !important;
+            transform: scale(0.95); 
+            box-shadow: 0 2px 10px rgba(5, 209, 206, 0.2);
+        }
 
         .ai-pulse-icon {
             animation: aiGlow 2s infinite ease-in-out;
@@ -518,13 +516,12 @@
 
         .ai-size-sm { font-size: 1.2rem; }
         
-        /* تحسينات للشاشات الصغيرة لتظل الشبكة أنيقة */
         @media (max-width: 600px) {
             .steps-wrapper {
-                grid-template-columns: 1fr; /* عرض عمودي بالكامل على الشاشات الضيقة */
+                grid-template-columns: 1fr; 
             }
             .step-item {
-                flex-direction: row; /* الأيقونة بجانب النص */
+                flex-direction: row; 
                 text-align: right;
             }
             .step-icon {
@@ -580,12 +577,9 @@
         </div>
     </div>
 
-    <!-- 👇 هذا هو سطر العنوان الجديد المضاف -->
 <h2 class="section-divider-title">اختر الموجّه | Prompt</h2>
 
 <div class="prompts-container" id="promptsGrid">
-   <!-- كروت البرومبتس الحالية بتضل هون متل ما هي -->
-
         
         <div class="prompt-card">
             <div class="accordion-header" onclick="toggleAccordion(this)" style="--card-bg-img: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500');">
@@ -949,6 +943,16 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             renderCards();
+        });
+
+        // 👇 الأكواد المضافة لمنع النقر اليميني (Context Menu) بالكامل في أي مكان بالصفحة
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 👇 الكود المضاف لمنع سحب وإفلات العناصر (Drag) كالصور والنصوص
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
         });
     </script>
 </body>
