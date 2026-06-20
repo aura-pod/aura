@@ -265,7 +265,7 @@
 
     <div class="thanks-card">
         <h4>أورا - AURA</h4>
-        <p>منهتم بكل قطعة لتليق فيكم وتعيشوا جوّكم 😊. شكراً لثقتكم ❤️.</p>
+        <p>منهتم بكل قطعة لتليق فيكم وتعيشوا جوّكم 😊 شكراً لثقتكم ❤️</p>
     </div>
 </div>
 
@@ -413,10 +413,10 @@ tg.ready();
 
         document.getElementById('size_grid').innerHTML = db[p].s.map((s,i) => {
             let costText = extraCosts.size[s] > 0 ? `<br><small style="color:#10b981">(+${extraCosts.size[s]}$)</small>` : '';
-            return `<label><input type="radio" name="size" value="${s}" ${i===0?'checked':''} onchange="upSizeOptions()"><span class="box-label">${s} ${costText}</span></label>`;
+            return `<label><input type="radio" name="size" value="${s}" onchange="upSizeOptions()"><span class="box-label">${s} ${costText}</span></label>`;
         }).join('');
         
-        document.getElementById('color_grid').innerHTML = pColors[p].map((c,i) => `<label><input type="radio" name="color" value="${c}" ${i===0?'checked':''}><span class="color-circle" style="background:${cM[c]}" title="${c}"></span></label>`).join('');
+        document.getElementById('color_grid').innerHTML = pColors[p].map((c,i) => `<label><input type="radio" name="color" value="${c}"><span class="color-circle" style="background:${cM[c]}" title="${c}"></span></label>`).join('');
 
         if(isClothing) {
             document.getElementById('print_options_area').classList.remove('hidden');
@@ -455,7 +455,7 @@ tg.ready();
         let printSizes = (s === 'Babies') ? ['حجم مناسب لألبسة الB B'] : ['أقل او تساوي A4', 'بين A4 وA3', 'مخصص (التوضيح والتسعير عند الطلب)'];
         document.getElementById('p_size_grid').innerHTML = printSizes.map((pz,i) => {
             let costText = extraCosts.p_size[pz] > 0 ? `<br><small style="color:#10b981">(+${extraCosts.p_size[pz]}$)</small>` : '';
-            return `<label><input type="radio" name="p_size" value="${pz}" ${i===0?'checked':''}><span class="box-label">${pz} ${costText}</span></label>`;
+            return `<label><input type="radio" name="p_size" value="${pz}"><span class="box-label">${pz} ${costText}</span></label>`;
         }).join('');
     }
 
@@ -488,7 +488,15 @@ tg.ready();
         }
 
         const q = parseInt(document.getElementById('p_qty').value);
-        const sVal = document.querySelector('input[name="size"]:checked').value, cVal = document.querySelector('input[name="color"]:checked').value;
+        
+        const sNode = document.querySelector('input[name="size"]:checked');
+        const cNode = document.querySelector('input[name="color"]:checked');
+        
+        if(!sNode || !cNode) {
+            return showAlert("يرجى اختيار المقاس واللون للمنتج بشكل صحيح.");
+        }
+        
+        const sVal = sNode.value, cVal = cNode.value;
         
         let itemPrice = db[p.value].p + (extraCosts.size[sVal] || 0);
         let locVal = null, pSizeVal = null;
