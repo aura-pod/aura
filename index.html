@@ -19,8 +19,11 @@
             --text-main: #4a4a4a;
             --white: #ffffff;
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            --flash-color: #ff3366; /* لون مميز خاص بزر عروض الفلاش للفت الانتباه */
-            --orange-color: #FF6B01; /* لون الشريط والإضافات */
+            --flash-color: #ff3366; 
+            --orange-color: #FF6B01; 
+            
+            /* مدة حركة فتح السقف */
+            --awning-anim-duration: 4s; 
         }
 
         /* إعدادات أمان إضافية لمنع تحديد النصوص والقوائم */
@@ -28,6 +31,7 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+            box-sizing: border-box;
         }
 
         body {
@@ -39,7 +43,7 @@
             justify-content: center;
             min-height: 100vh;
             color: var(--text-main);
-            overflow-x: hidden;
+            /* تمت إزالة overflow-x من هنا لضمان عمل الـ sticky */
         }
 
         .container {
@@ -47,7 +51,95 @@
             max-width: 450px;
             padding: 25px;
             box-sizing: border-box;
+            position: relative;
         }
+
+        /* ==========================================
+           تنسيقات سقف المتجر (الستارة - Storefront Awning)
+           ========================================== */
+        .awning-container {
+            width: calc(100% + 50px);
+            margin: -25px -25px 25px -25px; 
+            
+            /* تفعيل التثبيت (Sticky) */
+            position: sticky; 
+            top: 0; /* التثبيت عند أعلى حافة الشاشة تماماً */
+            z-index: 1000; /* قيمة عالية جداً ليمر فوق كل الأزرار واللوغو */
+            /* ================================== */
+            
+            perspective: 1000px;
+            display: none; 
+        }
+
+        /* العارضة البرتقالية العلوية لتثبيت السقف */
+        .awning-roof-line {
+            height: 10px;
+            background: linear-gradient(90deg, #d85700, var(--orange-color), #ff8f3d, var(--orange-color), #d85700);
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* جسم الستارة المخططة */
+        .shop-awning {
+            display: flex;
+            width: 100%;
+            height: 48px;
+            transform-origin: top center;
+            animation: shopAwningOpen var(--awning-anim-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            /* ظل كثيف لإعطاء إيحاء بالعمق عند مرور العناصر تحته */
+            filter: drop-shadow(0 10px 15px rgba(5, 209, 205, 0.4));
+            will-change: transform;
+        }
+
+        /* أشرطة الستارة مع الأقواس السفلية */
+        .stripe {
+            flex: 1;
+            height: 100%;
+            border-radius: 0 0 16px 16px; 
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .stripe:hover {
+            transform: scaleY(1.08);
+        }
+
+        .stripe.mauve {
+            background: linear-gradient(180deg, #03a6a4 0%, var(--mauve-primary) 50%, #029492 100%);
+            box-shadow: inset 0 -3px 4px rgba(0,0,0,0.15);
+        }
+
+        .stripe.white {
+            background: linear-gradient(180deg, #eefcfc 0%, #ffffff 50%, #e0f5f5 100%);
+            box-shadow: inset 0 -3px 4px rgba(0,0,0,0.08);
+        }
+
+        @keyframes shopAwningOpen {
+            0% {
+                transform: rotateX(-85deg) scaleY(0.2);
+                opacity: 0;
+            }
+            35% {
+                transform: rotateX(25deg) scaleY(1.08);
+                opacity: 1;
+            }
+            55% {
+                transform: rotateX(-12deg) scaleY(0.97);
+            }
+            75% {
+                transform: rotateX(6deg) scaleY(1.02);
+            }
+            90% {
+                transform: rotateX(-2deg) scaleY(0.99);
+            }
+            100% {
+                transform: rotateX(0deg) scaleY(1);
+                opacity: 1;
+            }
+        }
+        /* ========================================== */
 
         /* تنسيقات الشريط الإخباري المتحرك */
         .ticker-wrap {
@@ -56,13 +148,14 @@
             color: var(--orange-color);
             overflow: hidden;
             border-radius: 12px;
+            margin-top: 50px;
             margin-bottom: 20px;
-            display: none; /* مخفي افتراضياً لمنع الوميض عند اختيار إخفائه */
+            display: none; 
             box-shadow: 0 4px 10px rgba(255, 107, 1, 0.2);
             position: relative;
             height: 40px;
             line-height: 40px;
-            direction: ltr; /* تثبيت الاتجاه لضمان خروج النص من أقصى اليسار بدقة */
+            direction: ltr; 
         }
 
         .ticker-text {
@@ -70,8 +163,7 @@
             white-space: nowrap;
             font-size: 14px;
             font-weight: 700;
-            direction: rtl; /* الحفاظ على اتجاه النص العربي */
-            /* الحركة من نقطة الصفر في اليسار إلى أقصى اليمين */
+            direction: rtl; 
             animation: move-left-to-right 12s linear infinite;
         }
 
@@ -87,21 +179,6 @@
             padding-top: 5px;
         }
 
-        .logo-area {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--mauve-primary), var(--mauve-dark));
-            border-radius: 25px;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 30px;
-            box-shadow: 0 10px 20px rgba(5, 209, 205, 0.2);
-        }
-        
-        /* تنسيق لوغو البزنس الجديد */
         .brand-logo-custom {
             width: 250px; 
             height: auto; 
@@ -145,7 +222,6 @@
             cursor: pointer; 
         }
 
-        /* تأثير الأيقونة */
         .btn-item .icon-box {
             width: 45px;
             height: 45px;
@@ -160,15 +236,8 @@
             transition: var(--transition);
         }
 
-        /* تخصيص أيقونة الفلاش بلونها الخاص عند الهوفر */
-        .btn-item.flash-btn .icon-box {
-            color: var(--flash-color);
-        }
-
-        /* تخصيص أيقونة اللعبة */
-        .btn-item.game-btn .icon-box {
-            color: var(--orange-color);
-        }
+        .btn-item.flash-btn .icon-box { color: var(--flash-color); }
+        .btn-item.game-btn .icon-box { color: var(--orange-color); }
 
         .btn-item span {
             font-size: 17px;
@@ -176,7 +245,6 @@
             color: var(--text-main);
         }
 
-        /* تأثيرات الهوفر والحركة */
         .btn-item:hover {
             transform: translateY(-5px);
             background: linear-gradient(to left, var(--white), #fdfbff);
@@ -184,13 +252,8 @@
             border-color: var(--mauve-primary);
         }
 
-        .btn-item.flash-btn:hover {
-            border-color: var(--flash-color);
-        }
-
-        .btn-item.game-btn:hover {
-            border-color: var(--orange-color);
-        }
+        .btn-item.flash-btn:hover { border-color: var(--flash-color); }
+        .btn-item.game-btn:hover { border-color: var(--orange-color); }
 
         .btn-item:hover .icon-box {
             background: var(--mauve-dark);
@@ -198,17 +261,9 @@
             transform: rotate(10deg);
         }
 
-        .btn-item.flash-btn:hover .icon-box {
-            background: var(--flash-color);
-            color: white;
-        }
+        .btn-item.flash-btn:hover .icon-box { background: var(--flash-color); color: white; }
+        .btn-item.game-btn:hover .icon-box { background: var(--orange-color); color: white; }
 
-        .btn-item.game-btn:hover .icon-box {
-            background: var(--orange-color);
-            color: white;
-        }
-
-        /* سهم صغير على اليسار */
         .btn-item::after {
             content: '\f104'; 
             font-family: 'Font Awesome 6 Free';
@@ -218,23 +273,11 @@
             transition: var(--transition);
         }
 
-        .btn-item:hover::after {
-            color: var(--mauve-primary);
-            transform: translateX(-5px);
-        }
+        .btn-item:hover::after { color: var(--mauve-primary); transform: translateX(-5px); }
+        .btn-item.flash-btn:hover::after { color: var(--flash-color); }
+        .btn-item.game-btn:hover::after { color: var(--orange-color); }
 
-        .btn-item.flash-btn:hover::after {
-            color: var(--flash-color);
-        }
-
-        .btn-item.game-btn:hover::after {
-            color: var(--orange-color);
-        }
-
-        /* تنسيقات شارة الألعاب (الباج) والوميض */
-        .game-btn {
-            border: 1px solid rgba(255, 107, 1, 0.3); /* تمييز خفيف للزر */
-        }
+        .game-btn { border: 1px solid rgba(255, 107, 1, 0.3); }
 
         .game-badge {
             position: absolute;
@@ -247,16 +290,14 @@
             font-size: 11px;
             font-weight: 700;
             box-shadow: 0 4px 10px rgba(255, 107, 1, 0.4);
-            white-space: nowrap; /* يسمح بتمدد الشارة حسب طول النص */
+            white-space: nowrap; 
             z-index: 10;
             display: flex;
             align-items: center;
             gap: 6px;
-            /* حركة وميض واهتزاز لطيفة */
             animation: badgeWiggle 2s infinite ease-in-out;
         }
 
-        /* نجوم صغيرة داخل الشارة */
         .game-badge::before, .game-badge::after {
             content: '\f005';
             font-family: 'Font Awesome 6 Free';
@@ -270,9 +311,7 @@
             50% { transform: translateY(-3px) rotate(2deg); box-shadow: 0 8px 15px rgba(255, 107, 1, 0.7); }
         }
 
-        /* -------------------------------------
-           تنسيقات شارة "شرط الربح" والـ Tooltip (مُعدلة ومُصغرة)
-           ------------------------------------- */
+        /* ------------------------------------- */
         .condition-label {
             position: absolute;
             top: -10px;
@@ -280,9 +319,9 @@
             background: rgba(255, 255, 200, 1);
             color: var(--orange-color);
             border: 1px solid var(--orange-color);
-            padding: 2px 8px; /* تصغير الحجم */
+            padding: 2px 8px;
             border-radius: 15px;
-            font-size: 12px; /* تصغير الخط */
+            font-size: 12px;
             font-weight: 700;
             box-shadow: 0 2px 5px rgba(255, 107, 1, 0.15);
             z-index: 10;
@@ -294,19 +333,16 @@
 
         .pointing-hand {
             display: inline-block;
-            /* تحكم بحجم الإصبع بدقة من هنا: 0.8 تعني أصغر بـ 20%، يمكنك جعلها 0.7 لتصغيره أكثر */
             transform: scale(0.35); 
-            /* تحديد أبعاد ثابتة تجبر المتصفح على تصغير الرمز */
             width: 6px;
             height: 6px;
             line-height: 6px;
             animation: slideHand 1.5s infinite;
         }
 
-
         @keyframes slideHand {
             0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-3px); } /* حركة أفقية يسار ويمين */
+            50% { transform: translateX(-3px); }
         }
 
         .condition-tooltip {
@@ -357,7 +393,6 @@
             letter-spacing: 1px;
         }
 
-        /* إخفاء المستطيل الأزرق/الرمادي عند اللمس */
         .btn-item {
             outline: none;
             -webkit-tap-highlight-color: transparent; 
@@ -366,7 +401,6 @@
             transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s ease;
         }
 
-        /* تأثير حركة الضغط الحقيقية */
         .btn-item:active {
             transform: scale(0.95); 
             box-shadow: 0 2px 5px rgba(214, 214, 214, 0.1); 
@@ -374,37 +408,46 @@
             transition: 0.1s; 
         }
 
-        /* تأثير إضافي للأيقونة داخل الزر عند الضغط */
         .btn-item:active .icon-box {
             transform: scale(0.9); 
         }
 
-        /* إخفاء شريط التمرير */
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
+        /* التعديل الجذري تم هنا: تمت إزالة خصائص الـ overflow المانعة للـ sticky */
+        body::-webkit-scrollbar { display: none; }
         body {
             -ms-overflow-style: none;  
             scrollbar-width: none;  
-            overflow-y: scroll; 
             -webkit-overflow-scrolling: touch; 
         }
 
         .container {
-            overflow-y: auto;
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        .container::-webkit-scrollbar {
-            display: none;
-        }
+        .container::-webkit-scrollbar { display: none; }
 
     </style>
 </head>
 <body>
 
 <div class="container">
+
+    <div id="shop-awning-section" class="awning-container">
+        <div class="awning-roof-line"></div>
+        <div class="shop-awning">
+            <div class="stripe mauve"></div>
+            <div class="stripe white"></div>
+            <div class="stripe mauve"></div>
+            <div class="stripe white"></div>
+            <div class="stripe mauve"></div>
+            <div class="stripe white"></div>
+            <div class="stripe mauve"></div>
+            <div class="stripe white"></div>
+            <div class="stripe mauve"></div>
+            <div class="stripe white"></div>
+            <div class="stripe mauve"></div>
+        </div>
+    </div>
 
     <div id="news-ticker" class="ticker-wrap animate__animated animate__fadeInDown">
         <div class="ticker-text" id="ticker-message">
@@ -418,7 +461,7 @@
         <h5>هون بتطلب وبتعرف كل شي عن المتجر وعن طلبك</h5>
     </header>
 
-        <div class="menu-list" id="main-menu-list">
+    <div class="menu-list" id="main-menu-list">
         
         <div id="info-btn" onclick="window.location.href='info.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.1s; display: none;">
             <div class="icon-box">
@@ -441,12 +484,10 @@
         <div id="game-btn" onclick="window.location.href='hp-game.html'" class="btn-item game-btn animate__animated animate__fadeInUp" style="animation-delay: 0.25s; display: none;">
             <div class="game-badge">لعبة مكبس التيشرت 👕</div>
             
-            <!-- حقل شرط الربح المصغر مع تعديل حركة واتجاه الإصبع -->
             <div class="condition-label" onclick="showCondition(event)">
                  شرط الربح <span class="pointing-hand">👉</span>
             </div>
             
-            <!-- النص المنبثق (Tooltip) الخاص بشرط الربح -->
             <div id="condition-tooltip" class="condition-tooltip">
                 》 الرابح هو شخص واحد فقط .. والجائزة تيشيرت مجاني مطبوع بالتصميم اللي بيريده، وشرط الربح بهاللعبة هو طباعة (7) تيشيرتات، وبأبكر توقيت (يعني اللي بيسبق بتحقيق أول شرط).<br>》 اللعب لمرة واحدة للشخص ورح تضل متاحة 6 ساعات حتى الساعة 23:59 ليوم 13-06-2026.<br> بالتوفيق 😊
             </div>
@@ -492,7 +533,6 @@
             </div>
         </div>
 
-        <!-- زر معرض خطوط أورا الجديد المضاف هنا -->
         <div id="fonts-btn" onclick="window.location.href='fonts.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.7s; display: none;">
             <div class="icon-box">
                 <i class="fas fa-font"></i> 
@@ -555,7 +595,6 @@
 
     </div>
 
-
     <footer class="animate__animated animate__fadeIn">
         بتمنالك يوم مليء بالخير والسعادة والنجاح ❤️
         <br>AURA 2026
@@ -567,14 +606,12 @@
     // دالة إظهار شرط الربح (Tooltip)
     // ==========================================
     function showCondition(event) {
-        // إيقاف انتقال الصفحة عند الضغط على زر شرط الربح
         event.stopPropagation();
         event.preventDefault();
         
         const tooltip = document.getElementById('condition-tooltip');
         tooltip.classList.add('show');
         
-        // إخفاء الـ Tooltip بعد 10 ثواني
         setTimeout(() => {
             tooltip.classList.remove('show');
         }, 15000);
@@ -584,6 +621,7 @@
     // لوحة التحكم بإظهار وإخفاء الأزرار والإعلانات
     // ==========================================
     
+    const showShopAwning = true;      // سقف المتجر (الستارة المخططة)
     const showNewsTicker = true;      // شريط الإعلانات المتحرك
     
     // التحكم بظهور الأزرار (اجعلها true للإظهار، أو false للإخفاء)
@@ -594,12 +632,17 @@
     const showAvailableBtn = true;    // المنتجات المتوفرة
     const showSizeBtn = true;         // دليل المقاسات والعناية
     const showTrackBtn = true;        // تتبع الطلب
-    const showFontsBtn = true;        // معرض خطوط أورا (الزر الجديد)
+    const showFontsBtn = true;        // معرض خطوط أورا
     const showMockupBtn = true;       // معاينة التصميم
     const showFlashSaleBtn = true;    // عروض سريعة خاصة
     const showReviewsBtn = true;      // تقييمات الزبائن
     const showAiBtn = true;           // إنت وال AI 
     const showDirectoryBtn = true;    // دليل أصحاب الأعمال
+
+    // تفعيل سقف المتجر
+    if (showShopAwning) {
+        document.getElementById('shop-awning-section').style.display = 'block';
+    }
 
     // تفعيل شريط الإعلانات
     if (showNewsTicker) {
@@ -614,7 +657,7 @@
     if (showAvailableBtn) document.getElementById('available-btn').style.display = 'flex';
     if (showSizeBtn) document.getElementById('size-btn').style.display = 'flex';
     if (showTrackBtn) document.getElementById('track-btn').style.display = 'flex';
-    if (showFontsBtn) document.getElementById('fonts-btn').style.display = 'flex'; // تفعيل زر الخطوط الجديد
+    if (showFontsBtn) document.getElementById('fonts-btn').style.display = 'flex';
     if (showMockupBtn) document.getElementById('mockup-btn').style.display = 'flex';
     if (showFlashSaleBtn) document.getElementById('flash-sale-btn').style.display = 'flex';
     if (showReviewsBtn) document.getElementById('reviews-btn').style.display = 'flex';
