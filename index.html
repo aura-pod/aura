@@ -43,7 +43,6 @@
             justify-content: center;
             min-height: 100vh;
             color: var(--text-main);
-            /* تمت إزالة overflow-x من هنا لضمان عمل الـ sticky */
         }
 
         .container {
@@ -61,17 +60,14 @@
             width: calc(100% + 50px);
             margin: -25px -25px 25px -25px; 
             
-            /* تفعيل التثبيت (Sticky) */
             position: sticky; 
-            top: 0; /* التثبيت عند أعلى حافة الشاشة تماماً */
-            z-index: 1000; /* قيمة عالية جداً ليمر فوق كل الأزرار واللوغو */
-            /* ================================== */
+            top: 0; 
+            z-index: 1000; 
             
             perspective: 1000px;
             display: none; 
         }
 
-        /* العارضة البرتقالية العلوية لتثبيت السقف */
         .awning-roof-line {
             height: 10px;
             background: linear-gradient(90deg, #d85700, var(--orange-color), #ff8f3d, var(--orange-color), #d85700);
@@ -81,19 +77,16 @@
             z-index: 2;
         }
 
-        /* جسم الستارة المخططة */
         .shop-awning {
             display: flex;
             width: 100%;
             height: 48px;
             transform-origin: top center;
             animation: shopAwningOpen var(--awning-anim-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            /* ظل كثيف لإعطاء إيحاء بالعمق عند مرور العناصر تحته */
             filter: drop-shadow(0 10px 15px rgba(5, 209, 205, 0.4));
             will-change: transform;
         }
 
-        /* أشرطة الستارة مع الأقواس السفلية */
         .stripe {
             flex: 1;
             height: 100%;
@@ -117,30 +110,15 @@
         }
 
         @keyframes shopAwningOpen {
-            0% {
-                transform: rotateX(-85deg) scaleY(0.2);
-                opacity: 0;
-            }
-            35% {
-                transform: rotateX(25deg) scaleY(1.08);
-                opacity: 1;
-            }
-            55% {
-                transform: rotateX(-12deg) scaleY(0.97);
-            }
-            75% {
-                transform: rotateX(6deg) scaleY(1.02);
-            }
-            90% {
-                transform: rotateX(-2deg) scaleY(0.99);
-            }
-            100% {
-                transform: rotateX(0deg) scaleY(1);
-                opacity: 1;
-            }
+            0% { transform: rotateX(-85deg) scaleY(0.2); opacity: 0; }
+            35% { transform: rotateX(25deg) scaleY(1.08); opacity: 1; }
+            55% { transform: rotateX(-12deg) scaleY(0.97); }
+            75% { transform: rotateX(6deg) scaleY(1.02); }
+            90% { transform: rotateX(-2deg) scaleY(0.99); }
+            100% { transform: rotateX(0deg) scaleY(1); opacity: 1; }
         }
-        /* ========================================== */
 
+        /* ========================================== */
         /* تنسيقات الشريط الإخباري المتحرك */
         .ticker-wrap {
             width: 100%;
@@ -164,7 +142,14 @@
             font-size: 14px;
             font-weight: 700;
             direction: rtl; 
-            animation: move-left-to-right 12s linear infinite;
+            animation: move-left-to-right linear infinite;
+        }
+
+        /* تنسيق اسم المستخدم داخل الشريط ليكون مميز */
+        .ticker-username {
+            font-weight: 900;
+            color: var(--mauve-dark);
+            padding: 0 4px;
         }
 
         @keyframes move-left-to-right {
@@ -311,7 +296,6 @@
             50% { transform: translateY(-3px) rotate(2deg); box-shadow: 0 8px 15px rgba(255, 107, 1, 0.7); }
         }
 
-        /* ------------------------------------- */
         .condition-label {
             position: absolute;
             top: -10px;
@@ -383,7 +367,6 @@
             border-style: solid;
             border-color: rgba(50, 50, 50, 0.95) transparent transparent transparent;
         }
-        /* ------------------------------------- */
 
         footer {
             text-align: center;
@@ -412,7 +395,6 @@
             transform: scale(0.9); 
         }
 
-        /* التعديل الجذري تم هنا: تمت إزالة خصائص الـ overflow المانعة للـ sticky */
         body::-webkit-scrollbar { display: none; }
         body {
             -ms-overflow-style: none;  
@@ -450,9 +432,7 @@
     </div>
 
     <div id="news-ticker" class="ticker-wrap animate__animated animate__fadeInDown">
-        <div class="ticker-text" id="ticker-message">
-            🎉 أهلاً بك في متجر أورا للطباعة حسب الطلب 😊 شحن مجاني للطلبات فوق 50$ 🚀
-        </div>
+        <div class="ticker-text" id="ticker-message"></div>
     </div>
 
     <header class="animate__animated animate__fadeInDown">
@@ -603,6 +583,75 @@
 
 <script>
     // ==========================================
+    // إعدادات بيئة تيليغرام
+    // تم النقل إلى هنا لضمان إمكانية قراءة بيانات المستخدم مبكراً
+    // ==========================================
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand(); 
+    window.Telegram.WebApp.BackButton.hide();
+
+    // ==========================================
+    // لوحة التحكم بالمتغيرات والنصوص
+    // ==========================================
+    
+    const customAnnouncementText = "شحن مجاني للطلبات فوق 50$ 🚀 بمناسبة الصيف"; 
+    
+    const showShopAwning = true;      
+    const showNewsTicker = true;      
+    const showGreeting = true;        
+    const showUserName = true;        // 💡 إظهار أو إخفاء اسم المستخدم في الترحيب
+    
+    // التحكم بظهور الأزرار
+    const showInfoBtn = true;         
+    const showOrderBtn = true;        
+    const showGameBtn = true;         
+    const showLoyaltyBtn = true;      
+    const showAvailableBtn = true;    
+    const showSizeBtn = true;         
+    const showTrackBtn = true;        
+    const showFontsBtn = true;        
+    const showMockupBtn = true;       
+    const showFlashSaleBtn = true;    
+    const showReviewsBtn = true;      
+    const showAiBtn = true;           
+    const showDirectoryBtn = true;    
+
+    // ==========================================
+    // دالة إعداد نص الشريط المتحرك بناءً على الوقت والخيارات واسم المستخدم
+    // ==========================================
+    function setupDynamicTicker() {
+        const currentHour = new Date().getHours();
+        let greeting = "أهلاً بك";
+        
+        // استخراج اسم المستخدم إذا كانت الخاصية مفعلة والبيانات متوفرة
+        let userNameHTML = "";
+        if (showUserName && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) {
+            // تغليف الاسم بـ span ليأخذ التنسيق العريض واللون من الـ CSS المضاف
+            userNameHTML = `<span class="ticker-username">${tg.initDataUnsafe.user.first_name}</span>`;
+        }
+
+        // تحديد الترحيب المناسب مع إضافة الاسم إن وجد
+        if (currentHour >= 5 && currentHour < 12) {
+            greeting = `صباح الخير والورد ☀️🌸🌷 و 100 هلا${userNameHTML ? ' يا ' + userNameHTML : ''}`;
+        } else if (currentHour >= 12 && currentHour < 17) {
+            greeting = `يسعد أوقات الزبون الرايق المزوق ☕ يا أهلين ويا سهلين${userNameHTML ? ' بـ ' + userNameHTML : ''}`;
+        } else {
+            greeting = `مسا الخير لأحلى زبون 🌙 و 100 هلا${userNameHTML ? ' يا ' + userNameHTML : ''}`;
+        }
+
+        const tickerElement = document.getElementById('ticker-message');
+        if (tickerElement) {
+            if (showGreeting) {
+                // استخدمنا innerHTML بدلاً من innerText ليدعم وسوم التنسيق
+                tickerElement.innerHTML = `🎉 ${greeting} فيك بمتجر أورا 😊 | ${customAnnouncementText}`;
+            } else {
+                tickerElement.innerHTML = `🎉 ${customAnnouncementText}`;
+            }
+        }
+    }
+
+    // ==========================================
     // دالة إظهار شرط الربح (Tooltip)
     // ==========================================
     function showCondition(event) {
@@ -618,38 +667,27 @@
     }
 
     // ==========================================
-    // لوحة التحكم بإظهار وإخفاء الأزرار والإعلانات
+    // تفعيل وتطبيق العناصر عند تحميل الصفحة
     // ==========================================
     
-    const showShopAwning = true;      // سقف المتجر (الستارة المخططة)
-    const showNewsTicker = true;      // شريط الإعلانات المتحرك
-    
-    // التحكم بظهور الأزرار (اجعلها true للإظهار، أو false للإخفاء)
-    const showInfoBtn = true;         // دليل أورا
-    const showOrderBtn = true;        // طلب شراء
-    const showGameBtn = true;         // امرح واربح مع أورا 
-    const showLoyaltyBtn = true;      // بطاقة نقاط أورا
-    const showAvailableBtn = true;    // المنتجات المتوفرة
-    const showSizeBtn = true;         // دليل المقاسات والعناية
-    const showTrackBtn = true;        // تتبع الطلب
-    const showFontsBtn = true;        // معرض خطوط أورا
-    const showMockupBtn = true;       // معاينة التصميم
-    const showFlashSaleBtn = true;    // عروض سريعة خاصة
-    const showReviewsBtn = true;      // تقييمات الزبائن
-    const showAiBtn = true;           // إنت وال AI 
-    const showDirectoryBtn = true;    // دليل أصحاب الأعمال
+    setupDynamicTicker();
 
-    // تفعيل سقف المتجر
     if (showShopAwning) {
         document.getElementById('shop-awning-section').style.display = 'block';
     }
 
-    // تفعيل شريط الإعلانات
     if (showNewsTicker) {
-        document.getElementById('news-ticker').style.display = 'block';
+        const tickerWrap = document.getElementById('news-ticker');
+        tickerWrap.style.display = 'block';
+        
+        const tickerElement = document.getElementById('ticker-message');
+        if(tickerElement) {
+            const speedPixelsPerSecond = 70; 
+            const totalWidth = tickerElement.offsetWidth + tickerWrap.offsetWidth;
+            tickerElement.style.animationDuration = (totalWidth / speedPixelsPerSecond) + 's';
+        }
     }
 
-    // تفعيل الأزرار بناءً على الخيارات أعلاه
     if (showInfoBtn) document.getElementById('info-btn').style.display = 'flex';
     if (showOrderBtn) document.getElementById('order-btn').style.display = 'flex';
     if (showGameBtn) document.getElementById('game-btn').style.display = 'flex';
@@ -663,14 +701,6 @@
     if (showReviewsBtn) document.getElementById('reviews-btn').style.display = 'flex';
     if (showAiBtn) document.getElementById('ai-btn').style.display = 'flex';
     if (showDirectoryBtn) document.getElementById('directory-btn').style.display = 'flex';
-
-    // ==========================================
-    // إعدادات بيئة تيليغرام وحماية الواجهة
-    // ==========================================
-    const tg = window.Telegram.WebApp;
-    window.Telegram.WebApp.BackButton.hide();
-    tg.ready();
-    tg.expand(); 
 
     // جافاسكربت لمنع القائمة المنبثقة (Context Menu) عند الضغط المطول
     document.querySelectorAll('.btn-item, .brand-logo-custom').forEach(element => {
