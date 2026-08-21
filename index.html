@@ -453,6 +453,16 @@
             </div>
         </div>
 
+        <div id="gallery-btn" onclick="window.location.href='gallery.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.15s; display: none;">
+            <div class="icon-box">
+                <i class="fas fa-images"></i>
+            </div>
+            <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
+                <span style="font-weight: 600; font-size: 17px;">معرض التصاميم</span>
+                <small style="display: block; font-size: 11px; color: #FF6B01; margin-top: 2px;">تصفح أحدث الأفكار والتصاميم المتاحة للطباعة</small>
+            </div>
+        </div>
+
         <div id="order-btn" onclick="window.location.href='order.html'" class="btn-item animate__animated animate__fadeInUp" style="animation-delay: 0.2s; display: none;">
             <div class="icon-box"><i class="fas fa-shopping-bag"></i></div>
             <div class="button-content" style="display: flex; flex-direction: column; align-items: flex-start; text-align: right;">
@@ -595,7 +605,7 @@
     // لوحة التحكم بالمتغيرات والنصوص
     // ==========================================
     
-    const customAnnouncementText = "شحن مجاني للطلبات فوق 50$ 🚀 بمناسبة الصيف"; 
+    const customAnnouncementText = "شحن مجاني للطلبات فوق 50$ 🚀"; 
     
     const showShopAwning = true;      
     const showNewsTicker = true;      
@@ -604,6 +614,7 @@
     
     // التحكم بظهور الأزرار
     const showInfoBtn = true;         
+    const showGalleryBtn = true;      // 💡 إظهار أو إخفاء زر معرض التصاميم
     const showOrderBtn = true;        
     const showGameBtn = true;         
     const showLoyaltyBtn = true;      
@@ -633,18 +644,18 @@
 
         // تحديد الترحيب المناسب مع إضافة الاسم إن وجد
         if (currentHour >= 5 && currentHour < 12) {
-            greeting = `صباح الخير والورد ☀️🌸🌷 و 100 هلا${userNameHTML ? ' يا ' + userNameHTML : ''}`;
+            greeting = `صباح الخير والورد ☀️🌸🌷 نوّرتنا من الصبح ${userNameHTML ? ' يا ' + userNameHTML : ''}`;
         } else if (currentHour >= 12 && currentHour < 17) {
             greeting = `يسعد أوقات الزبون الرايق المزوق ☕ يا أهلين ويا سهلين${userNameHTML ? ' بـ ' + userNameHTML : ''}`;
         } else {
-            greeting = `مسا الخير لأحلى زبون 🌙 و 100 هلا${userNameHTML ? ' يا ' + userNameHTML : ''}`;
+            greeting = `مسا الخير 🌙 و 100 هلا${userNameHTML ? ' يا ' + userNameHTML : ''}`;
         }
 
         const tickerElement = document.getElementById('ticker-message');
         if (tickerElement) {
             if (showGreeting) {
                 // استخدمنا innerHTML بدلاً من innerText ليدعم وسوم التنسيق
-                tickerElement.innerHTML = `🎉 ${greeting} فيك بمتجر أورا 😊 | ${customAnnouncementText}`;
+                tickerElement.innerHTML = `🎉 ${greeting} بمتجر أورا 😊 | ${customAnnouncementText}`;
             } else {
                 tickerElement.innerHTML = `🎉 ${customAnnouncementText}`;
             }
@@ -689,6 +700,7 @@
     }
 
     if (showInfoBtn) document.getElementById('info-btn').style.display = 'flex';
+    if (showGalleryBtn) document.getElementById('gallery-btn').style.display = 'flex';
     if (showOrderBtn) document.getElementById('order-btn').style.display = 'flex';
     if (showGameBtn) document.getElementById('game-btn').style.display = 'flex';
     if (showLoyaltyBtn) document.getElementById('loyalty-btn').style.display = 'flex';
