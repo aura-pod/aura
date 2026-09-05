@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنتجات والمقاسات | متجر أورا</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #05D1CE;
+            --accent: #FF6B01;
+            --badge: #FF6B01; 
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --shadow-lux: 0 20px 40px rgba(0,0,0,0.06);
+            --glow: 0 0 20px rgba(5, 209, 205, 0.2);
+            --badge-glow: 0 0 15px rgba(245, 158, 11, 0.3);
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * { 
+            -webkit-user-select: none; 
+            user-select: none; 
+            box-sizing: border-box; 
+            outline: none; 
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Cairo', sans-serif; 
+        }
+
+        body { background: var(--bg); color: #1e293b; margin: 0; padding: 15px; overflow-x: hidden; }
+
+        header { text-align: center; margin-bottom: 40px; animation: slideInTop 1s var(--bezier); }
+        @keyframes slideInTop { from { opacity: 0; transform: translateY(-30px); filter: blur(5px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+        
+        h1 { font-weight: 900; font-size: 30px; color: var(--primary); margin: 0; }
+        .subtitle { color: #64748b; font-weight: 600; margin-top: 5px; }
+
+        .wrapper { max-width: 950px; margin: 0 auto; background: var(--card); border-radius: 45px; padding: 40px; box-shadow: var(--shadow-lux); border: 1px solid rgba(0,0,0,0.02); }
+
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; flex-wrap: wrap; gap: 20px; }
+        
+        .unit-toggle { display: flex; background: #f1f5f9; padding: 5px; border-radius: 50px; cursor: pointer; border: 1px solid #e2e8f0; }
+        .unit-btn { padding: 10px 28px; border-radius: 50px; font-weight: 800; font-size: 0.9rem; color: #64748b; transition: all 0.4s var(--bezier); }
+        .unit-btn.active { background: var(--primary); color: white; box-shadow: var(--glow); transform: scale(1.05); }
+
+        .actions-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .btn-action { background: #fff; color: var(--primary); border: 2.5px solid var(--primary); padding: 12px 25px; border-radius: 50px; font-weight: 800; cursor: pointer; transition: all 0.4s var(--bezier); display: flex; align-items: center; gap: 8px; }
+        .btn-action.care-btn { border-color: var(--badge); color: var(--badge); }
+        
+        .btn-action:hover { transform: translateY(-4px); box-shadow: var(--glow); background: var(--primary); color: #fff; }
+        .btn-action.care-btn:hover { background: var(--badge); color: #fff; box-shadow: var(--badge-glow); }
+        .btn-action:active { transform: scale(0.95); }
+
+        .tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .tab-btn { background: #f8fafc; border: 1.5px solid #e2e8f0; padding: 14px 45px; border-radius: 50px; cursor: pointer; font-weight: 800; font-size: 1.05rem; transition: all 0.4s var(--bezier); color: #475569; }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.08); box-shadow: var(--glow); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .item { 
+            background: #fff; border: 2px solid #f1f5f9; padding: 18px 10px; border-radius: 25px; 
+            cursor: pointer; text-align: center; transition: all 0.4s var(--bezier); 
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .item-name { font-weight: 800; color: #334155; font-size: 1.05rem; transition: 0.3s; margin-bottom: -2px; }
+        .badge { background: #fffbeb; color: var(--badge); border: 1px solid #fde68a; font-size: 0.65rem; font-weight: 900; padding: 3px 10px; border-radius: 12px; transition: 0.3s; }
+        
+        /* تنسيق رمز المنتج ضمن الزر */
+        .item-code {
+            background: rgba(5, 209, 205, 0.12);
+            color: var(--primary);
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 3px 12px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .item:hover { transform: translateY(-7px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(99, 102, 241, 0.1); }
+        .item.active { border-color: var(--primary); background: #f5f7ff; box-shadow: var(--glow); transform: scale(1.02); }
+        .item.active .item-name { color: var(--primary); }
+        .item.active .badge { background: var(--badge); color: #fff; border-color: var(--badge); box-shadow: var(--badge-glow); }
+        .item.active .item-code { background: rgba(255, 255, 255, 0.8); }
+
+        .display { background: #fcfcfd; border-radius: 35px; padding: 30px; border: 1px dashed #cbd5e1; transition: all 0.5s ease; }
+        
+        .product-content { display: flex; gap: 35px; flex-wrap: wrap; }
+        .gallery-section { flex: 1; min-width: 260px; display: flex; flex-direction: column; gap: 12px; }
+        .details-section { flex: 1.5; min-width: 280px; display: flex; flex-direction: column; justify-content: flex-start; }
+
+        .main-img-container { 
+            width: 100%; aspect-ratio: 1; border-radius: 25px; overflow: hidden; 
+            border: 2px solid #f1f5f9; cursor: zoom-in; position: relative; background: #fff;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.03); transition: all 0.3s var(--bezier);
+        }
+        .main-img-container:hover { border-color: var(--primary); box-shadow: var(--glow); }
+        .main-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s var(--bezier); }
+        .main-img-container:hover .main-img { transform: scale(1.08); }
+        .zoom-icon { 
+            position: absolute; bottom: 12px; right: 12px; background: rgba(255,255,255,0.9); 
+            color: var(--primary); border-radius: 50%; width: 35px; height: 35px; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); pointer-events: none;
+        }
+
+        .thumb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .thumb { 
+            aspect-ratio: 1; border-radius: 15px; overflow: hidden; 
+            border: 2.5px solid transparent; cursor: pointer; opacity: 0.6; transition: all 0.3s var(--bezier); 
+        }
+        .thumb.active { border-color: var(--primary); opacity: 1; transform: translateY(-4px); box-shadow: var(--glow); }
+        .thumb:hover { opacity: 0.9; }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* تنسيق تسمية رمز المنتج تحت الصور */
+        .gallery-code-label {
+            text-align: center;
+            background: rgba(5, 209, 205, 0.08);
+            color: var(--primary);
+            font-weight: 800;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            border: 1px dashed rgba(5, 209, 205, 0.4);
+            margin-top: 5px;
+        }
+
+        /* تنسيق حقل الوصف (قائمة نقطية) */
+        .item-desc { 
+            margin-top: 5px; 
+            color: #475569; 
+            background: #f1f5f9; 
+            padding: 15px 20px 15px 15px; 
+            border-radius: 15px; 
+        }
+        .item-desc ul {
+            margin: 0;
+            padding: 0;
+            padding-right: 15px; /* لإزاحة النقاط باللغة العربية */
+            list-style-type: none; /* سنستبدل النقاط التقليدية بتصميم أجمل */
+        }
+        .item-desc li {
+            position: relative;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+        .item-desc li:last-child { margin-bottom: 0; }
+        .item-desc li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            right: -15px;
+            top: -2px;
+        }
+
+        /* نافذة التكبير المعدلة لتكون شفافة وضبابية */
+        .lightbox { 
+            display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; 
+            background: rgba(15, 23, 42, 0.4); /* لون أفتح وشفاف */
+            backdrop-filter: blur(12px); /* ضبابية لطيفة */
+            align-items: center; justify-content: center; flex-direction: column;
+            animation: fadeInScale 0.3s var(--bezier);
+        }
+        .lightbox img { max-width: 90%; max-height: 85vh; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); cursor: zoom-out; }
+        .lightbox-close { 
+            position: absolute; top: 25px; right: 35px; color: #fff; font-size: 45px; 
+            line-height: 1; font-weight: 300; cursor: pointer; transition: 0.3s; z-index: 10001; 
+            background: rgba(0,0,0,0.2); width: 50px; height: 50px; border-radius: 50%; text-align: center;
+        }
+        .lightbox-close:hover { background: var(--accent); transform: scale(1.1) rotate(90deg); }
+
+        .sizes { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .size-btn { padding: 8px 20px; border-radius: 15px; border: 2px solid #e2e8f0; background: #fff; cursor: pointer; font-weight: 800; font-size: 0.95rem; transition: all 0.4s var(--bezier); white-space: nowrap; }
+        .size-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+        .size-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); transform: scale(1.08); box-shadow: 0 10px 20px rgba(244, 63, 94, 0.25); }
+
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; }
+        .card { 
+            background: #fff; padding: 18px 15px; border-radius: 20px; display: flex; flex-direction: column; 
+            align-items: center; border-bottom: 5px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.02); 
+            transition: all 0.4s var(--bezier); animation: fadeInScale 0.5s var(--bezier) backwards;
+        }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .card:hover { transform: translateY(-7px); box-shadow: 0 12px 25px rgba(0,0,0,0.06); }
+        .card-val { font-size: 1.8rem; font-weight: 900; color: var(--primary); margin-top: 5px; direction: ltr; }
+        .card-lbl { font-weight: 800; color: #64748b; font-size: 1rem; text-align: center;}
+
+        .note { margin-top: 25px; text-align: center; font-size: 0.95rem; color: var(--accent); font-weight: 800; background: #fff5f6; padding: 15px; border-radius: 18px; border: 1.5px solid #fee2e2; }
+
+        .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); }
+        .modal-content { 
+            background: #fff; width: 92%; max-width: 650px; margin: 0 auto;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            border-radius: 40px; padding: 35px; max-height: 90vh; overflow-y: auto;
+            scrollbar-width: none; -ms-overflow-style: none; box-shadow: 0 30px 70px rgba(0,0,0,0.4);
+        }
+        .modal-content::-webkit-scrollbar { display: none; }
+        .close { float: left; font-size: 35px; cursor: pointer; color: #94a3b8; transition: 0.3s; line-height: 1;}
+        .close:hover { color: var(--accent); }
+        
+        .guide-text { line-height: 2; font-weight: 600; font-size: 1rem; color: #334155; }
+        .guide-text b { color: var(--primary); font-weight: 900; }
+
+        .care-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .care-item { display: flex; gap: 15px; align-items: flex-start; background: #f8fafc; padding: 18px; border-radius: 20px; border: 1.5px solid #e2e8f0; transition: 0.3s; }
+        .care-item:hover { transform: translateY(-3px); border-color: var(--badge); box-shadow: var(--badge-glow); }
+        .care-icon { width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .care-icon svg { width: 24px; height: 24px; fill: var(--primary); }
+        .care-info h4 { margin: 0 0 5px 0; color: var(--primary); font-size: 1rem; font-weight: 900; }
+        .care-info p { margin: 0; font-size: 0.85rem; color: #64748b; line-height: 1.6; font-weight: 700; }
+
+        /* تعديلات شاشات الموبايل لتناسب الأزرار بجانب بعضها */
+        @media (max-width: 768px) {
+            .product-content { flex-direction: column; gap: 20px; }
+            .details-section { width: 100%; }
+        }
+        @media (max-width: 600px) {
+            .wrapper { padding: 25px; border-radius: 35px; }
+            h1 { font-size: 1.8rem; }
+            .top-bar { justify-content: center; }
+            
+            /* أزرار الإجراءات (كيف أقيس والعناية) بجانب بعضها */
+            .actions-group { flex-wrap: nowrap; width: 100%; gap: 10px; }
+            .btn-action { flex: 1; padding: 10px 5px; font-size: 0.75rem; justify-content: center; gap: 4px; border-width: 2px;}
+            .btn-action svg { width: 16px; height: 16px; }
+            
+            /* أزرار الأقسام (الألبسة والإكسسوارات) بجانب بعضها */
+            .tabs { flex-wrap: nowrap; gap: 10px; width: 100%; }
+            .tab-btn { flex: 1; padding: 12px 5px; font-size: 0.85rem; text-align: center; }
+
+            .modal-content { padding: 25px; width: 95%; }
+            .card-val { font-size: 1.6rem; }
+            .display { padding: 20px; }
+            .lightbox-close { top: 15px; right: 15px; width: 40px; height: 40px; font-size: 35px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <header>
+        <h1>المنتجات والمقاسات</h1>
+        <p class="subtitle">المقاسات الدقيقة والمواصفات لضمان اختيارك الصحيح</p>
+    </header>
+
+    <div class="top-bar">
+        <div class="unit-toggle" onclick="toggleUnit()">
+            <div id="u-cm" class="unit-btn active">CM</div>
+            <div id="u-in" class="unit-btn">INCH</div>
+        </div>
+        <div class="actions-group">
+            <button class="btn-action" onclick="openModal('howModal')">
+                💡 كيف أقيس؟
+            </button>
+            <button class="btn-action care-btn" onclick="openModal('careModal')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L10 6H4v16h16V6h-6l-2-4zm-1 2h2l1 2h4v2H6V6h4l1-2zM8 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4zm4-2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> 
+                العناية
+            </button>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <button id="t-wear" class="tab-btn active" onclick="setCat('wear')">الألبسة</button>
+        <button id="t-acc" class="tab-btn" onclick="setCat('acc')">الإكسسوارات</button>
+    </div>
+
+    <div class="grid" id="itemGrid"></div>
+
+    <div class="display">
+        <div class="product-content">
+            <!-- معرض الصور -->
+            <div class="gallery-section" id="galleryBox"></div>
+            
+            <!-- تفاصيل المقاسات -->
+            <div class="details-section">
+                <div id="sizeList" class="sizes"></div>
+                <div class="info-area">
+                    <div class="cards" id="valBox"></div>
+                    <div class="note" id="errNote">⚠️ نسبة الخطأ الواردة في القياس اليدوي: ±1.5 سم</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة عرض الصور الكبيرة -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightboxImg" src="" alt="Zoomed Product" onclick="event.stopPropagation(); closeLightbox()">
+</div>
+
+<div id="howModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('howModal')">&times;</span>
+        <h2 style="color:var(--primary); font-weight:900; margin-top:0;">دليل قياس الألبسة</h2>
+        <div class="guide-text">
+            <ul>
+                <li><b>تيشيرت - هودي:</b>
+                    <ul>
+                        <li><b>العرض:</b> قس المسافة بين نقطتي الإبط والقطعة مفرودة.</li>
+                        <li><b>الطول:</b> من أعلى نقطة في الكتف حتى نهاية الحافة السفلية.</li>
+                        <li><b>الأكمام:</b> من خياطة الكتف حتى نهاية المعصم.</li>
+                        <li><b>القطر:</b> عرض فتحة الكم النهائية.</li>
+                    </ul>
+                </li>
+                <li><b>بارباتوز الأطفال (Baby Onesie):</b>
+                    <ul>
+                        <li><b>الطول:</b> من الكتف وحتى أزرار الإغلاق السفلية.</li>
+                        <li><b>العرض:</b> منطقة الصدر من الجانب للجانب.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <button class="btn-action" style="width:100%; justify-content:center; margin-top:20px" onclick="closeModal('howModal')">تمام</button>
+    </div>
+</div>
+
+<div id="careModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('careModal')">&times;</span>
+        <h2 style="color:var(--badge); font-weight:900; margin-top:0;">تعليمات العناية بالألبسة المطبوعة</h2>
+        <p style="color:#64748b; font-weight:700; font-size:0.95rem; margin-top:-10px;">للحفاظ على جودة الطباعة وألوانها الزاهية لأطول فترة ممكنة، يرجى الالتزام بالآتي:</p>
+        
+        <div class="care-grid">
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg></div>
+                <div class="care-info"><h4>الغسيل مقلوباً</h4><p>اقلب القطعة (من الداخل للخارج) قبل وضعها في الغسالة لحماية التصميم من الاحتكاك.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M12 2c-1.1 0-2 .9-2 2v9.33c-.6.3-1.15.74-1.5 1.34-.84 1.45-.33 3.32 1.13 4.16C10.55 19.38 11.27 19.5 12 19.5s1.45-.12 2.37-.67c1.46-.84 1.97-2.71 1.13-4.16-.35-.61-.9-1.04-1.5-1.34V4c0-1.1-.9-2-2-2z"/></svg></div>
+                <div class="care-info"><h4>ماء بارد (أقل من 30°)</h4><p>تجنب الماء الحار تماماً لأن الحرارة العالية تؤدي إلى تلف الطبقة المطبوعة.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M22 13c-2 0-3.1 1.3-4 2.4-.6.8-1.1 1.6-2 1.6s-1.4-.8-2-1.6c-.9-1.1-2-2.4-4-2.4s-3.1 1.3-4 2.4c-.6.8-1.1 1.6-2 1.6H2v2h2c2 0 3.1-1.3 4-2.4.6-.8 1.1-1.6 2-1.6s1.4.8 2 1.6c.9 1.1 2 2.4 4 2.4s3.1-1.3 4-2.4c.6-.8 1.1-1.6 2-1.6h2v-2z"/></svg></div>
+                <div class="care-info"><h4>دورة غسيل لطيفة</h4><p>استخدم دورة غسيل لطيفة (Gentle Cycle) لتقليل الضغط والاحتكاك على الأقمشة.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.8l7.5 13.2h-15L12 5.8zm-1 5.2v4h2v-4h-2zm0 6v2h2v-2h-2z"/></svg></div>
+                <div class="care-info"><h4>بدون مبيضات</h4><p>استخدم منظفات معتدلة وتجنب المبيضات أو المنظفات القوية التي تتلف الألوان.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M19 11h-3V5c0-1.1-.9-2-2-2h-4C8.9 3 8 3.9 8 5v6H5c-1.1 0-2 .9-2 2v7h22v-7c0-1.1-.9-2-2-2zM10 5h4v6h-4V5z"/></svg></div>
+                <div class="care-info"><h4>تجفيف بالهواء</h4><p>يفضل التجفيف بالتعليق في الهواء الطلق، وتجنب استخدام النشافة الحرارية قدر الإمكان.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M21 6c-1.66 0-3 1.34-3 3v4c0 .55-.45 1-1 1v-4c0-1.66-1.34-3-3-3h-4c-1.66 0-3 1.34-3 3h2c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v4H6c-.55 0-1-.45-1 1v5h16v-5c0-1.66-1.34-3-3-3v-4c0-.55.45-1 1-1h2z"/></svg></div>
+                <div class="care-info"><h4>الكي من الداخل</h4><p>يمنع الكي المباشر فوق الطباعة. اكوي القطعة من الداخل أو ضع قماشاً عازلاً.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11H7v-2h10v2z"/></svg></div>
+                <div class="care-info"><h4>ممنوع التنظيف الجاف</h4><p>تجنب التنظيف الجاف (Dry Clean) تماماً، فالمواد الكيميائية المستخدمة تذيب الطباعة.</p></div>
+            </div>
+            <div class="care-item">
+                <div class="care-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+                <div class="care-info"><h4>أول غسلة (24 ساعة)</h4><p>يجب الانتظار لمدة 24 ساعة على الأقل بعد الطباعة الحرارية قبل غسل القطعة لأول مرة.</p></div>
+            </div>
+        </div>
+        <button class="btn-action care-btn" style="width:100%; justify-content:center; margin-top:20px" onclick="closeModal('careModal')">أتعهد بالالتزام بالعناية 😉</button>
+    </div>
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.BackButton.show();
+    tg.BackButton.onClick(function() { window.location.href = "index.html"; });
+    tg.ready();
+
+    const visibility = {
+        categories: { wear: true, acc: true },
+        items: {
+            tshirt: true, hoodie: true, jacket: false, pants: false, onesie: true,
+            mug: true, tote: true, hat: false, apron: false, tumbler_s: true, tumbler_b: false
+        }
+    };
+
+    // تم تحديث البيانات لتشمل رمز المنتج (code) ووصف كنقاط (desc مصفوفة)
+    const data = {
+        wear: {
+            tshirt: { 
+                name: 'تيشيرت', badge: 'ياقة دائرية', code: 'AUR-TS01',
+                sizes: { 'S': [68, 48, 20, 16], 'M': [70, 51, 21, 17], 'L': [73, 54, 22, 18], 'XL': [75, 57, 23, 19] }, 
+                labels: ['الطول', 'العرض', 'طول الكم', 'قطر الكم'],
+                desc: [
+                    'خامة قطنية 100% ناعمة ومريحة',
+                    'مثالي للطباعة الحرارية ولا يبهت',
+                    'يسمح بمرور الهواء ومناسب لأجواء الصيف',
+                    'تمت معالجته ضد الانكماش'
+                ],
+                images: ['https://placehold.co/600x600/f8fafc/05D1CE?text=T-Shirt+1', 'https://placehold.co/600x600/f8fafc/05D1CE?text=T-Shirt+2', 'https://placehold.co/600x600/f8fafc/05D1CE?text=Fabric+Detail']
+            },
+            hoodie: { 
+                name: 'هودي', badge: 'Oversized', code: 'AUR-HD01',
+                sizes: { 'M': [70, 57, 63, 10], 'L': [73, 60, 65, 11], 'XL': [76, 63, 67, 12] }, 
+                labels: ['الطول', 'العرض', 'طول الكم', 'قطر المعصم'],
+                desc: [
+                    'خامة شتوية مبطنة من الداخل للتدفئة',
+                    'قصة أوفر سايز عصرية ومريحة',
+                    'يتميز بقبعة واسعة وجيب كنغر أمامي'
+                ],
+                images: ['https://placehold.co/600x600/f8fafc/FF6B01?text=Hoodie+1', 'https://placehold.co/600x600/f8fafc/FF6B01?text=Hoodie+2', 'https://placehold.co/600x600/f8fafc/FF6B01?text=Inside+Lining']
+            },
+            onesie: { 
+                name: 'بارباتوز', badge: 'قطن ناعم', code: 'AUR-BB01',
+                sizes: { '3 أشهر': [36, 20], '6 أشهر': [38, 22], '12 شهر': [41, 24] }, 
+                labels: ['الطول', 'العرض'],
+                desc: [
+                    'قطن لطيف وآمن على بشرة الأطفال',
+                    'أزرار إغلاق متينة لسهولة التبديل',
+                    'مرونة ممتازة لراحة الطفل أثناء الحركة'
+                ],
+                images: ['https://placehold.co/600x600/f8fafc/05D1CE?text=Onesie+1', 'https://placehold.co/600x600/f8fafc/05D1CE?text=Onesie+2', 'https://placehold.co/600x600/f8fafc/05D1CE?text=Onesie+3']
+            }
+        },
+        acc: {
+            mug: { 
+                name: 'ماغ', badge: 'سيراميك', code: 'AUR-MG01',
+                sizes: { '11oz': [9.5, 8.2], '15oz': [11.5, 8.5] }, 
+                labels: ['الارتفاع', 'القطر العلوي'],
+                desc: [
+                    'ماغ سيراميك أبيض لمّاع ممتاز للطباعة',
+                    'آمن تماماً للاستخدام في المايكروويف',
+                    'ألوان الطباعة تظهر عليه بوضوح عالي'
+                ],
+                images: ['https://placehold.co/600x600/f8fafc/FF6B01?text=Mug+Front', 'https://placehold.co/600x600/f8fafc/FF6B01?text=Mug+Side', 'https://placehold.co/600x600/f8fafc/FF6B01?text=Mug+Top']
+            },
+            tote: { 
+                name: 'توت باغ', badge: 'متين وعملي', code: 'AUR-TB01',
+                sizes: { 'Standard': [42, 36] }, 
+                labels: ['الطول', 'العرض'],
+                desc: [
+                    'قماش كتان متين عالي الجودة',
+                    'يتحمل الأوزان الثقيلة ومناسب للاستخدام اليومي',
+                    'سهل الغسيل والطي'
+                ],
+                images: ['https://placehold.co/600x600/f8fafc/05D1CE?text=Tote+1', 'https://placehold.co/600x600/f8fafc/05D1CE?text=Tote+2', 'https://placehold.co/600x600/f8fafc/05D1CE?text=Tote+3']
+            },
+            tumbler_s: { 
+                name: 'تامبلر', badge: 'حافظ للحرارة', code: 'AUR-TM01',
+                sizes: { '20oz': [21, 7.3] }, 
+                labels: ['الارتفاع', 'القطر'],
+                desc: [
+                    'ستانلس ستيل مقاوم للصدأ',
+                    'يحفظ البرودة والحرارة لعدة ساعات طويلة',
+                    'غطاء محكم الإغلاق لمنع الانسكاب'
+                ],
+                images: ['https://placehold.co/600x600/f8fafc/FF6B01?text=Tumbler+1', 'https://placehold.co/600x600/f8fafc/FF6B01?text=Tumbler+2', 'https://placehold.co/600x600/f8fafc/FF6B01?text=Tumbler+Lid']
+            }
+        }
+    };
+
+    let curCat = 'wear', curItem = 'tshirt', curSize = 'M', isInch = false, curImgIndex = 0;
+
+    function setCat(cat) {
+        curCat = cat; 
+        curItem = Object.keys(data[cat]).find(k => visibility.items[k] !== false);
+        
+        if (curItem) {
+            curSize = Object.keys(data[cat][curItem].sizes)[0];
+            curImgIndex = 0; 
+            renderItems(); 
+            renderSizes(); 
+            update();
+        } else {
+            document.getElementById('itemGrid').innerHTML = '';
+            document.getElementById('sizeList').innerHTML = '';
+            document.getElementById('valBox').innerHTML = '';
+            document.getElementById('galleryBox').innerHTML = '';
+        }
+        
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === `t-${cat}`));
+    }
+
+    function renderItems() {
+        const g = document.getElementById('itemGrid'); g.innerHTML = '';
+        for (let k in data[curCat]) {
+            if (visibility.items[k] === false) continue;
+            
+            const itemData = data[curCat][k];
+            const d = document.createElement('div');
+            d.className = `item ${k === curItem ? 'active' : ''}`;
+            d.onclick = () => { curItem = k; curSize = Object.keys(data[curCat][k].sizes)[0]; curImgIndex = 0; renderItems(); renderSizes(); update(); };
+            
+            // إضافة رمز المنتج ضمن العنصر
+            d.innerHTML = `
+                <span class="badge">${itemData.badge}</span>
+                <span class="item-name">${itemData.name}</span>
+                <span class="item-code">${itemData.code}</span>
+            `;
+            g.appendChild(d);
+        }
+    }
+
+    function renderSizes() {
+        const s = document.getElementById('sizeList'); s.innerHTML = '';
+        if (!curItem) return;
+        const szs = data[curCat][curItem].sizes;
+        for (let z in szs) {
+            const b = document.createElement('button');
+            b.className = `size-btn ${z === curSize ? 'active' : ''}`;
+            b.innerText = z;
+            b.onclick = () => { curSize = z; renderSizes(); update(); };
+            s.appendChild(b);
+        }
+    }
+
+    function renderGallery() {
+        const gBox = document.getElementById('galleryBox');
+        if (!curItem) return;
+        const itm = data[curCat][curItem];
+        
+        if (!itm.images || itm.images.length === 0) {
+            gBox.innerHTML = ''; 
+            return;
+        }
+
+        let mainImgSrc = itm.images[curImgIndex];
+        
+        let thumbsHtml = itm.images.map((img, idx) => `
+            <div class="thumb ${idx === curImgIndex ? 'active' : ''}" onclick="changeImg(${idx})">
+                <img src="${img}" alt="Thumbnail ${idx+1}">
+            </div>
+        `).join('');
+
+        // تحويل الوصف إلى قائمة نقطية
+        let descListHtml = '';
+        if(Array.isArray(itm.desc)) {
+            descListHtml = '<ul>' + itm.desc.map(d => `<li>${d}</li>`).join('') + '</ul>';
+        } else {
+            descListHtml = `<ul><li>${itm.desc}</li></ul>`;
+        }
+
+        gBox.innerHTML = `
+            <div class="main-img-container" onclick="openLightbox('${mainImgSrc}')">
+                <img src="${mainImgSrc}" class="main-img" alt="${itm.name}">
+                <div class="zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zm2.5-4h-2v2H9v-2H7V9h2V7h1.5v2h2v1.5z"/></svg></div>
+            </div>
+            <div class="thumb-grid">
+                ${thumbsHtml}
+            </div>
+            <div class="gallery-code-label">رمز المنتج: ${itm.code}</div>
+            <div class="item-desc">
+                ${descListHtml}
+            </div>
+        `;
+    }
+
+    function changeImg(idx) {
+        curImgIndex = idx;
+        renderGallery();
+    }
+
+    function openLightbox(src) {
+        const lb = document.getElementById('lightbox');
+        document.getElementById('lightboxImg').src = src;
+        lb.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function update() {
+        if (!curItem) return;
+        const itm = data[curCat][curItem];
+        const val = itm.sizes[curSize];
+        let h = '';
+        
+        val.forEach((v, i) => {
+            let n = isInch ? (v / 2.54).toFixed(1) : v;
+            h += `<div class="card" style="animation-delay:${i*0.1}s">
+                        <span class="card-lbl">${itm.labels[i]}</span>
+                        <span class="card-val">${n} <small style="font-size:0.8rem; opacity:0.5">${isInch?'in':'cm'}</small></span>
+                  </div>`;
+        });
+        
+        document.getElementById('valBox').innerHTML = h;
+
+        const noteElement = document.getElementById('errNote');
+        if (curCat === 'wear') {
+            noteElement.style.display = 'block'; 
+            noteElement.innerText = isInch ? "⚠️ نسبة الخطأ الواردة: ±0.6 إنش" : "⚠️ نسبة الخطأ الواردة في القياس اليدوي: ±1.5 سم";
+        } else {
+            noteElement.style.display = 'none'; 
+        }
+
+        renderGallery(); 
+    }
+
+    function toggleUnit() {
+        isInch = !isInch;
+        document.getElementById('u-cm').classList.toggle('active');
+        document.getElementById('u-in').classList.toggle('active');
+        update();
+    }
+
+    function openModal(id) {
+        document.getElementById(id).style.display = 'block';
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).style.display = 'none';
+        document.body.style.overflow = 'auto';   
+    }
+
+    document.getElementById('t-wear').style.display = visibility.categories.wear ? '' : 'none';
+    document.getElementById('t-acc').style.display = visibility.categories.acc ? '' : 'none';
+
+    if (visibility.categories.wear) {
+        setCat('wear');
+    } else if (visibility.categories.acc) {
+        setCat('acc');
+    }
+</script>
+</body>
+</html>
