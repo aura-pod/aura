@@ -4,7 +4,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#05D1CE",
+  "theme_color": "#fcfafc",
   "icons": [
     {
       "src": "/aura-192.png",
