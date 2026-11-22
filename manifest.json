@@ -1,10 +1,10 @@
 {
-  "name": "Aura - Print on Demand",
-  "short_name": "متجر أورا - للطباعة حسب الطلب",
+  "name": "متجر أورا - للطباعة حسب الطلب",
+  "short_name": "متجر أورا",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#fcfafc",
+  "theme_color": "#fcfcfc",
   "icons": [
     {
       "src": "/aura-192.png",
