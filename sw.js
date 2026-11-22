@@ -1,25 +1,40 @@
-const CACHE_NAME = 'ora-pwa-v1';
+const CACHE_NAME = 'ora-pwa-v2';
 const urlsToCache = [
   '/',
   '/index.html'
 ];
 
-// تثبيت الـ Service Worker وتخزين الملفات الأساسية مؤقتاً
 self.addEventListener('install', event => {
+  self.skipWaiting(); // تفعيل التحديث فوراً
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// جلب الملفات حتى لو كان الاتصال ضعيفاً
+self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim());
+});
+
 self.addEventListener('fetch', event => {
+  // 1. تجاهل الطلبات غير الـ GET أو التي تحتوي على بيانات تيليغرام
+  if (event.request.method !== 'GET' || event.request.url.includes('tgWebApp')) {
+    return;
+  }
+
+  // 2. استراتيجية Network First (الأولوية للإنترنت ثم الكاش) لتجنب أخطاء الرجوع في تيليغرام
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        return response || fetch(event.request);
+        // تحديث الكاش بالنسخة الأحدث إذا كان الاتصال ممتازاً
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, responseClone);
+        });
+        return response;
+      })
+      .catch(() => {
+        // إذا انقطع الإنترنت، اسحب من الكاش
+        return caches.match(event.request);
       })
   );
 });
