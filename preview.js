@@ -1,21 +1,29 @@
 (function () {
-  const SECRET_KEY = "2026"; // الرمز السري الخاص بك
+  const SECRET_KEY = "2026";
   const STORAGE_KEY = "aura_owner_unlocked";
 
   const params = new URLSearchParams(window.location.search);
   if (params.get("aura") === SECRET_KEY) {
     localStorage.setItem(STORAGE_KEY, "true");
-    // تنظيف الرابط من شريط العنوان بعد الفتح
     const cleanUrl = window.location.origin + window.location.pathname;
     window.history.replaceState({}, document.title, cleanUrl);
     return;
   }
 
   if (localStorage.getItem(STORAGE_KEY) === "true") {
-    return; // صاحب الموقع: افتح المتجر الكامل مباشرة
+    return;
   }
 
-  // إخفاء محتوى المتجر عن الزوار وعرض صفحة التجهيز
+  // تحميل خط Cairo تلقائياً
+  if (!document.getElementById("aura-cairo-font")) {
+    const fontLink = document.createElement("link");
+    fontLink.id = "aura-cairo-font";
+    fontLink.rel = "stylesheet";
+    fontLink.href =
+      "https://fonts.googleapis.com/css2?family=Cairo:wght@600;700&display=swap";
+    document.head.appendChild(fontLink);
+  }
+
   const overlay = document.createElement("div");
   overlay.id = "aura-coming-soon-lock";
   overlay.innerHTML = `
@@ -26,85 +34,132 @@
         z-index: 2147483647;
         display: grid;
         place-items: center;
-        background: #090C10;
-        color: #F4F7F9;
-        font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+        background: #F4F5F2;
+        color: #14181F;
+        font-family: "Cairo", system-ui, -apple-system, sans-serif;
         padding: 24px;
         overflow: hidden;
         direction: rtl;
       }
-      #aura-coming-soon-lock .glow {
+
+      /* بقعتان منفصلتان تماماً لكل لون بدون تدرج بينهما */
+      #aura-coming-soon-lock .spot-teal {
         position: absolute;
-        width: 320px;
-        height: 320px;
+        width: 240px;
+        height: 240px;
         border-radius: 50%;
-        filter: blur(105px);
-        opacity: 0.24;
+        background: #05D1CE;
+        opacity: 0.14;
+        filter: blur(55px);
+        top: -60px;
+        right: -50px;
         pointer-events: none;
-        animation: auraDrift 9s ease-in-out infinite alternate;
       }
-      #aura-coming-soon-lock .teal { background: #05D1CE; top: -80px; right: -70px; }
-      #aura-coming-soon-lock .orange { background: #FF6B01; bottom: -80px; left: -70px; animation-delay: -4.5s; }
-      @keyframes auraDrift {
-        0% { transform: translate(0, 0) scale(1); }
-        100% { transform: translate(22px, -16px) scale(1.08); }
+
+      #aura-coming-soon-lock .spot-orange {
+        position: absolute;
+        width: 240px;
+        height: 240px;
+        border-radius: 50%;
+        background: #FF6B01;
+        opacity: 0.14;
+        filter: blur(55px);
+        bottom: -60px;
+        left: -50px;
+        pointer-events: none;
       }
+
+      /* البطاقة الزجاجية مع لمعة متحركة */
       #aura-coming-soon-lock .card {
         position: relative;
         z-index: 1;
         max-width: 520px;
         width: 100%;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(20, 24, 31, 0.1);
         border-radius: 24px;
         padding: 44px 28px;
         text-align: center;
-        backdrop-filter: blur(12px);
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 18px 45px rgba(20, 24, 31, 0.08);
+        overflow: hidden;
       }
-      #aura-coming-soon-lock .badge {
+
+      /* لمعة زجاجية تمر عبر البطاقة */
+      #aura-coming-soon-lock .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -130%;
+        width: 65%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.75),
+          transparent
+        );
+        transform: skewX(-22deg);
+        animation: auraGlassSweep 4.2s ease-in-out infinite;
+        pointer-events: none;
+      }
+
+      @keyframes auraGlassSweep {
+        0% { left: -130%; }
+        55% { left: 150%; }
+        100% { left: 150%; }
+      }
+
+      /* شارة علوية بلون الفيروزي فقط */
+      #aura-coming-soon-lock .pill-teal {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        padding: 8px 14px;
+        gap: 8px;
+        padding: 6px 14px;
         border-radius: 999px;
-        background: rgba(5, 209, 206, 0.08);
-        border: 1px solid rgba(5, 209, 206, 0.28);
-        margin-bottom: 22px;
+        background: rgba(5, 209, 206, 0.12);
+        border: 1px solid rgba(5, 209, 206, 0.35);
+        margin-bottom: 18px;
       }
-      #aura-coming-soon-lock .dot {
-        width: 8px;
-        height: 8px;
+
+      #aura-coming-soon-lock .dot-teal {
+        width: 9px;
+        height: 9px;
         border-radius: 50%;
-        background: #FF6B01;
-        box-shadow: 0 0 12px #FF6B01;
-        animation: auraPulse 1.8s ease-in-out infinite;
+        background: #05D1CE;
       }
-      @keyframes auraPulse {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.35); opacity: 0.65; }
-      }
-      #aura-coming-soon-lock .bar {
-        width: 68px;
-        height: 3px;
-        margin: 0 auto 24px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #05D1CE, #FF6B01);
-      }
+
       #aura-coming-soon-lock p {
+        position: relative;
+        z-index: 1;
         margin: 0;
-        font-size: clamp(1.2rem, 3.6vw, 1.65rem);
+        font-family: "Cairo", sans-serif;
+        font-size: clamp(1.2rem, 3.8vw, 1.65rem);
         line-height: 1.75;
-        font-weight: 600;
-        color: #F4F7F9;
+        font-weight: 700;
+        color: #14181F;
+      }
+
+      /* خط فاصل صغير باللون البرتقالي فقط */
+      #aura-coming-soon-lock .accent-orange {
+        width: 64px;
+        height: 4px;
+        margin: 20px auto 0;
+        border-radius: 999px;
+        background: #FF6B01;
       }
     </style>
-    <div class="glow teal"></div>
-    <div class="glow orange"></div>
+
+    <div class="spot-teal"></div>
+    <div class="spot-orange"></div>
+
     <div class="card">
-      <div class="badge"><span class="dot"></span></div>
-      <div class="bar"></div>
+      <div class="pill-teal">
+        <span class="dot-teal"></span>
+      </div>
       <p>نحن قيد التجهيز حالياً لنقدم لكم تجربة مميزة .. قريباً</p>
+      <div class="accent-orange"></div>
     </div>
   `;
 
