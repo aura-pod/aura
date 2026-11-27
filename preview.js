@@ -14,7 +14,6 @@
     return;
   }
 
-  // تحميل خط Cairo تلقائياً
   if (!document.getElementById("aura-cairo-font")) {
     const fontLink = document.createElement("link");
     fontLink.id = "aura-cairo-font";
@@ -69,50 +68,55 @@
         pointer-events: none;
       }
 
-      /* البطاقة الزجاجية مع لمعة متحركة */
+      /* بطاقة زجاجية شفافة حتى تظهر اللمعة بوضوح فوق كامل سطحها */
       #aura-coming-soon-lock .card {
         position: relative;
         z-index: 1;
         max-width: 520px;
         width: 100%;
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid rgba(20, 24, 31, 0.1);
+        background: rgba(244, 245, 242, 0.36);
+        border: 1px solid rgba(255, 255, 255, 0.65);
         border-radius: 24px;
         padding: 44px 28px;
         text-align: center;
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
         box-shadow: 0 18px 45px rgba(20, 24, 31, 0.08);
         overflow: hidden;
       }
 
-      /* لمعة زجاجية تمر عبر البطاقة */
+      /* لمعة زجاجية واضحة تمر على كامل البطاقة */
       #aura-coming-soon-lock .card::before {
         content: "";
         position: absolute;
         top: 0;
-        left: -130%;
-        width: 65%;
+        left: -135%;
+        width: 58%;
         height: 100%;
         background: linear-gradient(
           90deg,
-          transparent,
-          rgba(255, 255, 255, 0.75),
-          transparent
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.55) 45%,
+          rgba(255, 255, 255, 0.85) 50%,
+          rgba(255, 255, 255, 0.55) 55%,
+          rgba(255, 255, 255, 0) 100%
         );
-        transform: skewX(-22deg);
-        animation: auraGlassSweep 4.2s ease-in-out infinite;
+        transform: skewX(-24deg);
+        animation: auraGlassSweep 3.8s ease-in-out infinite;
         pointer-events: none;
+        z-index: 2;
       }
 
       @keyframes auraGlassSweep {
-        0% { left: -130%; }
-        55% { left: 150%; }
-        100% { left: 150%; }
+        0% { left: -135%; }
+        60% { left: 155%; }
+        100% { left: 155%; }
       }
 
       /* شارة علوية بلون الفيروزي فقط */
       #aura-coming-soon-lock .pill-teal {
+        position: relative;
+        z-index: 1;
         display: inline-flex;
         align-items: center;
         gap: 8px;
@@ -143,6 +147,8 @@
 
       /* خط فاصل صغير باللون البرتقالي فقط */
       #aura-coming-soon-lock .accent-orange {
+        position: relative;
+        z-index: 1;
         width: 64px;
         height: 4px;
         margin: 20px auto 0;
