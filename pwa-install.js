@@ -5,8 +5,8 @@
   const AURA_PWA_CONFIG = {
     enabled: true,
     iconUrl: '/aura-192.png',
-    title: 'ثبّت تطبيق متجر أورا',
-    subtitle: 'وصول أسرع وتجربة أوضح من شاشتك',
+    title: 'أضف متجر أورا لشاشتك',
+    subtitle: 'تطبيق ويب خفيف • وصول أسرع وتصفح أسهل',
     installBtnText: 'تثبيت',
     iosSubtitle: 'اضغط المشاركة ⍗ ثم "إضافة إلى الشاشة الرئيسية"',
     showDelayMs: 2000,
@@ -20,8 +20,9 @@
       accentOrange: '#FF6B01',
       titleText: '#222222',
       descText: '#4a4a4a',
-      closeBg: 'rgba(74, 74, 74, 0.08)',
-      closeText: '#4a4a4a'
+      closeBg: 'rgba(255, 107, 1, 0.12)',
+      closeBorder: 'rgba(255, 107, 1, 0.35)',
+      closeText: '#FF6B01'
     }
   };
 
@@ -41,7 +42,7 @@
 
   if (isStandalone || isTelegram) return;
 
-  // عدم الإزعاج إذا تم إغلاق الشريط في نفس جلسة التصفح الحالية
+  // عدم الإزعاج إذا تم إغلاق الشريط في نفس تبويب التصفح الحالي
   const SESSION_DISMISS_KEY = 'aura_pwa_banner_dismissed_session';
   if (sessionStorage.getItem(SESSION_DISMISS_KEY) === '1') return;
 
@@ -77,6 +78,9 @@
       box-sizing: border-box;
       transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
       opacity: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     #aura-pwa-install-banner.aura-pwa-visible {
@@ -100,6 +104,7 @@
       border: 1px solid rgba(5, 209, 205, 0.25);
       background: #fcfafc;
       flex-shrink: 0;
+      pointer-events: none;
     }
 
     .aura-pwa-copy {
@@ -136,6 +141,8 @@
       background: linear-gradient(135deg, ${c.accentTeal}, #03b5b2);
       color: #ffffff;
       border: none;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
       border-radius: 11px;
       padding: 7px 13px;
       font-family: 'Cairo', sans-serif;
@@ -147,6 +154,11 @@
       transition: transform 0.15s ease, opacity 0.2s ease;
     }
 
+    #aura-pwa-install-btn:focus,
+    #aura-pwa-install-btn:focus-visible {
+      outline: none;
+    }
+
     #aura-pwa-install-btn:active {
       transform: scale(0.95);
       opacity: 0.9;
@@ -156,9 +168,12 @@
       width: 28px;
       height: 28px;
       border-radius: 9px;
-      border: none;
+      border: 1px solid ${c.closeBorder};
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
       background: ${c.closeBg};
       color: ${c.closeText};
+      font-family: 'Cairo', sans-serif;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -166,13 +181,18 @@
       align-items: center;
       justify-content: center;
       padding: 0;
-      transition: background 0.2s ease, transform 0.15s ease;
+      transition: background 0.2s ease, transform 0.15s ease, color 0.2s ease;
+    }
+
+    #aura-pwa-close-btn:focus,
+    #aura-pwa-close-btn:focus-visible {
+      outline: none;
     }
 
     #aura-pwa-close-btn:active {
       transform: scale(0.92);
-      background: rgba(255, 107, 1, 0.14);
-      color: ${c.accentOrange};
+      background: ${c.accentOrange};
+      color: #ffffff;
     }
   `;
   document.head.appendChild(styleEl);
