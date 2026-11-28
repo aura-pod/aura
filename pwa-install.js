@@ -8,7 +8,7 @@
     title: 'أضف متجر أورا لشاشتك',
     subtitle: 'تطبيق ويب خفيف • وصول أسرع وتصفح أسهل',
     installBtnText: 'تثبيت',
-    iosSubtitle: 'اضغط المشاركة ⍗ ثم "إضافة إلى الشاشة الرئيسية"',
+    iosSubtitle: 'المشاركة ⍗ ثم "إضافة إلى الشاشة الرئيسية"',
     showDelayMs: 2000,
     iosShowDelayMs: 2500,
     extraBottomPaddingPx: 88,
@@ -61,17 +61,17 @@
       bottom: 14px;
       left: 50%;
       transform: translateX(-50%) translateY(130%);
-      width: calc(100% - 28px);
+      width: calc(100% - 24px);
       max-width: 422px;
       background: ${c.surface};
       border: 1.5px solid ${c.border};
       border-radius: 18px;
-      padding: 10px 12px;
+      padding: 10px 11px;
       box-shadow: 0 10px 26px rgba(5, 209, 205, 0.14), 0 4px 12px rgba(0, 0, 0, 0.07);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       z-index: 9999;
       direction: rtl;
       font-family: 'Cairo', sans-serif;
@@ -91,18 +91,18 @@
     .aura-pwa-left {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       min-width: 0;
-      flex: 1;
+      flex: 1 1 auto;
     }
 
     .aura-pwa-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
       object-fit: cover;
-      border: 1px solid rgba(5, 209, 205, 0.25);
-      background: #fcfafc;
+      border: 0px solid rgba(5, 209, 205, 0.25);
+      background: transparent;
       flex-shrink: 0;
       pointer-events: none;
     }
@@ -112,28 +112,31 @@
       flex-direction: column;
       gap: 2px;
       min-width: 0;
+      flex: 1 1 auto;
     }
 
     .aura-pwa-title {
       margin: 0;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: ${c.titleText};
       line-height: 1.25;
+      overflow-wrap: break-word;
     }
 
     .aura-pwa-subtitle {
       margin: 0;
-      font-size: 11px;
+      font-size: 10.2px;
       font-weight: 500;
       color: ${c.descText};
-      line-height: 1.3;
+      line-height: 1.32;
+      overflow-wrap: break-word;
     }
 
     .aura-pwa-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       flex-shrink: 0;
     }
 
@@ -144,12 +147,13 @@
       outline: none;
       -webkit-tap-highlight-color: transparent;
       border-radius: 11px;
-      padding: 7px 13px;
+      padding: 7px 11px;
       font-family: 'Cairo', sans-serif;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
       box-shadow: 0 4px 10px rgba(5, 209, 205, 0.28);
       transition: transform 0.15s ease, opacity 0.2s ease;
     }
@@ -165,8 +169,8 @@
     }
 
     #aura-pwa-close-btn {
-      width: 28px;
-      height: 28px;
+      width: 27px;
+      height: 27px;
       border-radius: 9px;
       border: 1px solid ${c.closeBorder};
       outline: none;
@@ -174,13 +178,14 @@
       background: ${c.closeBg};
       color: ${c.closeText};
       font-family: 'Cairo', sans-serif;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       padding: 0;
+      flex-shrink: 0;
       transition: background 0.2s ease, transform 0.15s ease, color 0.2s ease;
     }
 
@@ -193,6 +198,34 @@
       transform: scale(0.92);
       background: ${c.accentOrange};
       color: #ffffff;
+    }
+
+    @media (max-width: 360px) {
+      #aura-pwa-install-banner {
+        width: calc(100% - 16px);
+        padding: 9px;
+        gap: 6px;
+        border-radius: 16px;
+      }
+      .aura-pwa-icon {
+        width: 34px;
+        height: 34px;
+      }
+      .aura-pwa-title {
+        font-size: 12px;
+      }
+      .aura-pwa-subtitle {
+        font-size: 9.6px;
+      }
+      #aura-pwa-install-btn {
+        padding: 6px 9px;
+        font-size: 11px;
+      }
+      #aura-pwa-close-btn {
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+      }
     }
   `;
   document.head.appendChild(styleEl);
